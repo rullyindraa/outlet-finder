@@ -1,0 +1,25 @@
+link(rel='stylesheet', href='/stylesheets/style-login.css')
+script(src='/javascripts/modal_login_regist.js')
+.modal.fade.register(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel', aria-hidden='true')
+  .modal-dialog.bd-example-modal-sm
+    .modal-content
+      .modal-header
+        h4 Register
+      .modal-body
+        form.form(method='POST' action='/register/verify_account')
+          p.fieldset
+            label.image-replace.username(for='signup-username') Username
+            input#signup-username.full-width.has-padding.has-border(type='text', placeholder='Username', required)
+            span.error-message Your username can only contain numeric and alphabetic symbols!
+          p.fieldset
+            label.image-replace.email(for='signup-email') E-mail
+            input#signup-email.full-width.has-padding.has-border(type='email', placeholder='E-mail', required)
+            span.error-message Enter a valid email address!
+          p.fieldset
+            input#accept-terms(type='checkbox')
+            label(for='accept-terms') I agree to the 
+              a.accept-terms(href='#0') Terms
+          p.fieldset
+            input.full-width.has-padding(type='submit', value='Create My Account')
+
+        

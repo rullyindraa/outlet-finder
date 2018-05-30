@@ -1,0 +1,9 @@
+node_modules
+.DS_Store
+views/.DS_Store
+public/.DS_Store
+public/stylesheets/.DS_Store
+outlet_finder.sql
+outlet-finder_2018-05-21.sql
+outlet-finder_2018-05-22.sql
+sendgrid.env

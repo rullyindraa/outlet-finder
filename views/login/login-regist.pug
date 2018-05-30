@@ -1,0 +1,76 @@
+extends layout-login
+
+block content
+  nav.main-nav
+    ul
+      li
+        a.signin(href='#') Sign in
+      li
+        a.signup(href='#') Sign up
+  .user-modal
+    .user-modal-container
+      ul.switcher
+        li
+          a(href='#') Login
+        li
+          a(href='#') Register
+      #login
+        form.form(method='GET' action='/login/signin')
+          p.fieldset
+            label.image-replace.username Username
+            input#username.full-width.has-padding.has-border(type='text', placeholder='Username', name='username', required='')
+            span.error-message An account with this username does not exist!
+          p.fieldset
+            label.image-replace.password(for='password') Password
+            input#password.full-width.has-padding.has-border(type='password', placeholder='Password', name='password')
+            a.hide-password(href='#0') Show
+            span.error-message Wrong password! Try again.
+          p.fieldset
+            input#remember-me(type='checkbox', checked='')
+            label(for='remember-me')  Remember me
+          p.fieldset
+            // input.full-width(type='submit', value='Login')
+          p.fieldset
+            button.shadow.bg-blue.text-white.font-bold.py-2.px-4.full-rounded.mr-4(class='hover:bg-purple-light', type='submit' , value='submit')
+              | LOGIN
+            //- .col-md-6
+              button.btn.btn-success(type='submit')
+                i.fa.fa-sign-in
+                |  Login
+        p.form-bottom-message
+          a(href='/forgot') Forgot your password?
+        // <a href="#0" class="close-form">Close</a>
+      #signup
+        form.form(method='POST' action='/register/verify_account')
+          p.fieldset
+            label.image-replace.username Username
+            input#username.full-width.has-padding.has-border(type='text', placeholder='Username', name='username')
+            span.error-message Your username can only contain numeric and alphabetic symbols!
+          p.fieldset
+            label.image-replace.email E-mail
+            input#email.full-width.has-padding.has-border(type='email', placeholder='E-mail', name='email')
+            span.error-message Enter a valid email address!
+          p.fieldset
+            input#accept-terms(type='checkbox')
+            label(for='accept-terms')
+              |   I agree to the 
+              a.accept-terms(href='#0') Terms
+          p.fieldset
+            button.shadow.bg-blue.text-white.font-bold.py-2.px-4.full-rounded.mr-4(class='hover:bg-purple-light', type='submit' , value='submit')
+              | Create My Account
+        // <a href="#0" class="cd-close-form">Close</a>
+      #reset-password
+        p.form-message
+          | Lost your password? Please enter your email address.
+          br
+          |  You will receive a link to create a new password.
+        form.form
+          p.fieldset
+            label.image-replace.email(for='reset-email') E-mail
+            input#reset-email.full-width.has-padding.has-border(type='email', placeholder='E-mail')
+            span.error-message An account with this email does not exist!
+          p.fieldset
+            input.full-width.has-padding(type='submit', value='Reset password')
+        p.form-bottom-message
+          a(href='/login') Back to log-in
+      a.close-form(href='/') Close

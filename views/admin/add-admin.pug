@@ -1,0 +1,43 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    .container-fluid
+      // Breadcrumbs
+      ol.breadcrumb.color-pblue
+        li.breadcrumb-item.active.h4 Add Admin
+    form.needs-validation(action='/admin/add-admin', method='POST', novalidate='', style='color: black;')
+      .form-group
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          label(for='first-name') First Name:
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          input.form-control(type='text', name='first_name', placeholder='First Name', required='')
+          .invalid-feedback
+            | Please enter your first name
+      .form-group
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          label(for='last-name') Last Name:
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          input.form-control(type='text', name='last_name', placeholder='Last Name', required='')
+          .invalid-feedback
+            | Please enter your last name
+      .form-group
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          label(for='username') Username:
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          input.form-control(type='text', name='username', placeholder='Username', required='')
+          .invalid-feedback
+            | Please enter your username
+      .form-group
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          label(for='email') Email:
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          input.form-control(type='text', name='email', placeholder='Email', required='')
+          .invalid-feedback
+            | Please enter your email
+      input.btn.btn-md.color-ink.ml-3.mb-3(type='submit', value='Submit')
+  
+  include ../includes/logout.pug
+
+  include ../includes/footer.pug

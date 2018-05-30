@@ -1,0 +1,34 @@
+link(rel='stylesheet', href='/stylesheets/style-login.css')
+.modal.fade.login(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel', aria-hidden='true')
+  .modal-dialog.bd-example-modal-sm
+    .modal-content
+      .modal-header
+        h4 Register
+      .modal-body
+        form.form(method='POST')
+          p.fieldset
+            label.image-replace.username Username
+            input#username.full-width.has-padding.has-border(type='text', placeholder='Username', name='username', value=susername, readonly)
+            span.error-message An account with this username does not exist!
+          p.fieldset
+            label.image-replace.password Email
+            input#password.full-width.has-padding.has-border(type='email', placeholder='Password', name='email', value=semail, readonly)
+          p.fieldset
+            label.image-replace.password Password
+            input#password.full-width.has-padding.has-border(type='password', placeholder='Password', name='password')
+          p.fieldset
+            label.image-replace.password Confirm Password
+            input#password_confirm.full-width.has-padding.has-border(type='password', placeholder='Password', name='password_confirm')
+          p.fieldset
+            // input.full-width(type='submit', value='Login')
+          p.fieldset
+            input.full-width.has-padding(type='submit', value='Login')
+            //- .col-md-6
+              button.btn.btn-success(type='submit')
+                i.fa.fa-sign-in
+                |  Login
+        p.form-bottom-message
+          button.shadow.bg-blue.text-white.font-bold.py-2.px-4.full-rounded.mr-4(class='hover:bg-purple-light', type='submit' , value='submit')
+            | Submit
+
+        

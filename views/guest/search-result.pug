@@ -1,0 +1,125 @@
+extends ../layout-guest
+
+block content
+  nav.navbar.navbar-expand-lg.navbar-light.color-ink
+    a.navbar-brand(href='/' style="color: #FFFFFF;")
+      img(src="/images/logo-light.png" height="31" alt="")
+    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+      span.i.fa.fa-fw.fa-bars(style='color: white;')
+    #navbarSupportedContent.collapse.navbar-collapse.justify-content-right
+      ul.navbar-nav.ml-auto.justify-content-right
+        li.nav-item.mr-2
+          a.nav-link.nav-top.rounded.border-light.text-white(href='/')
+            |  Home
+        li.nav-item.mr-2
+          a.nav-link.nav-top.rounded.border-light.text-white(href='/categories')
+            |  Browse Directory
+        li.nav-item.mr-2
+          a.signin.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.login')
+            |  Login
+        li.nav-item.mr-2
+          a.signup.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.register')
+            |  Register
+  .content-wrapper
+    .container-fluid
+      // Search
+      #search.row(style='background-color: #C4D4E0; padding-bottom: 15px;')
+        .container
+          form.col-lg-12.col-md-12.col-sm-12.col-xs-12.mt-2(action='/search/', method='GET')
+            .form-row(style='margin-top: 20px;')
+              .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2
+                select.form-control(name='city')
+                  option(selected='', hidden='') Select City
+                  option(value='Yogyakarta') Yogyakarta
+                  option(value='Solo') Solo
+                  option(value='Semarang') Semarang
+              .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                select.form-control(name='category')
+                  option(selected='', hidden='') Select Category
+                  option(value='arts') Arts
+                  option(value='business') Business
+                  option(value='computers') Computers
+              .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                input.form-control(type='text', placeholder='Keywords', name='keywords')
+              .col-lg-1.col-md-1.col-sm-1.col-xs-1
+                input.btn.color-ink.mb-3(type='submit', value='Search')
+      .content-wrapper(style='margin-top:-42px;')
+        ul#myTab.nav.nav-tabs.justify-content-end(role='tablist')
+          li.nav-item
+            a#list-tab.nav-link.active(data-toggle='tab', href='#list', role='tab', aria-controls='list', aria-selected='true') List
+          li.nav-item
+            a#maps-tab.nav-link(data-toggle='tab', href='#maps', role='tab', aria-controls='maps', aria-selected='false') Maps
+        #myTabContent.tab-content
+          #list.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='list-tab')
+            .container
+              .row.mt-5
+                .col-lg-2.col-md-2.col-sm-2.col-xs-2.mb-3
+                  img(src='https://image.freepik.com/free-icon/city_318-112631.jpg', alt='ikon bisnis')
+                .col-lg-10.col-md-10.col-sm-10.col-xs-10
+                  h4
+                    a Lorem ipsum dolor sit amet
+                  p(style='color: grey') City: Yogyakarta - Business: Retail
+                  p
+                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              .row.mt-4
+                .col-lg-2.col-md-2.col-sm-2.col-xs-2.mb-3
+                  img(src='https://image.freepik.com/free-icon/city_318-112631.jpg', alt='ikon bisnis')
+                .col-lg-10.col-md-10.col-sm-10.col-xs-10
+                  h4
+                    a Lorem ipsum dolor sit amet
+                  p(style='color: grey') City: Yogyakarta - Business: Retail
+                  p
+                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              .row.mt-4
+                .col-lg-2.col-md-2.col-sm-2.col-xs-2.mb-3
+                  img(src='https://image.freepik.com/free-icon/city_318-112631.jpg', alt='ikon bisnis')
+                .col-lg-10.col-md-10.col-sm-10.col-xs-10
+                  h4
+                    a Lorem ipsum dolor sit amet
+                  p(style='color: grey') City: Yogyakarta - Business: Retail
+                  p
+                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              .row.mt-4
+                .col-lg-2.col-md-2.col-sm-2.col-xs-2.mb-3
+                  img(src='https://image.freepik.com/free-icon/city_318-112631.jpg', alt='ikon bisnis')
+                .col-lg-10.col-md-10.col-sm-10.col-xs-10
+                  h4
+                    a Lorem ipsum dolor sit amet
+                  p(style='color: grey') City: Yogyakarta - Business: Retail
+                  p
+                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              .row.mt-4
+                .col-lg-2.col-md-2.col-sm-2.col-xs-2.mb-3
+                  img(src='https://image.freepik.com/free-icon/city_318-112631.jpg', alt='ikon bisnis')
+                .col-lg-10.col-md-10.col-sm-10.col-xs-10
+                  h4
+                    a Lorem ipsum dolor sit amet
+                  p(style='color: grey') City: Yogyakarta - Business: Retail
+                  p
+                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              .row.mt-4
+                .col-lg-2.col-md-2.col-sm-2.col-xs-2.mb-3
+                  img(src='https://image.freepik.com/free-icon/city_318-112631.jpg', alt='ikon bisnis')
+                .col-lg-10.col-md-10.col-sm-10.col-xs-10
+                  h4
+                    a Lorem ipsum dolor sit amet
+                  p(style='color: grey') City: Yogyakarta - Business: Retail
+                  p
+                    | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              .row.mt-4.justify-content-center
+                ul.pagination.pagination-sm.float-sm-left.mb-4.mt-3
+                  li.page-item
+                    a.page-link(href='#') Previous
+                  li.page-item.active
+                    a.page-link(href='#') 1
+                  li.page-item
+                    a.page-link(href='#') 2
+                  li.page-item
+                    a.page-link(href='#') 3
+                  li.page-item
+                    a.page-link(href='#') Next 
+          #maps.tab-pane.fade.mt-3(role='tabpanel', aria-labelledby='maps-tab')
+            .row
+              #map
+                
+    include footer.pug

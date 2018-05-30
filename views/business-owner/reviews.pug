@@ -1,0 +1,137 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    .container-fluid
+      // Breadcrumbs
+      ol.breadcrumb.color-pblue
+        li.breadcrumb-item.active.h4 Reviews
+      // Search
+      form(action='/search/', method='GET')
+        .form-row
+          .col-lg-4.col-md-4.col-sm-4.col-xs-4
+            .form-group
+              input.form-control(type='text', placeholder='Keywords', name='keywords', value=keywords)
+          .col-lg-3.col-md-3.col-sm-3.col-xs-3
+            .form-group
+              select.form-control(name="orderby")
+                option(name='categories', value="categories") - Business -
+                option(name='it_service', value="it_service") Wonderlabs
+                option(name='fnb', value="fnb") Wonderfood
+          .col-lg-3.col-md-3.col-sm-3.col-xs-3
+            .form-group
+              select.form-control(name="sort")
+                option(name='asc', value="ASC") - Outlet -
+                option(name='asc', value="ASC") Wonderlabs Armstrong
+                option(name='desc', value="DESC") Wonderlabs Explorer
+          .col-lg-1.col-md-1.col-sm-1.col-xs-1.mb-4
+            input.btn.color-ink(type='submit', value='Search')
+      .col-lg-11(style='margin-left: -12px;')
+        strong
+          h6(style='color: black;')
+            | Rully Indra Laelaningrum
+        p(style='color: gray; font-size: 14px')
+          | 2 days ago - outlet: 
+          a(href='#')  wonderlabs explorer campus
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        hr
+        strong
+          h6(style='color: black;')
+            | Evania Kurniawati
+        p(style='color: gray; font-size: 14px')
+          | 3 days ago - outlet: 
+          a(href='#')  wonderlabs explorer campus
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        hr
+        strong
+          h6(style='color: black;')
+            | Qisti Rahmatillah
+        p(style='color: gray; font-size: 14px')
+          | 3 days ago - outlet: 
+          a(href='#')  wonderlabs armstrong campus
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        hr
+        strong
+          h6(style='color: black;')
+            | Dyah Ayu
+        p(style='color: gray; font-size: 14px')
+          | 4 days ago - outlet: 
+          a(href='#')  wonderlabs sputnik campus
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        hr
+        strong
+          h6(style='color: black;')
+            | Tsurayya Atsauri
+        p(style='color: gray; font-size: 14px')
+          | 5 days ago - outlet: 
+          a(href='#')  wonderlabs explorer campus
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        hr
+        strong
+          h6(style='color: black;')
+            | Azma Sholihah
+        p(style='color: gray; font-size: 14px')
+          | 5 days ago - outlet: 
+          a(href='#')  wonderlabs explorer campus
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        hr
+        strong
+          h6(style='color: black;')
+            | Mila Fiolita
+        p(style='color: gray; font-size: 14px')
+          | 6 days ago - outlet: 
+          a(href='#')  wonderlabs explorer campus
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange.mb-3
+        
+      ul.pagination.pagination-sm.float-sm-left.mb-4.mt-3
+        li.page-item
+          a.page-link(href='#') Previous
+        li.page-item
+          a.page-link(href='#') 1
+        li.page-item.active
+          a.page-link(href='#') 2
+        li.page-item
+          a.page-link(href='#') 3
+        li.page-item
+          a.page-link(href='#') Next
+  include ../includes/logout.pug
+
+  include ../includes/footer.pug

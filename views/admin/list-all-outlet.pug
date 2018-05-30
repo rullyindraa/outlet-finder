@@ -1,0 +1,133 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    .container-fluid
+      // Breadcrumbs
+      ol.breadcrumb.color-pblue
+        li.breadcrumb-item.active.h4 Outlets
+      // Search
+      form(action='/search/', method='GET')
+        .form-row
+          .col-lg-3.col-md-5.col-sm-5.col-xs-5
+            .form-group
+              input.form-control(type='text', placeholder='Keywords', name='keywords', value=keywords)
+          .col-lg-3.col-md-3.col-sm-3.col-xs-3
+            .form-group
+              select.form-control(name="orderby")
+                option(name='categories', value="categories") - Category -
+                option(name='it_service', value="it_service") IT Service
+                option(name='fnb', value="fnb") Food and Beverage
+          .col-lg-3.col-md-3.col-sm-3.col-xs-3
+            .form-group
+              select.form-control(name="sort")
+                option(name='asc', value="ASC") - City -
+                option(name='asc', value="ASC") Yogyakarta
+                option(name='desc', value="DESC") Semarang
+          .col-lg-1.col-md-1.col-sm-1.col-xs-1
+            input.btn.color-ink.mb-3(type='submit', value='Search')
+      .table-responsive.pb-5(style='color: black; margin-left: -15px;')
+        table#dataTable.table-striped.table
+          thead
+            tr
+              th Name
+              th Business
+              th City
+              th Page Views
+              th Action
+          tbody
+            tr
+              td Wonderlabs Armstrong Campus
+              td Wonderlabs
+              td Yogyakarta
+              td 110
+              td 
+                a(href='#')
+                  button.btn.btn-danger.btn-sm(type='button', onclick='')
+                    i.fa.fa-trash
+            tr
+              td Wonderlabs Explorer Campus
+              td Wonderlabs
+              td Yogyakarta
+              td 55
+              td 
+                a(href='#')
+                  button.btn.btn-danger.btn-sm(type='button', onclick='')
+                    i.fa.fa-trash
+            tr
+              td Wonderlabs Sputnik Campus
+              td Wonderlabs
+              td Yogyakarta
+              td 120
+              td 
+                a(href='#')
+                  button.btn.btn-danger.btn-sm(type='button', onclick='')
+                    i.fa.fa-trash
+            tr
+              td Wonderlabs Houston Campus
+              td Wonderlabs
+              td Yogyakarta
+              td 100
+              td 
+                a(href='#')
+                  button.btn.btn-danger.btn-sm(type='button', onclick='')
+                    i.fa.fa-trash
+            tr
+              td Wonderzza
+              td Wonderfood
+              td Yogyakarta
+              td 150
+              td 
+                a(href='#')
+                  button.btn.btn-danger.btn-sm(type='button', onclick='')
+                    i.fa.fa-trash
+            tr
+              td Wonder Cake
+              td Wonderfood
+              td Semarang
+              td 5
+              td 
+                a(href='#')
+                  button.btn.btn-danger.btn-sm(type='button', onclick='')
+                    i.fa.fa-trash
+                    
+      //- ul.pagination.pagination-sm.float-sm-left.mb-4.pb-5.mt-3
+      //-   li.page-item
+      //-     a.page-link(href='#') Previous
+      //-   li.page-item.active
+      //-     a.page-link(href='#') 1
+      //-   li.page-item
+      //-     a.page-link(href='#') 2
+      //-   li.page-item
+      //-     a.page-link(href='#') 3
+      //-   li.page-item
+      //-     a.page-link(href='#') Next
+      
+      script(type='text/javascript').
+        function del(e) {
+          window.idCategories = e;
+          $("#myModal").modal('show');
+        }
+        function deleteCategories(){
+          var id = window.idCategories;
+          $.ajax({
+            url:'/admin/categories/delete/'+id,
+            type:'POST',
+            success : function (respon) {
+            setTimeout(function() {$("#myModal").modal('hide');}, 1000);
+            location.reload();
+            }
+          })
+        }
+        $(document).ready(function() {
+          $('#dataTable').DataTable({
+            "searching": false
+          });
+          $('#dataTable_paginate').addClass('pagination-sm');
+          $('#dataTable_paginate').addClass('mt-2');
+        });
+
+  include ../includes/logout.pug
+
+  include ../includes/footer.pug

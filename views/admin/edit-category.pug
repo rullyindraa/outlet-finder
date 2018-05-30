@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    .container-fluid
+      // Breadcrumbs
+      ol.breadcrumb.color-pblue
+        li.breadcrumb-item.active.h4 Edit Category
+    form.needs-validation(action='/admin/categories/edit/', method='POST', novalidate='', style='color: black;')
+      .form-group
+        input.form-control(type='hidden', name='id', value=id)
+      .form-group
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          label(for='category-name') Category Name:
+        .col-lg-6.col-md-6.col-sm-6.col-xs-6
+          input.form-control(type='text', name='name', value=name, placeholder='Category Name', required='')
+          .invalid-feedback
+            | Please enter your category name
+      .form-group
+        .col-lg-4.col-md-4.col-sm-4.col-xs-4
+          label(for='description') Description:
+        .col-lg-8.col-md-8.col-sm-8.col-xs-8
+          textarea.form-control(name="description", rows="4")=description
+          .invalid-feedback
+            | Please enter your description
+      input.btn.btn-md.color-ink.ml-3.mb-3(type='submit', value='Submit')
+  
+  include ../includes/logout.pug
+
+  include ../includes/footer.pug
+  

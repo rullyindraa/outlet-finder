@@ -1,0 +1,144 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    .container-fluid
+      // Breadcrumbs
+      ol.breadcrumb.color-pblue
+        li.breadcrumb-item.active.h4 Dashboard
+      // Icon Cards
+      .row
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-1.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-dollar
+              .mr-5
+                | 48 Total Business
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-2.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fas.fa-shopping-bag.fa-fw
+              .mr-5
+                | 301 Total Outlets
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-3.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-th-list
+              .mr-5
+                | 17 Category
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-4.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-comments
+              .mr-5
+                | 208 Reviews
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+      //- h5.mt-3(style='color: black;')
+      //-   | New Business
+      //- hr.color-nantucket(style='margin-top: 0px; height: 1px;')
+      hr
+      .card.mb-3.mt-5
+        .card-header.card-header-primary
+          .card-icon.blue-1
+            i.fas.fa-dollar-sign.fa-2x
+          h5.mt-3(style='color: black;') New Business
+        .card-body
+          .table-responsive(style='color: black;')
+            table.table-striped.table.col-lg-12.col-md-12.col-sm-12.col-xs-12
+              thead
+                tr
+                  th Name
+                  th Categories
+                  th Outlets
+                  th 
+              tbody
+                tr
+                  td Wonderlabs
+                  td IT Services
+                  td 4 
+                    a(href='#') view outlets >
+                  td 
+                    a(href='#') view business >
+                tr
+                  td Wonderfood
+                  td Food and Beverages
+                  td 10 
+                    a(href='#') view outlets >
+                  td 
+                    a(href='#') view business >
+      br
+      .card.mb-3.mt-7
+        .card-header
+          .card-icon.blue-2
+            i.fas.fa-shopping-bag.fa-2x
+          h5.mt-3(style='color: black;') New Outlet
+        .card-body
+          .table-responsive-lg(style='color: black;')
+            table.table-striped.table.col-lg-12.col-md-12.col-sm-12.col-xs-12
+              thead
+                tr
+                  th Name
+                  th Business
+                  th City
+                  th Action
+              tbody
+                tr
+                  td Wonderlabs Armstrong Campus
+                  td Wonderlabs
+                  td Yogyakarta
+                  td 
+                    a(href='#') view outlets >
+                tr
+                  td Wonderlabs Explorer Campus
+                  td Wonderlabs
+                  td Yogyakarta
+                  td 
+                    a(href='#') view outlets >
+                tr
+                  td Wonderlabs Sputnik Campus
+                  td Wonderlabs
+                  td Yogyakarta
+                  td 
+                    a(href='#') view outlets >
+                tr
+                  td Wonderlabs Houston Campus
+                  td Wonderlabs
+                  td Yogyakarta
+                  td 
+                    a(href='#') view outlets >
+                tr
+                  td Wonderzza
+                  td Wonderfood
+                  td Yogyakarta
+                  td 
+                    a(href='#') view outlets >
+                tr
+                  td Wonder Cake
+                  td Wonderfood
+                  td Semarang
+                  td 
+                    a(href='#') view outlets >
+
+  include ../includes/logout.pug
+
+  include ../includes/footer.pug

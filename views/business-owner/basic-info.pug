@@ -1,0 +1,48 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    ul.nav.nav-tabs
+      li.nav-item
+        a.nav-link.active(href='/basic-info', style='color:black') Basic Info
+      li.nav-item
+        a.nav-link(href='/change-password', style='color:black') Change Password
+      li.nav-item
+        a.nav-link(href='/security', style='color:black') Security
+      li.nav-item
+        a.nav-link(href='/setting', style='color:black') Setting
+    .tab-content
+      form.needs-validation.mt-3.col-lg-12.col-md-12.col-sm-12.col-xs-12(action='/basic-info', method='POST', novalidate='', style='color: black;')
+        .form-row
+          .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6
+            label First Name:
+            input.form-control(type='text', name='first_name', value=first_name, placeholder='Name', required='')
+            .invalid-feedback
+              | Please enter your first name
+            label.mt-3 Last Name:
+            input.form-control(type='text', name='last_name', value=last_name, placeholder='Name', required='')
+            .invalid-feedback
+              | Please enter your last name
+            label.mt-3 Email:
+            input.form-control(type='email', name='email', value=email, placeholder='Email', required='')
+            .invalid-feedback
+              | Please enter a valid email
+            label.mt-3 Username:
+            input.form-control(type='text', name='username', value=username, placeholder='Username', required='')
+            .invalid-feedback
+              | Please enter your username
+            label.mt-3 Phone Number:
+            input.form-control(type='text', name='phone_number', value=phone_number, placeholder='Phone Number', required='')
+            .invalid-feedback
+              | Please enter a valid phone number
+          .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6(align='center')
+            img.img-thumbnail.mt-2.mb-2(src=photo, alt=alt, width='180px', height='180px')
+            .custom-file.mt-2
+              input.custom-file-input(type='file' accept="image/*")
+              label.custom-file-label Choose file...
+        input.btn.btn-md.color-ink.mb-3(type='submit', value='Save', name='photo')
+  
+  include ../includes/logout.pug
+  
+  include ../includes/footer.pug
