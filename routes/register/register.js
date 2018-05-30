@@ -93,6 +93,7 @@ router.get('/next/:token', function(req, res){
     if(rows<0) {
       alert('token is invalid !')
     } else {
+      console.log(rows)
       var username = rows[0].username;
       var email = rows[0].email;
       res.render('login/register-next', {susername: username, stoken: req.params.token, semail: email})
