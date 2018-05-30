@@ -5,28 +5,69 @@ block content
   .content-wrapper
     ul.nav.nav-tabs
       li.nav-item
-        a.nav-link(href='/basic-info', style='color:black') Basic Info
+        a.nav-link(href='/admin/basic-info', style='color:black') Basic Info
       li.nav-item
-        a.nav-link(href='/change-password', style='color:black') Change Password
+        a.nav-link(href='/admin/change-password', style='color:black') Change Password
       li.nav-item
-        a.nav-link.active(href='/security', style='color:black') Security
+        a.nav-link.active(href='/admin/security', style='color:black') Security 
     .tab-content
-      form.mt-4.col-lg-12.col-md-12.col-sm-12.col-xs-12(action='#', method='POST', novalidate='', style='color: black;')
-        .form-row
+      |
+      - if(valid){
+        .alert.alert-success(role='alert')
+          | !{valid}
+      - } 
+      
+      form.mt-4.col-lg-12.col-md-12.col-sm-12.col-xs-12(action='/check', method='POST', novalidate='', style='color: black;')
+        .form-row( data-toggle="modal" data-target="#myModal")
           .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8
-            label(for='name') Enable two factor athentiation token
+            label(for='name') Enable two factor authentication token
           .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2
             label.switch
-              input(type='checkbox', checked='')
+              input#check1(type='checkbox', name='check1', checked=scheck1)
               span.slider.round
         .form-row
           .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8
             label(for='name') Prevent login from other IP address (current IP address: 144.205.77.102)
           .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
             label.switch
-              input(type='checkbox', checked='')
+              input#ip(type='checkbox', checked=false)
               span.slider.round
-        input.btn.btn-md.color-ink.mb-3(type='submit', value='Save')
+          |
+          - if(valid) {
+            form(action='/check', method='POST')
+              input.btn.btn-dark(type='submit', style='margin-top: 10px', value='Save Changes')
+          - }
+      script(type='text/javascript', src='../javascripts/account.js')
+      form.m-4(action='/check', style='margin-top: 30px')
+        #set.modal.fade(tabindex='0', role='dialog')
+          .modal-dialog(role='document')
+            .modal-content
+              .modal-header
+                h5.modal-title Set Up a Third Party App to Generate Codes 
+                    button#cancel.close(type='button', data-dismiss='modal', aria-label='Close' , name = 'close1')
+                      span(aria-hidden='true') ×
+              .modal-body
+                table.w-full.max-w-md( style='color:black')
+                    tr
+                      td(colspan='3') In order for third-party applications to run, scan the QR code below or tap the secret key directly in the app :
+                    tr.m-4
+                      td QR Code
+                      td
+                        img#qrcode.mt-2.mb-2(src=qrcode, alt='QR Code', name='qrcode')
+                    tr.m-4
+                      td Secret Key
+                      td
+                        input#secret_key.form-control.w-full(type='text', name='secret_key', value=secret_key, readonly)
+                    tr.m-4.mt-4
+                      td.mt-4(colspan='3') To confirm that the third-party app has been properly set up, enter the security code displayed on your phone. 
+                    tr
+                      td Security Code     
+                      td
+                        //- input#tok.form-control.w-full(type='text', name='tok', value=tok)
+                        input#secret_token.form-control.w-full(type='text', name='secret_token')
+                    tr
+                      td
+                        button.btn.btn-primary.ml-4(type='submit', value='Verify') Confirm
 
   include ../includes/logout.pug
 
