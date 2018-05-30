@@ -31,15 +31,11 @@ block content
           p.fieldset
             // input.full-width(type='submit', value='Login')
           p.fieldset
-            button.shadow.bg-blue.text-white.font-bold.py-2.px-4.full-rounded.mr-4(class='hover:bg-purple-light', type='submit' , value='submit')
-              | LOGIN
-            //- .col-md-6
-              button.btn.btn-success(type='submit')
-                i.fa.fa-sign-in
-                |  Login
+            input.full-width.has-padding(type='submit', value='Login')
+
         p.form-bottom-message
           a(href='/forgot') Forgot your password?
-        // <a href="#0" class="close-form">Close</a>
+
       #signup
         form.form(method='POST' action='/register/verify_account')
           p.fieldset
@@ -56,9 +52,8 @@ block content
               |   I agree to the 
               a.accept-terms(href='#0') Terms
           p.fieldset
-            button.shadow.bg-blue.text-white.font-bold.py-2.px-4.full-rounded.mr-4(class='hover:bg-purple-light', type='submit' , value='submit')
-              | Create My Account
-        // <a href="#0" class="cd-close-form">Close</a>
+            input.full-width.has-padding(type='submit', value='Create My Account')
+      
       #reset-password
         p.form-message
           | Lost your password? Please enter your email address.
