@@ -1,0 +1,69 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    .container-fluid
+      // Breadcrumbs
+      ol.breadcrumb.color-pblue
+        li.breadcrumb-item.active.h4 Business
+      // Search
+      form(action='/search/', method='GET')
+        .form-row
+          .col-lg-5.col-md-5.col-sm-5.col-xs-5
+            .form-group
+              input.form-control(type='text', placeholder='Keywords', name='keywords', value=keywords)
+          .col-lg-3.col-md-3.col-sm-3.col-xs-3
+            .form-group
+              select.form-control(name="orderby")
+                option(name='categories', value="categories") - Category -
+                option(name='it_service', value="it_service") IT Service
+                option(name='fnb', value="fnb") Food and Beverage
+          .col-lg-1.col-md-1.col-sm-1.col-xs-1
+            input.btn.color-ink.mb-3(type='submit', value='Search')
+      .table-responsive.pb-5(style='color: black; margin-left: -15px;')
+        table#dataTable.table-striped.table
+          thead
+            tr
+              th Name
+              th Categories
+              th Outlets
+              th Action
+          tbody
+            for b in data
+              tr
+                td=b.dataValues.business
+                td=b.dataValues.category_names
+                td 4 
+                  a(href='#') view outlets
+                td 
+                  a(href='#')
+                    button.btn.btn-danger.btn-sm(type='button', onclick='')
+                      i.fa.fa-trash
+          
+      script(type='text/javascript').
+        function del(e) {
+          window.idCategories = e;
+          $("#myModal").modal('show');
+        }
+        function deleteCategories(){
+          var id = window.idCategories;
+          $.ajax({
+            url:'/admin/categories/delete/'+id,
+            type:'POST',
+            success : function (respon) {
+            setTimeout(function() {$("#myModal").modal('hide');}, 1000);
+            location.reload();
+            }
+          })
+        }
+        $(document).ready(function() {
+          $('#dataTable').DataTable({
+            "searching": false
+          });
+          $('#dataTable_paginate').addClass('pagination-sm');
+          $('#dataTable_paginate').addClass('mt-2');
+        });
+  include ../includes/logout.pug
+
+  include ../includes/footer.pug

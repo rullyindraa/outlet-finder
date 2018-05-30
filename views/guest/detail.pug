@@ -1,0 +1,217 @@
+extends ../layout-guest
+
+block content
+  nav.navbar.navbar-expand-lg.navbar-light.color-ink
+    a.navbar-brand(href='/' style="color: #FFFFFF;")
+      img(src="/images/logo-light.png" height="31" alt="")
+    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+      span.i.fa.fa-fw.fa-bars(style='color: white;')
+    #navbarSupportedContent.collapse.navbar-collapse.justify-content-right
+      ul.navbar-nav.ml-auto.justify-content-right
+        li.nav-item.mr-2
+          a.nav-link.nav-top.rounded.border-light.text-white(href='/')
+            |  Home
+        li.nav-item.mr-2
+          a.nav-link.nav-top.rounded.border-light.text-white(href='/categories')
+            |  Browse Directory
+        li.nav-item.mr-2
+          a.signin.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.login')
+            |  Login
+        li.nav-item.mr-2
+          a.signup.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.register')
+            |  Register
+  header.bg-header.text-center
+    .container
+      img.img-fluid.mb-4.d-block.mx-auto(src='/images/wonderlabs.png', style="width: 200px;")
+      h1.text-uppercase.mb-2
+        | Wonderlabs
+      p.text-muted City: Yogyakarta - Business: Retail
+      p.text-center
+        | Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam ornare wisi eu metus. Quisque porta. Fusce wisi. Nunc dapibus tortor vel mi dapibus sollicitudin. Etiam sapien elit, consequat eget, tristique non, venenatis quis, ante. Nulla quis diam.
+        | Fusce suscipit libero eget elit. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Aliquam erat volutpat. Aenean placerat. Mauris tincidunt sem sed arcu.
+      hr.detail.mt-4
+    .container
+      .row
+        .col-lg-3.col-md-6.text-center
+          .detail-box.mt-5.mx-auto
+            i.fa.fa-4x.fa-map-marker.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+            h3.mb-3 
+              | Address
+            p.text-muted.mb-0
+              | Jalan Laksda Adisucipto no 21, Kota Yogyakarta, Depok, 55238
+        .col-lg-3.col-md-6.text-center
+          .detail-box.mt-5.mx-auto
+            i.fa.fa-4x.fa-globe.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+            h3.mb-3 
+              | Website
+            p.text-muted.mb-0
+              | http://www.lorem.co.id 
+        .col-lg-3.col-md-6.text-center
+          .detail-box.mt-5.mx-auto
+            i.fa.fa-4x.fa-phone-square.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+            h3.mb-3 
+              | Phone
+            p.text-muted.mb-0
+              | 0274 567 890  
+        .col-lg-3.col-md-6.text-center
+          .detail-box.mt-5.mx-auto
+            i.fa.fa-4x.fa-envelope.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+            h3.mb-3 
+              | E-mail
+            p.text-muted.mb-0
+              | contact@lorem.co.id  
+      a#info.btn.btn-detail.color-white.btn-xl.mt-4.text-uppercase(href='#info' style='border-radius: 300px; padding: 1rem 2rem;') View Outlet Info
+  section.bg-section-1.info(style='padding-bottom: 50px;')
+    .container
+      h2.mb-2.text-center
+        | Wonderlabs Armstrong Campus
+      hr.detail.mt-4
+    .container
+      ul.timeline
+        li
+          .timeline-badge.blue
+            i.fa.fa-fw.fa-info
+          .timeline-panel.blue
+            .timeline-heading
+              h4.timeline-title Outlet Info
+            .timeline-body
+              p
+                .mt-2
+                i.fa.fa-fw.fa-map-marker
+                |  Jalan Laksda Adisucipto no 21, Kota Yogyakarta, Depok, 55238
+                br
+                .mt-2
+                i.fa.fa-fw.fa-globe
+                |  http://www.lorem.co.id 
+                br
+                .mt-2
+                i.fa.fa-fw.fa-phone-square
+                |  0274 567 890 
+                br
+                .mt-2
+                i.fa.fa-fw.fa-envelope
+                |  contact@lorem.co.id 
+        li.timeline-inverted
+          .timeline-badge.primary
+            i.fa.fa-fw.fa-clock-o
+          .timeline-panel.primary
+            .timeline-heading
+              h4.timeline-title Open Now
+            .timeline-body
+              p
+                .row
+                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                    | Monday
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-6 
+                    | 8.00 - 18.00
+                .row
+                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                    | Tuesday
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                    | 8.00 - 18.00
+                .row
+                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                    | Wednesday
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                    | 8.00 - 18.00
+                .row
+                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                    | Thursday
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                    | 8.00 - 18.00
+                .row
+                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                    | Friday
+                  .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                    | 8.00 - 18.00   
+      .container.text-center
+        a#maps.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(href='#maps' style='border-radius: 300px; padding: 1rem 2rem;') View in Maps
+  section.bg-section-2.maps.text-center(style='padding-bottom: 50px;')
+    .container-fluid
+      .row
+        #map(style='margin-top: -30px;')
+        .mt-5
+      a.btn.btn-ink.color-ink.btn-xl.mt-5.text-uppercase(href='#' style='border-radius: 300px; padding: 1rem 2rem;') Get Direction
+      a.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-5.text-uppercase(href='#' style='border-radius: 300px; padding: 1rem 2rem;') Find Similar
+      a#comment.btn.btn-detail.btn-detail-page.color-white.btn-xl.mt-5.text-uppercase(href='#comment' style='border-radius: 300px; padding: 1rem 2rem;') Find Out Review
+  section.bg-section-1.comment(style='padding-bottom: 50px;')
+    .container
+      h2.mb-2.text-center
+        | Review
+      hr.detail.mt-4
+    .container.mt-4
+      .col-lg-12.col-md-12.col-sm-12.col-xs-12
+        strong
+          h6(style='color: black;') Rully Indra Laelaningrum
+        p(style='color: gray; font-size: 14px')
+          | 2 days ago 
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
+          | book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        .mt-3
+        strong
+          h6(style='color: black;') Evania Kurniawati
+        p(style='color: gray; font-size: 14px')
+          | 3 days ago
+        p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
+          | book.
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-orange
+        i.fa.fa-fw.fa-star.star-gray
+        i.fa.fa-fw.fa-star.star-gray
+        .mt-3
+    .container.text-center
+      button.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(style='border-radius: 300px; padding: 1rem 2rem;', type='button', data-toggle='modal', data-target='.bd-example-modal-lg') Add Review
+      a#other.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-4.text-uppercase(href='#other' style='border-radius: 300px; padding: 1rem 2rem;') Find Other Outlet
+  section.bg-section-2.other(style='padding-bottom: 50px;')
+    .container
+      h2.mb-2.text-center
+        | Other Outlet
+      hr.detail.mt-4
+    .container.mt-4
+      .table-responsive-lg(style='color: black;')
+        table.table-striped.table.col-lg-12.col-md-12.col-sm-12.col-xs-12
+          thead
+            tr
+              th Name
+              th Business
+              th City
+              th 
+          tbody
+            tr
+              td Wonderlabs Armstrong Campus
+              td Wonderlabs
+              td Yogyakarta
+              td 
+                a(href='#') view outlets >
+            tr
+              td Wonderlabs Explorer Campus
+              td Wonderlabs
+              td Yogyakarta
+              td 
+                a(href='#') view outlets >
+            tr
+              td Wonderlabs Sputnik Campus
+              td Wonderlabs
+              td Yogyakarta
+              td 
+                a(href='#') view outlets >
+            tr
+              td Wonderlabs Houston Campus
+              td Wonderlabs
+              td Yogyakarta
+              td 
+                a(href='#') view outlets >
+
+  div(style='margin-top: -20px;')
+
+  include footer.pug
+    
+  include add-review.pug

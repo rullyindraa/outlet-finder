@@ -1,0 +1,270 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    .container-fluid
+      // Breadcrumbs
+      ol.breadcrumb(style='background-color: #DAE1E7')
+        li.breadcrumb-item.active.h4 Create Outlet
+      form.needs-validation(action='#', method='POST', novalidate='', style='color: black; margin-left: -12px;')
+        .form-group
+          .col-lg-4.col-md-4.col-sm-4.col-xs-4
+            label(for='student_id') Business:
+          .col-lg-6.col-md-6.col-sm-6.col-xs-6
+            select.form-control(name="categories")
+              option(name='categories', value="categories") - Select Business -
+              option(name='it_service', value="it_service") IT Services
+              option(name='fnb', value="fnb") Food and Beverages
+            .invalid-feedback
+              | Please select categories
+        .form-group
+          .col-lg-4.col-md-4.col-sm-4.col-xs-4
+            label(for='name') Outlet Name:
+          .col-lg-6.col-md-6.col-sm-6.col-xs-6
+            input.form-control(type='text', name='name', placeholder='Outlet Name', required='')
+            .invalid-feedback
+              | Please enter your outlet name
+        .form-group
+          .col-lg-4.col-md-4.col-sm-4.col-xs-4
+            label(for='student_email') Email:
+          .col-lg-6.col-md-6.col-sm-6.col-xs-6
+            input.form-control(type='email', name='student_email', placeholder='Email', required='')
+            .invalid-feedback
+              | Please enter a valid email
+        .form-group
+          .col-lg-4.col-md-4.col-sm-4.col-xs-4
+            label(for='student_email') Phone Number:
+          .col-lg-6.col-md-6.col-sm-6.col-xs-6
+            input.form-control(type='text', name='student_email', placeholder='Phone Number', required='')
+            .invalid-feedback
+              | Please enter a valid phone number
+        .form-group
+          .col-lg-4.col-md-4.col-sm-4.col-xs-4
+            label(for='address') Website:
+          .col-lg-6.col-md-6.col-sm-6.col-xs-6
+            input.form-control(type='text', name='address', placeholder='Website', required='')
+            .invalid-feedback
+              | Please enter your website
+        .form-group
+          .col-lg-4.col-md-4.col-sm-4.col-xs-4
+            label(for='student_email') Photo:
+          .col-lg-6.col-md-6.col-sm-6.col-xs-6
+            .custom-file
+              input.custom-file-input(type='file' accept="image/*")
+              label.custom-file-label Choose file...
+        .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8
+          label(for='date_of_birth') Description:
+          textarea.form-control(name="desc", rows="4")
+          .invalid-feedback
+            | Please enter your description
+        .form-group.col-lg-10.col-md-10.col-sm-10.col-xl-10
+          label(for='date_of_birth') Address:
+          .card.mb-3
+            .card-body
+              .form-row
+                .form-group.col-lg-6.col-md-6.col-sm-6.col-xl-6
+                  label(for='student_email') Line 1:
+                  input.form-control(type='text', name='student_email', placeholder='Line 1 Address', required='')
+                  .invalid-feedback
+                    | Please enter a Line 1 Address
+                .form-group.col-lg-6.col-md-6.col-sm-6.col-xl-6
+                  label(for='address') Line 2:
+                  input.form-control(type='text', name='address', placeholder='Line 2 Address', required='')
+                  .invalid-feedback
+                      | Please enter Line 2 Address
+              .form-row
+                .form-group.col-lg-5.col-md-5.col-sm-5.col-xs-5
+                  label(for='student_id') Province:
+                  select.form-control(name="categories")
+                    option(name='categories', value="categories") - Select Province -
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  label(for='student_id') City:
+                  select.form-control(name="categories" readonly)
+                    option(name='categories', value="categories") - Select City -
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  label(for='student_email') Postal Code:
+                  input.form-control(type='text', name='student_email', placeholder='Postal Code', required='')
+                  .invalid-feedback
+                    | Please enter a valid phone number
+              input.btn.btn-md.color-pblue.mb-3(type='submit', value='Geolocate')
+              .form-row
+                .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6
+                  input.form-control(type='text', name='student_email', placeholder='Latitude', required='', readonly)
+                  .invalid-feedback
+                    | Please enter a valid phone number
+                .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6
+                  input.form-control(type='text', name='student_email', placeholder='Longitude', required='', readonly)
+                  .invalid-feedback
+                    | Please enter a valid phone number
+              a(href='#')  view in maps >
+        .form-group.col-lg-10.col-md-10.col-sm-10.col-xl-10
+          label(for='date_of_birth') Open Hours:
+          .card.mb-3
+            .card-body
+              .form-row
+                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  label.mr-5(for='date_of_birth') Monday
+                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+                  input.form-check-input(type='checkbox', value='')
+                  label.form-check-label
+                    | Closed
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="open")
+                    option(name='categories', value="categories") 08:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="close")
+                    option(name='categories', value="categories") 17:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+              .form-row
+                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  label.mr-5(for='date_of_birth') Tuesday
+                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+                  input.form-check-input(type='checkbox', value='')
+                  label.form-check-label
+                    | Closed
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="open")
+                    option(name='categories', value="categories") 08:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="close")
+                    option(name='categories', value="categories") 17:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+              .form-row
+                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  label.mr-5(for='date_of_birth') Wednesday
+                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+                  input.form-check-input(type='checkbox', value='')
+                  label.form-check-label
+                    | Closed
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="open")
+                    option(name='categories', value="categories") 08:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="close")
+                    option(name='categories', value="categories") 17:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+              .form-row
+                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  label.mr-5(for='date_of_birth') Thursday
+                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+                  input.form-check-input(type='checkbox', value='')
+                  label.form-check-label
+                    | Closed
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="open")
+                    option(name='categories', value="categories") 08:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="close")
+                    option(name='categories', value="categories") 17:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+              .form-row
+                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  label.mr-5(for='date_of_birth') Friday
+                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+                  input.form-check-input(type='checkbox', value='')
+                  label.form-check-label
+                    | Closed
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="open")
+                    option(name='categories', value="categories") 08:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="close")
+                    option(name='categories', value="categories") 17:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+              .form-row
+                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  label.mr-5(for='date_of_birth') Saturday
+                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+                  input.form-check-input(type='checkbox', value='' checked)
+                  label.form-check-label
+                    | Closed
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="open" disabled)
+                    option(name='categories', value="categories") 08:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="close" disabled)
+                    option(name='categories', value="categories") 17:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+              .form-row
+                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                  label(for='date_of_birth') Sunday
+                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+                  input.form-check-input(type='checkbox', value='' checked)
+                  label.form-check-label
+                    | Closed
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="open" disabled)
+                    option(name='categories', value="categories") 08:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                  select.form-control(name="close" disabled)
+                    option(name='categories', value="categories") 17:00
+                    option(name='it_service', value="it_service") IT Services
+                    option(name='fnb', value="fnb") Food and Beverages
+                  .invalid-feedback
+                    | Please select categories
+              .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8(style='margin-left: 5px;')
+                input.form-check-input(type='checkbox', value='', checked)
+                label.form-check-label
+                  | Set as closed on public holiday
+
+        input.btn.btn-md.color-ink.ml-3.mb-5(type='submit', value='Submit')
+        input.btn.btn-md.color-ink.ml-2.mb-5(type='submit', value='Submit and Add Outlet >')
+
+  include ../includes/logout.pug
+  
+  include ../includes/footer.pug

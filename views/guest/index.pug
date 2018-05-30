@@ -1,0 +1,134 @@
+extends ../layout-guest
+
+block content
+  nav.navbar.navbar-expand-lg.navbar-light.color-ink
+    a.navbar-brand(href='/' style="color: #FFFFFF;")
+      img(src="/images/logo-light.png" height="31" alt="")
+    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+      span.i.fa.fa-fw.fa-bars(style='color: white;')
+    #navbarSupportedContent.collapse.navbar-collapse.justify-content-right
+      ul.navbar-nav.ml-auto.justify-content-right
+        li.nav-item.mr-2
+          a.nav-link.nav-top.rounded.border-light.text-white(href='/')
+            |  Home
+        li.nav-item.mr-2
+          a.nav-link.nav-top.rounded.border-light.text-white(href='/categories')
+            |  Browse Directory
+        li.nav-item.mr-2
+          a.signin.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.login')
+            |  Login
+        li.nav-item.mr-2
+          a.signup.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.register')
+            |  Register
+  .container-fluid
+    .row
+      #map
+    #search.row.justify-content-center(style='background-color: #C4D4E0')
+      form.col-lg-12.col-md-12.col-sm-12.col-xs-12(action='/search/', method='GET')
+        .form-row.justify-content-center(style='margin-top: 20px;')
+          .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2
+            select.form-control(name='city')
+              option(selected='', hidden='') Select City
+              option(value='Yogyakarta') Yogyakarta
+              option(value='Solo') Solo
+              option(value='Semarang') Semarang
+          .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+            select.form-control(name='category')
+              option(selected='', hidden='') Select Category
+              option(value='arts') Arts
+              option(value='business') Business
+              option(value='computers') Computers
+          .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+            input.form-control(type='text', placeholder='Keywords', name='keywords')
+          .col-lg-1.col-md-1.col-sm-1.col-xs-1
+            input.btn.color-ink(type='submit', value='Search')
+    #search.row.justify-content-center
+      .form-row.col-lg-11.col-md-11.col-sm-11.col-xs-11.text-center(style='margin-top: 20px;')
+        p
+          b Popular Search : 
+          |
+          a(href='/search-result') rak kantor
+          |, 
+          a(href='#') meja kantor
+          |, 
+          a(href='#') seragam sekolah
+          |, 
+          a(href='#') toko kain grosir
+          |, 
+          a(href='#') toko bunga jogja
+          |, 
+          a(href='#') toko bangunan
+          |, 
+          a(href='#') sepeda gunung
+          |, 
+          a(href='#') meja kantor
+          |, 
+          a(href='#') seragam sekolah
+          |, 
+          a(href='#') toko kain grosir
+          |, 
+          a(href='#') toko bunga jogja
+          |, 
+          a(href='#') toko bangunan
+          |, 
+          a(href='#') sepeda gunung
+          |, 
+          a(href='#') meja kantor
+          |, 
+          a(href='#') seragam sekolah
+          |, 
+          a(href='#') toko kain grosir
+          |, 
+          a(href='#') toko bunga jogja
+          |, 
+          a(href='#') toko bangunan
+          |, 
+          a(href='#') sepeda gunung
+          |, 
+          a(href='#') meja kantor
+          |, 
+          a(href='#') seragam sekolah
+          |, 
+          a(href='#') toko kain grosir
+          |, 
+          a(href='#') toko bunga jogja
+          |, 
+          a(href='#') toko bangunan
+          |, 
+          a(href='#') sepeda gunung
+          |, 
+          a(href='#') meja kantor
+          |, 
+          a(href='#') seragam sekolah
+          |, 
+          a(href='#') toko kain grosir
+          |, 
+          a(href='#') toko bunga jogja
+          |, 
+          a(href='#') toko bangunan
+          |, 
+          a(href='#') sepeda gunung
+          |, 
+          a(href='#') meja kantor
+          |, 
+          a(href='#') seragam sekolah
+          |, 
+          a(href='#') toko kain grosir
+          |, 
+          a(href='#') toko bunga jogja
+          |, 
+          a(href='#') toko bangunan
+          |, 
+          a(href='#') sepeda gunung
+          |, 
+          a(href='#') meja kantor
+          |, 
+          a(href='#') seragam sekolah
+          |, 
+          a(href='#') toko kain grosir
+          |, 
+          a(href='#') toko bunga jogja
+          |, 
+          a(href='#') toko bunga jogja
+
+  include footer.pug

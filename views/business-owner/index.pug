@@ -1,0 +1,106 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    .container-fluid
+      // Breadcrumbs
+      ol.breadcrumb.color-pblue
+        li.breadcrumb-item.active.h4 Dashboard
+      // Icon Cards
+      .row
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-1.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-dollar
+              .mr-5
+                | 12 Business
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-2.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-shopping-bag
+              .mr-5
+                | 110 Outlets
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-3.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-comments
+              .mr-5
+                | 26 Reviews
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+      // Business
+      h5.mt-2(style='color: black;')
+        | Wonderlabs
+        a.small.float-right(href='#') view outlets >
+      hr
+      //hr.color-nantucket(style='margin-top: 0px; height: 1px;')
+      .row
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-1.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-heart
+              .mr-5
+                | 4 Local Popularity
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-2.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-globe
+              .mr-5
+                | 102 Global Popularity
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+      // Outlet
+      h5.mt-2(style='color: black;')
+        | Wonderfood
+        a.small.float-right(href='#') view outlets >
+      hr
+      //hr.color-nantucket(style='margin-top: 0px; height: 1px;')
+      .row
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-1.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-heart
+              .mr-5
+                | 390 Local Popularity
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+        .col-xl-3.col-sm-6.mb-3
+          .card.text-white.blue-2.o-hidden.h-100
+            .card-body
+              .card-body-icon
+                i.fa.fa-fw.fa-globe
+              .mr-5
+                | 1021 Global Popularity
+            a.card-footer.text-white.clearfix.small.z-1(href='#')
+              span.float-left View Details
+              span.float-right
+                i.fa.fa-angle-right
+
+  include ../includes/logout.pug
+  
+  include ../includes/footer.pug

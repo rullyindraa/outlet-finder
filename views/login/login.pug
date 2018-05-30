@@ -1,0 +1,33 @@
+link(rel='stylesheet', href='/stylesheets/style-login.css')
+.modal.fade.login(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel', aria-hidden='true')
+  .modal-dialog.bd-example-modal-sm
+    .modal-content
+      .modal-header
+        h4 Login
+      .modal-body
+        form.form(method='GET' action='')
+          p.fieldset
+            label.image-replace.username Username
+            input#username.full-width.has-padding.has-border(type='text', placeholder='Username', name='username', required='')
+            span.error-message An account with this username does not exist!
+          p.fieldset
+            label.image-replace.password Password
+            input#password.full-width.has-padding.has-border(type='password', placeholder='Password', name='password')
+            a.hide-password(href='#0') Show
+            span.error-message Wrong password! Try again.
+          p.fieldset
+            input#remember-me(type='checkbox', checked='')
+            label(for='remember-me')  Remember me
+          p.fieldset
+            // input.full-width(type='submit', value='Login')
+          p.fieldset
+            input.full-width.has-padding(type='submit', value='Login')
+            //- .col-md-6
+              button.btn.btn-success(type='submit')
+                i.fa.fa-sign-in
+                |  Login
+        p.form-bottom-message
+          a(href='#', data-dismiss='modal', data-toggle='modal', data-target='.forgot') Forgot your password?
+        // <a href="#0" class="close-form">Close</a>
+
+        

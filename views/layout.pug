@@ -1,0 +1,117 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+    link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.0.13/css/all.css', integrity='sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp', crossorigin='anonymous')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js')
+    link(href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css', rel='stylesheet')
+    script(type='text/javascript', charset='utf8', src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js')
+    script(type='text/javascript', charset='utf8', src='https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='icon', href='/images/square-icon.png')
+    title=title
+    style.
+      #map {
+        width: 100%;
+        height: 300px;
+        border-radius: 4px;
+      }
+    script.
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -33.8688, lng: 151.2195},
+          zoom: 13
+        });
+        var input = document.getElementById('pac-input');
+        //map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        var infowindow = new google.maps.InfoWindow();
+        var infowindowContent = document.getElementById('infowindow-content');
+        infowindow.setContent(infowindowContent);
+        var marker = new google.maps.Marker({
+          map: map,
+          anchorPoint: new google.maps.Point(0, -29)
+        });
+        autocomplete.addListener('place_changed', function() {
+          infowindow.close();
+          marker.setVisible(false);
+          var place = autocomplete.getPlace();
+          if (!place.geometry) {
+          // User entered the name of a Place that was not suggested and
+          // pressed the Enter key, or the Place Details request failed.
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+          // If the place has a geometry, then present it on a map.
+          if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+          } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(17);  // Why 17? Because it looks good.
+          }
+          marker.setPosition(place.geometry.location);
+          marker.setVisible(true);
+          var address = '';
+          var component = place.address_components;
+          var formatted_address = place.formatted_address;
+          var line1 = place.address_components[1].short_name;
+          var line2 = place.address_components[0].short_name;
+          var country = place.address_components[6].short_name;
+          var adm1 = place.address_components[5].long_name;
+          var adm2 = place.address_components[4].short_name;
+          var adm3 = place.address_components[3].short_name;
+          var adm4 = place.address_components[2].short_name;
+          var postal_code = place.address_components[7].short_name;
+          var lat = place.geometry.location.lat();
+          var lng = place.geometry.location.lng();
+          document.getElementById("line1").value = line1;
+          document.getElementById("line2").value = line2;
+          document.getElementById("country").value = country;
+          document.getElementById("adm1").value = adm1;
+          document.getElementById("adm2").value = adm2;
+          document.getElementById("adm3").value = adm3;
+          document.getElementById("adm4").value = adm4;
+          document.getElementById("postal_code").value = postal_code;
+          document.getElementById("lat").value = lat;
+          document.getElementById("lng").value = lng;
+          document.getElementById("formatted_address").value = formatted_address;
+          console.log(component);
+          console.log(lat);
+          console.log(formatted_address);
+          if (place.address_components) {
+            address = [
+            (place.address_components[0] && place.address_components[0].short_name || ''),
+            (place.address_components[1] && place.address_components[1].short_name || ''),
+            (place.address_components[2] && place.address_components[2].short_name || '')
+            ].join(' ');
+          }
+          infowindowContent.children['place-icon'].src = place.icon;
+          infowindowContent.children['place-name'].textContent = place.name;
+          infowindowContent.children['place-address'].textContent = address;
+          infowindow.open(map, marker);
+        });
+      }
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBSKactSNtQkMmc86xP_oknMBCABF2ioYI&libraries=places&callback=initMap', async='', defer='')
+    script.
+      $(document).ready(function () {
+        var url = window.location;
+        $('ul.navbar-nav.navbar-sidenav a[href="'+ url +'"]').parent().addClass('active-navbar');
+        $('ul.navbar-nav.navbar-sidenav a').filter(function() {
+          return this.href == url;
+        }).parent().addClass('active-navbar');
+      });
+
+  body#page-top.fixed-nav.sticky-footer.bg
+    block content

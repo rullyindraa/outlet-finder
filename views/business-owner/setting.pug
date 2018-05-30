@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  include include/navbar.pug
+  .content-wrapper
+    ul.nav.nav-tabs
+      li.nav-item
+        a.nav-link(href='/basic-info', style='color:black') Basic Info
+      li.nav-item
+        a.nav-link(href='/change-password', style='color:black') Change Password
+      li.nav-item
+        a.nav-link(href='/security', style='color:black') Security
+      li.nav-item
+        a.nav-link.active(href='/setting', style='color:black') Setting
+    .tab-content
+      form.container.mt-3.ml-1(action="", style='color:black')
+        h2.display-5 Deactivate your account
+        p.lead
+          | Deactivating your account will disable your profile and remove all your data in this system.
+        hr.my-4
+        .form-group.col-lg-10.col-md-10.col-sm-10.col-xs-10.mt-3.ml-1
+          input.form-check-input(type='checkbox', value='')
+          label.form-check-label
+            | I agree that all of my data will be deleted and will not be recoveredable upon deleted.
+        button.btn.mt-2.mb-3.px-4.color-ink(type='button') Deactivate Account
+        
+  include ../includes/logout.pug
+  
+  include ../includes/footer.pug
