@@ -113,6 +113,7 @@ function isAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
+app.use('/register', register)
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', isAuthenticated, adminRouter);
@@ -120,7 +121,7 @@ app.use('/business-owner', isAuthenticated, businessRouter);
 // app.use('/business-owner', businessRouter);
 app.use('/login', login);
 app.use('/', isAuthenticated, account);
-app.use('/register', register)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
