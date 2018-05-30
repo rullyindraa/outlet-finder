@@ -49,12 +49,9 @@ html
           marker.setVisible(false);
           var place = autocomplete.getPlace();
           if (!place.geometry) {
-          // User entered the name of a Place that was not suggested and
-          // pressed the Enter key, or the Place Details request failed.
             window.alert("No details available for input: '" + place.name + "'");
             return;
           }
-          // If the place has a geometry, then present it on a map.
           if (place.geometry.viewport) {
             map.fitBounds(place.geometry.viewport);
           } else {
@@ -63,32 +60,47 @@ html
           }
           marker.setPosition(place.geometry.location);
           marker.setVisible(true);
+          
+          for (var i = 0; i < place.address_components.length; i++) {
+            for (var j = 0; j < place.address_components[i].types.length; j++) {
+              if (place.address_components[i].types[j] == "postal_code") {
+                document.getElementById('postal_code').value = place.address_components[i].long_name;
+              } else if (place.address_components[i].types[j] == "country") {
+                document.getElementById('country').value = place.address_components[i].short_name;
+              } else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+                document.getElementById('adm1').value = place.address_components[i].short_name;
+              } else if (place.address_components[i].types[j] == "administrative_area_level_2") {
+                document.getElementById('adm2').value = place.address_components[i].short_name;
+              } else if (place.address_components[i].types[j] == "administrative_area_level_3") {
+                document.getElementById('adm3').value = place.address_components[i].short_name;
+              } else if (place.address_components[i].types[j] == "administrative_area_level_4") {
+                document.getElementById('adm4').value = place.address_components[i].short_name;
+              } else if (place.address_components[i].types[j] == "administrative_area_level_5" || place.address_components[i].types[j] == "locality") {
+                document.getElementById('line2').value = place.address_components[i].short_name;
+              } else if (place.address_components[i].types[j] == "route") {
+                var route = place.address_components[i].short_name;
+              } else if (place.address_components[i].types[j] == "street_number") {
+                var st = place.address_components[i].short_name;
+              }
+            }
+          }
           var address = '';
           var component = place.address_components;
           var formatted_address = place.formatted_address;
-          var line1 = place.address_components[1].short_name;
-          var line2 = place.address_components[0].short_name;
-          var country = place.address_components[6].short_name;
-          var adm1 = place.address_components[5].long_name;
-          var adm2 = place.address_components[4].short_name;
-          var adm3 = place.address_components[3].short_name;
-          var adm4 = place.address_components[2].short_name;
-          var postal_code = place.address_components[7].short_name;
           var lat = place.geometry.location.lat();
           var lng = place.geometry.location.lng();
-          document.getElementById("line1").value = line1;
-          document.getElementById("line2").value = line2;
-          document.getElementById("country").value = country;
-          document.getElementById("adm1").value = adm1;
-          document.getElementById("adm2").value = adm2;
-          document.getElementById("adm3").value = adm3;
-          document.getElementById("adm4").value = adm4;
-          document.getElementById("postal_code").value = postal_code;
+          if (route === undefined) {
+            route = '';
+          }
+          if (st === undefined) {
+            st = '';
+          }
+          document.getElementById('line1').value = route + ' ' + st;
           document.getElementById("lat").value = lat;
           document.getElementById("lng").value = lng;
           document.getElementById("formatted_address").value = formatted_address;
           console.log(component);
-          console.log(lat);
+          console.log(place);
           console.log(formatted_address);
           if (place.address_components) {
             address = [

@@ -31,7 +31,7 @@ block content
             tr
               th Name
               th Num of Business
-              th Action
+              th#action Action
           tbody
             for categories in data
               tr
@@ -95,6 +95,7 @@ block content
             "searching": false
           });
           $('#dataTable_paginate').addClass('pagination-sm');
+          $('#action').removeClass('sorting');
           $('#dataTable_paginate').addClass('mt-2');
         });
 

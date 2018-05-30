@@ -31,7 +31,7 @@ block content
               th Email
               th Phone Number
               th Status
-              th Action
+              th#action Action
           tbody
             for bo in data
               tr
@@ -82,6 +82,7 @@ block content
             "searching": false
           });
           $('#dataTable_paginate').addClass('pagination-sm');
+          $('#action').removeClass('sorting');
           $('#dataTable_paginate').addClass('mt-2');
         });
 

@@ -33,7 +33,7 @@ block content
               th Username
               th Name
               th Email
-              th Action
+              th#action Action
           tbody
             for admin in data
               tr
@@ -79,6 +79,7 @@ block content
             "searching": false
           });
           $('#dataTable_paginate').addClass('pagination-sm');
+          $('#action').removeClass('sorting');
           $('#dataTable_paginate').addClass('mt-2');
         });
         
