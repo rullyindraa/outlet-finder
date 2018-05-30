@@ -117,6 +117,10 @@ a:hover {
   color:  #193446;
 }
 
+#logout a:hover {
+  color: #FFF;
+}
+
 .breadcrumb-item.active {
   color: #193446;
   font-weight: 500;

@@ -3,7 +3,7 @@ var config = {
     host : 'localhost',
     user : 'root',
     password : '',
-    database : 'outlet_finder'
+    database : 'outlet-finder'
   },
   register_message: {
     from: 'register@demo.com',

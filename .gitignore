@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+views/.DS_Store
+public/.DS_Store
+public/stylesheets/.DS_Store
+sendgrid.env
+views/guest/c-2.pug

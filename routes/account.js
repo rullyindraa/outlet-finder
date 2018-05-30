@@ -366,7 +366,7 @@ router.post('/change-password', function(req, res, next) {
         } else {
           alert('wrong old password!')
         }
-        res.redirect('/change_password')
+        res.redirect('/change-password')
       })
     } else {
       req.flash('not_match', 'The new password and confirm password are not the same')
