@@ -36,6 +36,21 @@ router.post('/verify_account', function(req, res, next) {
         var email = req.body.email;
         var username = req.body.username;
         var token_active = token;
+        var create_at = moment().toDate();
+        var insert_user = {
+          username: username, email: email, token: token_active, create_at: create_at, role:0
+        }
+
+        // user.create(insert_user).then(function(rows, err) {
+        //   user.findAll({
+        //     where : {
+        //       username : username
+        //     }
+        //   }).then(function(wrr, rows) {
+        //     done(err, token, rows)
+        //   })
+        // })
+
         user.findAll({
           where: {
             username: username
@@ -44,14 +59,15 @@ router.post('/verify_account', function(req, res, next) {
           if(rows.length>0) {
             alert('username already used!');
           } else {
-            var create_at = moment().toDate();
-            var insert_user = {
-              username: username, email: email, token: token_active, create_at: create_at, role:0
-            }
-            console.log('pengecekan kketiga')
-            user.bulkCreate(insert_user).then(function(rows, err) {
-              alert('check your email to verify your account!')
-              done(err, token, rows)
+            user.create(insert_user).then(function(rows, err) {
+              user.findAll({
+                where : {
+                  username : username
+                }
+              }).then(function(err, rows) {
+                alert('check your email to confirm your account!')
+                done(err, token, rows)
+              })
             })
           }
         }).catch(function(err) {
@@ -84,7 +100,8 @@ router.get('/register_next', function(req, res) {
   res.render('login/register-next');
 })
 
-router.get('/next/:token', function(req, res){
+router.get('/next/:token', function(req, res,){
+  console.log('sampe sini aja coba')
   user.findAll({
     where: {
       token:[req.params.token]
