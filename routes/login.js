@@ -76,8 +76,8 @@ router.get('/forgot', function(req, res) {
 })
 
 router.post('/reset_password', function(req, res, next) {
-  var email = req.body.email;
-    console.log(email);
+    var email = req.body.email;
+    console.log("daftar email :",email);
     async.waterfall([
       function(done) {
         crypto.randomBytes(20, function(err, buf) {
@@ -133,7 +133,7 @@ router.post('/reset_password', function(req, res, next) {
       }
       ], function(err) {
         if (err) return next(err);
-        res.redirect('/login/forgot');
+        res.redirect('/login');
       });
 });
 
@@ -169,7 +169,8 @@ router.post('/reset', function(req, res) {
     var pass = bcrypt.hashSync(password);
 
     user.update({
-      password: pass
+      password: pass,
+      token : null
     }, {
       where: {
         username: username

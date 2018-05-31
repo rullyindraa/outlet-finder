@@ -28,15 +28,18 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 router.get('/security', function(req, res) {
+  // var username:
   user.findAll({
     where: {
-      username: 'qyu'
+      username: req.user.username
     }
   }).then(rows => {
-    var newSecret = twoFactor.generateSecret({name: '', account: 'qyu'})
+    var newSecret = twoFactor.generateSecret({name: 'Outlet Finder', account: req.user.username})
     console.log('new secret',newSecret)
     var newToken = twoFactor.generateToken(newSecret.secret);
     console.log(newToken);
+    var check1 = rows[0].two_fa;
+    console.log('status two fa', check1)
     user.update({
       secret_key: newSecret.secret,
       qr_url: newSecret.qr
@@ -45,120 +48,56 @@ router.get('/security', function(req, res) {
         username: 'qyu'
       }
     }).then(rows => {
-      var check1;
-      if (rows.two_fa === '1'){
-        check1 = 'enable'
-      } else {
-        check1 = 'disable'
-      }
-      if(req.user.role === true) {
-        res.render('admin/security', {stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken, check_2fa: check1, name: req.user.first_name +  ' ' + req.user.last_name, active5: 'active-navbar'})
-      } else {
-        res.render('business-owner/security', { title: 'Account Security | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar' });
-      }
+      res.render('admin/security', {stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken, scheck1: check1})
     })
   })
 });
 
-// router.get('/verify', function (req, res) {
-//   user.findOne({
-//       where : {
-//         username: 'qyu'
-//       }
-//     }).then(function(rows) {
-//       console.log(rows.username)
-//       var secret_token = req.body.secret_token;
-//       console.log("secretnya",secret_token)
-//       var verifyToken = twoFactor.verifyToken(rows.secret_key, secret_token);
-//       console.log(rows.secret_key)
-//       console.log(verifyToken)
-//       console.log(secret_token)
-//       // console.log(cobaa)
-//       if (verifyToken !== null) {
-//         // alert('Valid token.')
-//         req.flash('valid', 'Valid token.')
-//         req.flash('code', rows.secret_key)
-//         res.render('admin/security',{'valid': req.flash('valid'), stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken})
-//         // res.render('admin/security');
-//       } else {
-//         // alert('Wrong token!')
-//         // req.flash('failed', 'Wrong token!')
-//         // req.flash('code', user.twofa_secret)
-//         // res.render('admin/security', {token: req.query.token });
-//       }
-//       // console.log(twofa.verifyToken(user.twofa_secret, req.body.token));
-//   })
-// });
-
-// // router.get('/verify', function(req, res) {
-
-// // })
-
-// router.post('/save', function (req, res) {
-//   user.update({
-//     two_fa: 'ENABLE'
-//   }, { 
-//     where : {
-//       username: 'qyu'
-//     }
-//   }).then(function(rows) {
-//     req.flash('success', 'Horray! Two factor authentication is enabled.')
-//     res.render('admin/security', { 'valid': req.flash('success'), stwofa: 'enable', stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken })
-//   })
-// })
-
 router.get('/check', function(req, res, next) {
-  // console.log('quswr', req.query.token)
   user.findOne({
     where: {
-      username: 'qyu'
+      username: req.user.username
     }
   }).then(function(rows) {
     var verifyToken = twoFactor.verifyToken(rows.secret_key, req.query.secret_token);
     console.log("secret key: ",rows.secret_key);
-    console.log('input token: ', req.query.secret_token)
+    console.log('input token: ', req.query.secret_token);
     if (verifyToken !== null) {
-      // console.log("secret key :",rows.secret_key)
-      // console.log('qr :', rows.qr_url)
-      // console.log(verifyToken)
-      // res.send(true);
-      // stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret
-      res.render('admin/security',{'valid': req.flash('valid'), stwofa: 'enable', 'enable': req.flash('code'), stwo_fa: rows.two_fa, qrcode: rows.qr_url, secret_key: rows.secret_key})
+      req.flash('Valid', 'Two factor authentication now active !')
+      res.render('admin/security',{'valid': req.flash('Valid'), stwo_fa: rows.two_fa, qrcode: rows.qr_url, secret_key: rows.secret_key, scheck1: rows.two_fa})
     } else {
       console.log('INVALID TOKEN');
       res.send(false);
-      // req.flash('failed', 'Wrong token!')
-      // // req.flash('code', user.twofa_secret)
       // res.render('admin/security', {token: req.query.token });
     }
     console.log("sampe sini")
   })
 })
 
-router.post('/account/check', function(req, res) {
+router.post('/check', function(req, res) {
   console.log('masuk ke post')
   user.update({
     two_fa: '1'
   }, {
     where: {
-      username: 'qyu'
+      username: req.user.username
     }
   }).then(function(rows) {
     console.log('adalah..')
     req.flash('success', 'Horray! Two factor authentication is enabled.')
-    res.render('admin/security', { 'valid': req.flash('success'), stwofa: 'enable' })
+    res.render('admin/security', { 'valid': req.flash('success'), scheck1: rows.two_fa })
   })
 })
 
-router.get('/check/:token', function(req, res, next) {
-  var verifytoken = twoFactor.verifyToken(req.user[0].secret_key, req.params.token);
-  console.log(req.params.token)
-  if (verifytoken !== null) {
-    res.send(true);
-  } else {
-    res.send(false);
-  }
-});
+// router.get('/check/:token', function(req, res, next) {
+//   var verifytoken = twoFactor.verifyToken(req.user[0].secret_key, req.params.token);
+//   console.log(req.params.token)
+//   if (verifytoken !== null) {
+//     res.send(true);
+//   } else {
+//     res.send(false);
+//   }
+//  });
 
 router.get('/basic-info', function(req, res, next) {
   user.findAll({
@@ -388,6 +327,7 @@ router.get('/setting', function(req, res) {
 });
 
 router.get('/logout', function(req,res){
+  console.log('logout')
   req.logout();
   res.redirect('/');
 });
