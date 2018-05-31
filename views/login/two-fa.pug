@@ -17,6 +17,28 @@
 //-           p.fieldset
 //-               a(href='/login') Back to log-in
 
+extends layout-login
 
-extends 
-      
+block content
+  .container
+    .wrapper
+      form.form.form-signin(method='POST', action='/two_fa')
+        img.img-thumbnail.center(src="/images/logo-dark-trans.png" alt="")
+        p.fieldset
+          label.image-replace.username Username
+          input#username.full-width.has-padding.has-border(type='text', placeholder='Username', name='username', value=susername, readonly)
+        p.fieldset
+          label.image-replace.password Token
+          input#password.full-width.has-padding.has-border(type='text', placeholder='Token', name='token')
+          span.error-message Please enter token from your device
+          |
+          - if(wrong) {
+            p.fieldset(style = 'color: red')
+              | !{wrong}
+          - }
+        p.fieldset
+          // input.full-width(type='submit', value='Login')
+        p.fieldset
+          input.full-width.has-padding(type='submit', value='Submit')
+        p.fieldset(align='center')
+          a(href='/login') Back to log-in

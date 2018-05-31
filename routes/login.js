@@ -12,17 +12,14 @@ const moment = require('moment');
 const user = models.user;
 const sgMail = require('@sendgrid/mail');
 
-// router.get('/', function(req, res, next) {
-//   res.render('login/login-regist', { title: 'LOGIN' });
-// });
-
 router.get('/', function(req, res, next) {
-  res.render('login/login-2', { title: 'LOGIN' });
+  res.render('login/login-regist', { title: 'LOGIN' });
 });
 
 router.get('/signin', function(req, res, next) {
   passport.authenticate('local', function(err, users, info) {
     console.log("coba", req.query.username)
+    // console.log('two-fa', req.query.two_fa)
     if (err){ return next(err) }
     if (!users) {
       return res.redirect('/login');
@@ -32,23 +29,13 @@ router.get('/signin', function(req, res, next) {
         username: [req.query.username]
       }
     }).then(function(rows) {
-        if(rows[0].two_fa === 1) {
-          if(rows[0].role === 1) {
-            req.login(users, function(err) {
-              if (err) { return next(err); }
-              console.log('akjsh')
-              return res.redirect('/admin/');
-            });
-          }
-          else{
-            req.login(users, function(err) {
-              if (err) { return next(err); }
-              console.log('akjsh')
-              return res.redirect('/business-owner/');
-            });
-          }
-          console.log(req.login);
-          // res.redirect('/')
+        console.log('userr: ',rows)
+        if(rows[0].two_fa === true) {
+          req.login(users, function(err) {
+            if (err) { return next(err); }
+              console.log('masuuuk')
+              return res.redirect('/two_fa');
+          });
         } else {
           if(rows[0].role === true) {
             req.login(users, function(err) {
@@ -125,8 +112,6 @@ router.post('/reset_password', function(req, res, next) {
           subject: config.message.subject_reset,
           text: config.message.text_reset1 + 'http://'+ req.headers.host +'/login/set_password/'+ token + '\n\n' + config.message.text_reset2
         };
-        // console.log(req.headers.host)
-        // console.log("proses kirim");
         sgMail.send(mailOptions, function(err) {
           done(err, 'done');
         }) 
@@ -147,15 +132,6 @@ router.get('/set_password/:token', function(req, res, next) {
     res.render('login/reset-password', {susername: rows[0].username, semail: rows[0].email})
   })
 })
-
-// router.post('/set_password/', function(req, res, err, next) {
-//   var username = req.body.username;
-//   var email = req.body.email;
-
-//   console.log(username, email)
-//   res.redirect('/login')
-
-// })
 
 router.post('/reset', function(req, res) {
   var username = req.body.username;

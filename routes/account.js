@@ -39,13 +39,14 @@ router.get('/security', function(req, res) {
     var newToken = twoFactor.generateToken(newSecret.secret);
     console.log(newToken);
     var check1 = rows[0].two_fa;
+    var username = rows[0].username;
     console.log('status two fa', check1)
     user.update({
       secret_key: newSecret.secret,
       qr_url: newSecret.qr
     }, {
       where: {
-        username: 'qyu'
+        username: username
       }
     }).then(rows => {
       res.render('admin/security', {stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken, scheck1: check1})
@@ -325,6 +326,40 @@ router.get('/setting', function(req, res) {
     res.render('business-owner/setting', { title: 'Account Setting | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar' });
   }
 });
+
+router.get('/two_fa', function(req, res) {
+  console.log('masuk sini')
+  console.log(req.user.username)
+  // res.render('login/two-fa')
+  res.render('login/two-fa', { title: 'Two Factor Authentication | Outlet Finder', susername: req.user.username});
+})
+
+router.post('/two_fa', function(req, res, next) {
+  console.log('coba masuk')
+  // console.log(req.body.username);
+  console.log('query :', req.user.username)
+  username = req.body.username;
+  console.log(username)
+  user.findOne({
+    where : {
+      username : username
+    }
+  }).then(function(rows) {
+    var verifyToken = twoFactor.verifyToken(rows.secret_key, req.body.token)
+    console.log(verifyToken);
+    if (verifyToken === null) {
+      req.flash('wrong', 'Please enter valid token !')
+      res.render('login/two-fa',{'wrong': req.flash('wrong'), susername: rows.username})
+    } else {
+      if(rows.role === true){
+        console.log('masuk ke admin')
+        res.render('admin/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+      } else {
+        res.render('busines-owner/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+      }
+    }
+  })
+})
 
 router.get('/logout', function(req,res){
   console.log('logout')
