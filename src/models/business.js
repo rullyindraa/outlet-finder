@@ -73,6 +73,8 @@ module.exports = (sequelize, DataTypes) => {
     business.belongsToMany(models['category'], { through: models['helper_category'], foreignKey: models['helper_category'].bussinessId});
     business.hasOne(models['helper_category']);
     business.belongsTo(models['address']);
+    business.hasOne(models['outlet']);
+    business.belongsTo(models['file']);
     //business.hasOne(models['user']);
     //business.belongsTo(models['helper_category']);
     //business.belongsTo(models.helper_category, {foreignKey: models.helper_category.bussinessId});

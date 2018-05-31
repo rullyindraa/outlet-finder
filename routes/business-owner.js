@@ -22,11 +22,9 @@ router.get('/', function(req, res) {
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		// set uploads directory
 		cb(null, './public/files/')
 	},
 	filename: (req, file, cb) => {
-		// save file with current timestamp + user email + file extension
 		cb(null, Date.now() + path.extname(file.originalname));
 	}
 })
@@ -36,11 +34,12 @@ const upload = multer({storage: storage});
 router.get('/business', function(req, res) {
   business.findAll({
     where: {
-      // userId:1
       userId: req.user.id
     },
     attributes: [['name', 'business'],
-    [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names']],
+      [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names'],
+      [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.businessId"))), 'count_outlet']
+    ],
     group: ['business.id'],
     include: [
       {
@@ -51,8 +50,16 @@ router.get('/business', function(req, res) {
         //   [Sequelize.fn('GROUP_CONCAT', Sequelize.col("categories.name")), 'category_names']
         //   // [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("name SEPARATOR ', '")), 'Categories'], 'Categories'
         // ]
+      },
+      {
+        model: outlet,
+        attributes: ['id'],
+        // distinct: ['businessId'],
+        // attributes: [[Sequelize.fn('COUNT', Sequelize.col("outlet.businessId")), 'count_outlet']],
+        group: ['id']
       }
-    ]
+    ],
+    raw:true
   }).then(rows => {
     console.log(rows);
     res.render('business-owner/business', {title: 'Business Lists | Outlet Finder', data:rows, name: req.user.first_name});
@@ -98,7 +105,6 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
       )
       .then(row => {
         file.create({
-          //files: !req.file ? 'placeholder.jpg' : req.file.filename,
           relative_path: target_path,
           original_name: !req.file ? 'placeholder.jpg' : req.file.filename,
           mime_type : req.file.mimetype
@@ -111,9 +117,7 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
           console.log(row);
           console.log(req.file);
           business.create({
-            // userId: 1,
             userId: req.user.id,
-            // userId: this.id,
             name: req.body.name,
             addressId: row.id,
             fileId: row.id,
@@ -128,10 +132,12 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
           })
           .then(row => {
             console.log(row);
+            for (var i=0; i< req.body.category.length; i++){
               helper_category.create({
                 categoryId: req.body.category,
                 businessId: row.id
               })
+            }
             })
           .then(rows => {
             console.log(rows);
@@ -147,6 +153,67 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
         res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name});
       })
     } 
+  })
+});
+
+router.get('/business/:id', function(req, res) {
+  // category.findAll()
+  // .then(rows => {
+  //   res.render('business-owner/edit-business', {title: 'Edit Business | Outlet Finder', Categories:rows, name: req.user.first_name});
+  // })
+  business.findAll({
+    where: {
+      id: [req.params.id]
+    },
+    attributes: ['*', ['name', 'b_name']],
+    // attributes: ['id', 'name', 'phone_number', 'email', 'website', 'description'],
+    include: [
+      {
+        model: helper_category,
+        // attributes: [[Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names']],
+        include: [
+          {
+            model: category,
+            attributes: ['name']
+          }
+        ]
+        // attributes: ['name']
+      },
+      {
+        model: address
+      },
+      {
+        model: file,
+        attributes: ['name', ['relative_path', 'path']]
+      }
+    ],
+    // group: ['business.id'],
+    raw:true
+  })
+  .then(function(rows) {
+    console.log(rows);
+    res.render('business-owner/edit-business', {
+      title: 'Edit Business | Outlet Finder', 
+      data: rows,
+      // id: rows[0].id,
+      // name: rows[0].name,
+      // description: rows[0].description,
+      // categories: rows[0].categories,
+      name: req.user.first_name + ' ' + req.user.last_name, 
+      active2: 'active-navbar' 
+    })
+  }).catch(err => {
+    console.error(err);
+  });
+});
+
+router.post('/business/delete/:id', function(req, res, next) {
+  business.destroy({
+    where: {
+      id : [req.params.id]
+    }
+  }).then(function(err) {
+    res.redirect('/business-owner/business')
   })
 });
 
