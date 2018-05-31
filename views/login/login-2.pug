@@ -1,0 +1,29 @@
+extends layout-login
+
+block content
+  .container
+    .wrapper
+      form.form.form-signin(method='GET' action='/login/signin')
+        img.img-thumbnail.center(src="/images/logo-dark-trans.png" alt="")
+        p.fieldset
+          label.image-replace.username Username
+          input#username.full-width.has-padding.has-border(type='text', placeholder='Username', name='username', required='')
+          span.error-message An account with this username does not exist!
+        p.fieldset
+          label.image-replace.password(for='password') Password
+          input#password.full-width.has-padding.has-border(type='password', placeholder='Password', name='password')
+          a.hide-password(href='#0') Show
+          span.error-message Wrong password! Try again.
+        p.fieldset
+          input#remember-me(type='checkbox', checked='')
+          label(for='remember-me')  Remember me
+        p.fieldset
+          // input.full-width(type='submit', value='Login')
+        p.fieldset
+          input.full-width.has-padding(type='submit', value='Login')
+        p.fieldset(align='center')
+          a(href='/register', align='center' ,style='margin-bottom: 10px;') Create an account 
+          | or
+          a(href='/forgot', style='margin-bottom: 20px;')  reset password
+
+        

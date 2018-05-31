@@ -12,8 +12,12 @@ const moment = require('moment');
 const user = models.user;
 const sgMail = require('@sendgrid/mail');
 
+// router.get('/', function(req, res, next) {
+//   res.render('login/login-regist', { title: 'LOGIN' });
+// });
+
 router.get('/', function(req, res, next) {
-  res.render('login/login-regist', { title: 'LOGIN' });
+  res.render('login/login-2', { title: 'LOGIN' });
 });
 
 router.get('/signin', function(req, res, next) {

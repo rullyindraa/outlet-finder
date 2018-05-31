@@ -1,0 +1,21 @@
+extends layout-login
+
+block content
+  .container
+    .wrapper
+      img.img-thumbnail.center(src="/images/logo-dark-trans.png" alt="")
+      p.form-message
+        | Lost your password? Please enter your email address.
+        br
+        |  You will receive a link to create a new password.
+      form.form
+        p.fieldset
+          label.image-replace.email(for='reset-email') E-mail
+          input#reset-email.full-width.has-padding.has-border(type='email', placeholder='E-mail')
+          span.error-message An account with this email does not exist!
+        p.fieldset
+          input.full-width.has-padding(type='submit', value='Reset password')
+      p.form-bottom-message
+        a(href='/login') Back to log-in
+    a.close-form(href='/') Close
+    

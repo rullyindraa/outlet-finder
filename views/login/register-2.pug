@@ -1,0 +1,25 @@
+extends layout-login
+
+block content
+  .container
+    .wrapper
+      form.form.form-signin(method='POST' action='/register/verify_account')
+        img.img-thumbnail.center(src="/images/logo-dark-trans.png" alt="")
+        p.fieldset
+          label.image-replace.username Username
+          input#username-regist.full-width.has-padding.has-border(type='text', placeholder='Username', name='username')
+          span.error-message Your username can only contain numeric and alphabetic symbols!
+        p.fieldset
+          label.image-replace.email E-mail
+          input#email.full-width.has-padding.has-border(type='email', placeholder='E-mail', name='email')
+          span.error-message Enter a valid email address!
+        p.fieldset
+          input#accept-terms(type='checkbox')
+          label(for='accept-terms')
+            |   I agree to the 
+            a.accept-terms(href='#0') Terms
+        p.fieldset
+          input.full-width.has-padding(type='submit', value='Create My Account')
+        p.fieldset(align='center')
+          a(href='/login', align='center' ,style='margin-bottom: 10px;') Back to login
+        
