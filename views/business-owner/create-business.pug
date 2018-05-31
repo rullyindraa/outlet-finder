@@ -51,8 +51,9 @@ block content
             label(for='photo') Photo:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
             .custom-file
-              input.custom-file-input(type='file' name="photo" id="photo")
-              label.custom-file-label Choose file...
+              //- input.custom-file-input(type='file' name="photo" id="photo")
+              //- label.custom-file-label Choose file...
+              input#photo.form-control(type='file' accept="image/*" name='photo')
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='Description') Description:

@@ -13,18 +13,16 @@ const twoFactor = require('node-2fa');
 const flash = require('express-flash');
 const multer = require('multer');
 const path = require('path');
+var fs = require('fs');
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		// set uploads directory
 		cb(null, './public/files/')
 	},
 	filename: (req, file, cb) => {
-		// save file with current timestamp + user email + file extension
 		cb(null, Date.now() + path.extname(file.originalname));
 	}
 })
-
 const upload = multer({storage: storage});
 
 router.get('/security', function(req, res) {
@@ -125,6 +123,8 @@ router.get('/basic-info', function(req, res, next) {
         photo: rows[0][`file.pp`],
         alt: rows[0][`file.p`],
         name: req.user.first_name + ' ' + req.user.last_name,
+        photo: rows[0][`file.pp`],
+        alt: rows[0][`file.p`],
         active5: 'active-navbar'
       })
     } else {
@@ -139,6 +139,8 @@ router.get('/basic-info', function(req, res, next) {
         photo: rows[0][`file.pp`],
         alt: rows[0][`file.p`],
         name: req.user.first_name + ' ' + req.user.last_name,
+        photo: rows[0][`file.pp`],
+        alt: rows[0][`file.p`],
         active2: 'active-navbar'
       })
     }
@@ -153,17 +155,20 @@ router.post('/basic-info', upload.single('photo'), function(req, res, next) {
   var email = req.body.email;
   var username = req.body.username;
   var phone_number = req.body.phone_number;
-  var updatedAt = new Date();
-  var photo = req.file;
+  // var updatedAt = new Date();
 
-  var target_path = '/files/' + req.file.filename;
-  file.update(
+  if (req.file) {
+		// if old photo exists (old photo not empty) then unlink / remove the photo in directory
+		if (req.body.old_photo !== '')
+			fs.unlink(`public/files/${req.body.old_photo}`);
+    var target_path = '/files/' + req.file.filename;
+    file.update(
       {
+        name: req.file.filename,
         relative_path: target_path,
-        name: !req.file ? 'placeholder.jpg' : req.file.filename,
-        original_name: req.file.originalname,
+        original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
         mime_type : req.file.mimetype,
-        updatedAt: updatedAt
+        updatedAt: new Date()
       },
       {
         where: {
@@ -183,8 +188,8 @@ router.post('/basic-info', upload.single('photo'), function(req, res, next) {
         last_name: last_name,
         email: email, 
         username: username, 
-        phone_number: phone_number, 
-        updatedAt: updatedAt
+        phone_number: phone_number,
+        updatedAt: new Date()
         } , {
         where: {
           id: req.user.id
@@ -192,77 +197,32 @@ router.post('/basic-info', upload.single('photo'), function(req, res, next) {
       })
     })
     .then(function(rows) {
-      if(req.user.role === true) {
-        res.redirect('/basic-info');
-      } else {
-        res.redirect('/basic-info');
-      }
+      // console.log(req.file);
+      res.redirect('/basic-info');
     }).catch(err => {
       console.error(err);
     });
-  // if(photo === undefined) {
-  //   user.update({
-  //     first_name: first_name, 
-  //     last_name: last_name,
-  //     email: email, 
-  //     username: username, 
-  //     phone_number: phone_number, 
-  //     updatedAt: updatedAt
-  //   } , {
-  //     where: {
-  //       id: req.user.id
-  //     }
-  //   }).then(function(rows) {
-  //     res.redirect('/basic-info');
-  //   }).catch(err => {
-  //     console.error(err);
-  //   });
-  // } else {
-  //   var target_path = '/files/' + req.file.filename;
-  //   file.update(
-  //     {
-  //       relative_path: target_path,
-  //       name: !req.file ? 'placeholder.jpg' : req.file.filename,
-  //       original_name: req.file.originalname,
-  //       mime_type : req.file.mimetype,
-  //       updatedAt: updatedAt
-  //     },
-  //     {
-  //       where: {
-  //         id: req.user.fileId
-  //       }
-  //     },
-  //     {
-  //       include: [{
-  //         model: user
-  //       }]
-  //     }
-  //   )
-  //   .then(row => {
-  //     user.update(
-  //       {
-  //       first_name: first_name, 
-  //       last_name: last_name,
-  //       email: email, 
-  //       username: username, 
-  //       phone_number: phone_number, 
-  //       updatedAt: updatedAt
-  //       } , {
-  //       where: {
-  //         id: req.user.id
-  //       }
-  //     })
-  //   })
-  //   .then(function(rows) {
-  //     if(req.user.role === true) {
-  //       res.redirect('/basic-info');
-  //     } else {
-  //       res.redirect('/basic-info');
-  //     }
-  //   }).catch(err => {
-  //     console.error(err);
-  //   });
-  // }
+  }
+  user.update({
+    first_name: first_name, 
+    last_name: last_name,
+    email: email, 
+    username: username, 
+    phone_number: phone_number, 
+    updatedAt: new Date()
+  } , {
+    where: {
+      id: req.user.id
+    }
+  }).then(function(rows) {
+    if(req.user.role === true) {
+      res.redirect('/basic-info');
+    } else {
+      res.redirect('/basic-info');
+    }
+  }).catch(err => {
+    console.error(err);
+  });
 });
 
 router.get('/change-password', function(req, res, next) {

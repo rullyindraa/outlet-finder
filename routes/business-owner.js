@@ -16,10 +16,6 @@ const validateJoi = require('../src/validation/create-business');
 var multer = require('multer');
 const path = require('path');
 
-router.get('/', function(req, res) {
-  res.render('business-owner/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
-});
-
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, './public/files/')
@@ -30,6 +26,10 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({storage: storage});
+
+router.get('/', function(req, res) {
+  res.render('business-owner/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
+});
 
 router.get('/business', function(req, res) {
   business.findAll({
@@ -62,14 +62,14 @@ router.get('/business', function(req, res) {
     raw:true
   }).then(rows => {
     console.log(rows);
-    res.render('business-owner/business', {title: 'Business Lists | Outlet Finder', data:rows, name: req.user.first_name});
+    res.render('business-owner/business', {title: 'Business Lists | Outlet Finder', data:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
   })
 });
 
 router.get('/business/create-business', function(req, res) {
   category.findAll()
   .then(rows => {
-    res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name});
+    res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
   })
 });
 
@@ -150,7 +150,7 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
       category.findAll()
       .then(rows => {
         //if (err) return err;
-        res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name});
+        res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
       })
     } 
   })
@@ -195,11 +195,8 @@ router.get('/business/:id', function(req, res) {
     res.render('business-owner/edit-business', {
       title: 'Edit Business | Outlet Finder', 
       data: rows,
-      // id: rows[0].id,
-      // name: rows[0].name,
-      // description: rows[0].description,
-      // categories: rows[0].categories,
       name: req.user.first_name + ' ' + req.user.last_name, 
+      photo:req.user[`file.pp`],
       active2: 'active-navbar' 
     })
   }).catch(err => {
@@ -240,16 +237,16 @@ router.get('/outlets', function(req, res) {
     raw: true
   }).then(rows => {
     console.log(rows);
-    res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, name: req.user.first_name });
+    res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
   })
 });
 
 router.get('/outlets/create-outlet', function(req, res) {
-  res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', name: req.user.first_name });
+  res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
 });
 
 router.get('/reviews', function(req, res) {
-  res.render('business-owner/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name });
+  res.render('business-owner/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
 });
 
 module.exports = router;
