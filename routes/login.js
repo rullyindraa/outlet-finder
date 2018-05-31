@@ -13,7 +13,7 @@ const user = models.user;
 const sgMail = require('@sendgrid/mail');
 
 router.get('/', function(req, res, next) {
-  res.render('login/login-regist', { title: 'LOGIN' });
+  res.render('login/login-2', { title: 'LOGIN' });
 });
 
 router.get('/signin', function(req, res, next) {
@@ -60,6 +60,10 @@ router.get('/signin', function(req, res, next) {
 
 router.get('/forgot', function(req, res) {
   res.render('login/forgot')
+})
+
+router.get('/reset_password', function(req, res) {
+  res.render('login/forgot-2')
 })
 
 router.post('/reset_password', function(req, res, next) {

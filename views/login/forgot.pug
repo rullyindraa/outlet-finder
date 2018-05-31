@@ -9,10 +9,10 @@ link(rel='stylesheet', href='/stylesheets/style-login.css')
           | Lost your password? Please enter your email address.
           br
           |  You will receive a link to create a new password.
-        form.form
+        form.form(action='/login/reset_password', method='POST')
           p.fieldset
             label.image-replace.email(for='reset-email') E-mail
-            input#reset-email.full-width.has-padding.has-border(type='email', placeholder='E-mail')
+            input#email.full-width.has-padding.has-border(type='email', placeholder='E-mail', name='email')
             span.error-message An account with this email does not exist!
           p.fieldset
             input.full-width.has-padding(type='submit', value='Reset password')
