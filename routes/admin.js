@@ -113,9 +113,6 @@ router.post('/categories/delete/:id', function(req, res, next) {
 
 router.get('/business', function(req, res) {
   business.findAll({
-    // where: {
-    //   userId: req.user.id
-    // },
     attributes: [['name', 'business'],
     [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names']],
     group: ['business.id'],
@@ -126,8 +123,12 @@ router.get('/business', function(req, res) {
       }
     ]
   }).then(rows => {
-    console.log(rows);
-    res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name});
+    category.findAll()
+      .then(categories => {
+        console.log(rows);
+        console.log(categories);
+        res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, val: categories, name: req.user.first_name + ' ' + req.user.last_name});
+      })
   })
 });
 

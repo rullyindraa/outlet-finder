@@ -17,8 +17,8 @@ block content
             .form-group
               select.form-control(name="orderby")
                 option(name='categories', value="categories") - Category -
-                option(name='it_service', value="it_service") IT Service
-                option(name='fnb', value="fnb") Food and Beverage
+                each value in val
+                  option(value=value.id) #{value.name}
           .col-lg-1.col-md-1.col-sm-1.col-xs-1
             input.btn.color-ink.mb-3(type='submit', value='Search')
       .table-responsive.pb-5(style='color: black; margin-left: -15px;')
