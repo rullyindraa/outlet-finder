@@ -32,24 +32,22 @@ router.get('/', function(req, res) {
 });
 
 router.get('/business', function(req, res) {
-  business.findAll({
+  business.findAll(
+    {
     where: {
+      // userId:1
       userId: req.user.id
     },
-    attributes: [['name', 'business'],
-      [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names'],
-      [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.businessId"))), 'count_outlet']
+    attributes: ['id',['name', 'business'],
+    [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names'],
+    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.businessId"))), 'count_outlet']
     ],
+    // distinct: true,
     group: ['business.id'],
     include: [
       {
         model: category,
-        //attributes: [['name', Categories]], 
-        attributes: ['name'] 
-        // attributes: [
-        //   [Sequelize.fn('GROUP_CONCAT', Sequelize.col("categories.name")), 'category_names']
-        //   // [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("name SEPARATOR ', '")), 'Categories'], 'Categories'
-        // ]
+        attributes: ['name']
       },
       {
         model: outlet,
@@ -59,6 +57,7 @@ router.get('/business', function(req, res) {
         group: ['id']
       }
     ],
+    
     raw:true
   }).then(rows => {
     console.log(rows);
@@ -66,12 +65,47 @@ router.get('/business', function(req, res) {
   })
 });
 
-router.get('/business/create-business', function(req, res) {
-  category.findAll()
-  .then(rows => {
-    res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
-  })
-});
+// router.get('/business', function(req, res) {
+//   business.findAll({
+//     where: {
+//       userId: req.user.id
+//     },
+//     attributes: [['name', 'business'],
+//       [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names'],
+//       [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.businessId"))), 'count_outlet']
+//     ],
+//     group: ['business.id'],
+//     include: [
+//       {
+//         model: category,
+//         //attributes: [['name', Categories]], 
+//         attributes: ['name'] 
+//         // attributes: [
+//         //   [Sequelize.fn('GROUP_CONCAT', Sequelize.col("categories.name")), 'category_names']
+//         //   // [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("name SEPARATOR ', '")), 'Categories'], 'Categories'
+//         // ]
+//       },
+//       {
+//         model: outlet,
+//         attributes: ['id'],
+//         // distinct: ['businessId'],
+//         // attributes: [[Sequelize.fn('COUNT', Sequelize.col("outlet.businessId")), 'count_outlet']],
+//         group: ['id']
+//       }
+//     ],
+//     raw:true
+//   }).then(rows => {
+//     console.log(rows);
+//     res.render('business-owner/business', {title: 'Business Lists | Outlet Finder', data:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+//   })
+// });
+
+// router.get('/business/create-business', function(req, res) {
+//   category.findAll()
+//   .then(rows => {
+//     res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+//   })
+// });
 
 router.post('/business/create-business', upload.single('photo'), function(req, res){
   var target_path = './public/files/' + req.file.filename;
