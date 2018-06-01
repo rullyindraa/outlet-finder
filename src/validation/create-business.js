@@ -3,8 +3,7 @@ const extens = require('joi-date-extensions');
 const Joi = baseJoi.extend(extens);
 
 module.exports = Joi.object().keys({
-  category: Joi.string().error(new Error('Line of Business is required.')).required(),
-  name: Joi.string().error(new Error('Bisnis name is required.')).required(),
+  name: Joi.string().error(new Error('Business name is required.')).required(),
   email: Joi.string().error(new Error('Email is required.')).required(),
   email: Joi.string().email().error(new Error('Email is invalid.')),
   phone_number: Joi.string().error(new Error('Contact Number is Required')).required(),

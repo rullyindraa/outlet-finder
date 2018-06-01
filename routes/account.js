@@ -15,16 +15,6 @@ const multer = require('multer');
 const path = require('path');
 var fs = require('fs');
 
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, './public/files/')
-	},
-	filename: (req, file, cb) => {
-		cb(null, Date.now() + path.extname(file.originalname));
-	}
-})
-const upload = multer({storage: storage});
-
 router.get('/security', function(req, res) {
   // var username:
   user.findAll({
@@ -97,6 +87,16 @@ router.post('/check', function(req, res) {
 //     res.send(false);
 //   }
 //  });
+
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, './public/files/')
+	},
+	filename: (req, file, cb) => {
+		cb(null, Date.now() + path.extname(file.originalname));
+	}
+})
+const upload = multer({storage: storage});
 
 router.get('/basic-info', function(req, res, next) {
   user.findAll({

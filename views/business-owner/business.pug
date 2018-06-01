@@ -16,9 +16,9 @@ block content
           .col-lg-3.col-md-3.col-sm-3.col-xs-3
             .form-group
               select.form-control(name="orderby")
-                option(name='categories', value="categories") - Categories -
-                option(name='it_service', value="it_service") IT Services
-                option(name='fnb', value="fnb") Food and Beverages
+                option(name='categories', value="categories") - Category -
+                each value in categories
+                  option(value=value.id) #{value.name}
           .col-lg-3.col-md-3.col-sm-3.col-xs-3
             .form-group
               select.form-control(name="sort")
@@ -43,6 +43,7 @@ block content
                 td=b.business
                 td=b.category_names
                 td=b.count_outlet
+                  | 
                   a(href='#') view outlets >
                 td
                   .dropdown.show

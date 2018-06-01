@@ -39,8 +39,8 @@ router.get('/business', function(req, res) {
       userId: req.user.id
     },
     attributes: ['id',['name', 'business'],
-    [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names'],
-    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.businessId"))), 'count_outlet']
+    [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("DISTINCT(categories.name) SEPARATOR ', '")), 'category_names'],
+    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.id"))), 'count_outlet']
     ],
     // distinct: true,
     group: ['business.id'],
@@ -51,66 +51,38 @@ router.get('/business', function(req, res) {
       },
       {
         model: outlet,
-        attributes: ['id'],
+        // attributes: ['id'],
         // distinct: ['businessId'],
         // attributes: [[Sequelize.fn('COUNT', Sequelize.col("outlet.businessId")), 'count_outlet']],
-        group: ['id']
+        group: ['businessId']
       }
     ],
     
     raw:true
   }).then(rows => {
-    console.log(rows);
-    res.render('business-owner/business', {title: 'Business Lists | Outlet Finder', data:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+    category.findAll()
+    .then(cat => {
+      console.log('ini',rows);
+      console.log('itu',cat);
+      res.render('business-owner/business', {title: 'Business Lists | Outlet Finder', data:rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+    })
   })
 });
 
-// router.get('/business', function(req, res) {
-//   business.findAll({
-//     where: {
-//       userId: req.user.id
-//     },
-//     attributes: [['name', 'business'],
-//       [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names'],
-//       [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.businessId"))), 'count_outlet']
-//     ],
-//     group: ['business.id'],
-//     include: [
-//       {
-//         model: category,
-//         //attributes: [['name', Categories]], 
-//         attributes: ['name'] 
-//         // attributes: [
-//         //   [Sequelize.fn('GROUP_CONCAT', Sequelize.col("categories.name")), 'category_names']
-//         //   // [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("name SEPARATOR ', '")), 'Categories'], 'Categories'
-//         // ]
-//       },
-//       {
-//         model: outlet,
-//         attributes: ['id'],
-//         // distinct: ['businessId'],
-//         // attributes: [[Sequelize.fn('COUNT', Sequelize.col("outlet.businessId")), 'count_outlet']],
-//         group: ['id']
-//       }
-//     ],
-//     raw:true
-//   }).then(rows => {
-//     console.log(rows);
-//     res.render('business-owner/business', {title: 'Business Lists | Outlet Finder', data:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
-//   })
-// });
-
-// router.get('/business/create-business', function(req, res) {
-//   category.findAll()
-//   .then(rows => {
-//     res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
-//   })
-// });
+router.get('/business/create-business', function(req, res) {
+  category.findAll()
+  .then(rows => {
+    // console.log(rows);
+    res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+  })
+});
 
 router.post('/business/create-business', upload.single('photo'), function(req, res){
-  var target_path = './public/files/' + req.file.filename;
+  var target_path = '/files/' + req.file.filename;
 
-  validateJoi.validate({ category: req.body.category, name: req.body.name, 
+  validateJoi.validate({ 
+    // category: req.body.category, 
+    name: req.body.name, 
     email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
     description: req.body.description, line1: req.body.line1, line2: req.body.line2,
     adm_area_lv1: req.body.adm_area_lv1, adm_area_lv2: req.body.adm_area_lv2, 
@@ -139,8 +111,9 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
       )
       .then(row => {
         file.create({
+          name: req.file.filename,
           relative_path: target_path,
-          original_name: !req.file ? 'placeholder.jpg' : req.file.filename,
+          original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
           mime_type : req.file.mimetype
         }, {
           include: [{
@@ -148,8 +121,8 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
           }]
         })
         .then(row => {
-          console.log(row);
-          console.log(req.file);
+          // console.log(row);
+          // console.log(req.file);
           business.create({
             userId: req.user.id,
             name: req.body.name,
@@ -165,17 +138,15 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
             }]
           })
           .then(row => {
-            console.log(row);
-            for (var i=0; i< req.body.category.length; i++){
+            for(var i = 0; i < req.body.category.length; i++ ) {
               helper_category.create({
-                categoryId: req.body.category,
+                categoryId: req.body.category[i],
                 businessId: row.id
               })
             }
-            })
+          })
           .then(rows => {
             console.log(rows);
-            console.log(req.file);
             res.redirect('/business-owner/business');
           })
         }) 
@@ -184,7 +155,7 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
       category.findAll()
       .then(rows => {
         //if (err) return err;
-        res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+        res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
       })
     } 
   })
@@ -199,7 +170,7 @@ router.get('/business/:id', function(req, res) {
     where: {
       id: [req.params.id]
     },
-    attributes: ['*', ['name', 'b_name']],
+    // attributes: ['*', ['name', 'b_name']],
     // attributes: ['id', 'name', 'phone_number', 'email', 'website', 'description'],
     include: [
       {
@@ -208,7 +179,7 @@ router.get('/business/:id', function(req, res) {
         include: [
           {
             model: category,
-            attributes: ['name']
+            // attributes: ['name']
           }
         ]
         // attributes: ['name']
@@ -222,16 +193,21 @@ router.get('/business/:id', function(req, res) {
       }
     ],
     // group: ['business.id'],
+    distinct: true,
     raw:true
   })
-  .then(function(rows) {
-    console.log(rows);
-    res.render('business-owner/edit-business', {
-      title: 'Edit Business | Outlet Finder', 
-      data: rows,
-      name: req.user.first_name + ' ' + req.user.last_name, 
-      photo:req.user[`file.pp`],
-      active2: 'active-navbar' 
+  .then(rows => {
+    category.findAll()
+    .then(cat => {
+      console.log('ini',rows[0]);
+      // console.log('itu', cat);
+      res.render('business-owner/edit-business', {
+        title: 'Edit Business | Outlet Finder', 
+        data: rows, categories: cat,
+        name: req.user.first_name + ' ' + req.user.last_name, 
+        photo:req.user[`file.pp`],
+        active2: 'active-navbar' 
+      })
     })
   }).catch(err => {
     console.error(err);
@@ -270,7 +246,7 @@ router.get('/outlets', function(req, res) {
     ],
     raw: true
   }).then(rows => {
-    console.log(rows);
+    // console.log(rows);
     res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
   })
 });
