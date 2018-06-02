@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   page_view.associate = function(models) {
     // associations can be defined here
+    page_view.belongsTo(models['outlet']);
   };
   return page_view;
 };

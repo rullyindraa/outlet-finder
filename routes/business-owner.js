@@ -12,6 +12,7 @@ const helper_category = models.helper_category;
 const outlet = models.outlet;
 const page_view = models.page_view;
 const user = models.user;
+const review = models.review;
 const validateJoi = require('../src/validation/create-business');
 var multer = require('multer');
 const path = require('path');
@@ -57,7 +58,6 @@ router.get('/business', function(req, res) {
         group: ['businessId']
       }
     ],
-    
     raw:true
   }).then(rows => {
     category.findAll()
@@ -199,11 +199,23 @@ router.get('/business/:id', function(req, res) {
   .then(rows => {
     category.findAll()
     .then(cat => {
-      console.log('ini',rows[0]);
+      // console.log('ini',rows[0]);
       // console.log('itu', cat);
-      res.render('business-owner/edit-business', {
+      // console.log('try', rows[0]['address.raw_address']);
+      //console.log('aku', rows[0]['address.location'].coordinates[0]);
+      res.render('business-owner/edit-business2', {
         title: 'Edit Business | Outlet Finder', 
-        data: rows, categories: cat,
+        //data: rows,
+        id:  rows[0].id,
+        business_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
+        path: rows[0]['file.path'], file_name: rows[0]['file.name'], 
+        address_id: rows[0]['address.id'],
+        raw_address: rows[0]['address.raw_address'], 
+        line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
+        adm_area_lv1: rows[0]['address.adm_area_lv1'], adm_area_lv2: rows[0]['address.adm_area_lv2'], adm_area_lv3: rows[0]['address.adm_area_lv3'], adm_area_lv4: rows[0]['address.adm_area_lv4'],
+        formatted_address: rows[0]['address.formatted_address'],
+        lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
+        categories: cat,
         name: req.user.first_name + ' ' + req.user.last_name, 
         photo:req.user[`file.pp`],
         active2: 'active-navbar' 
@@ -218,22 +230,60 @@ router.post('/business/delete/:id', function(req, res, next) {
   business.destroy({
     where: {
       id : [req.params.id]
-    }
+    },
   }).then(function(err) {
     res.redirect('/business-owner/business')
   })
 });
 
-router.get('/outlets', function(req, res) {
+router.get('/outlet', function(req, res) {
+  // outlet.findAll({
+  //   where: {
+  //     businessId:2
+  //   },
+  //   attributes: ['id', ['name', 'outlet_name']],
+  //   include: [
+  //     {
+  //       model: business,
+  //       attributes: [['name', 'business_name']]
+  //     },
+  //     {
+  //       model: address,
+  //       attributes: [['adm_area_lv2', 'city_name']]
+  //     },
+  //     {
+  //       model: page_view,
+  //       attributes: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']]
+  //     }
+  //   ],
+  //   raw: true
+  // })
+  // .then(rows => {
+  //   category.findAll()
+  //   .then(cat => {
+  //     console.log(rows);
+  //     res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+  //   })
+  // })
   outlet.findAll({
-    where: {
-      businessId:1
-    },
-    attributes: [['name', 'outlet_name']],
+    attributes: ['id', ['name', 'outlet_name']],
+    // attributes: {
+    //   include: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']]
+    // },
     include: [
       {
         model: business,
-        attributes: [['name', 'business_name']]
+        // where: {
+        //   userId: req.user.id
+        // },
+        attributes: [['name', 'business_name']],
+        include: [{
+          model: user,
+          where: {
+            id: req.user.id
+          },
+          attributes:['id']
+        }]
       },
       {
         model: address,
@@ -241,22 +291,160 @@ router.get('/outlets', function(req, res) {
       },
       {
         model: page_view,
-        attributes: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']]
-      }
+        
+        // attributes: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']],
+        //[[Sequelize.fn('IFNULL', Sequelize.fn('COUNT', Sequelize.col('outletId')), 0), 'page_views']],
+        // include: [outlet]
+        required: false,
+      },
     ],
     raw: true
-  }).then(rows => {
-    // console.log(rows);
-    res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+  })
+  .then(rows => {
+    category.findAll()
+    .then(cat => {
+      console.log(rows);
+      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+    })
   })
 });
 
-router.get('/outlets/create-outlet', function(req, res) {
-  res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+router.get('/oulet/business/:id', function(req, res){
+  outlet.findAll({
+    where: {
+      businessId: [req.params.id]
+    },
+    attributes: ['id', ['name', 'outlet_name']],
+    // attributes: {
+    //   include: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']]
+    // },
+    include: [
+      {
+        model: business,
+        attributes: [['name', 'business_name']],
+      },
+      {
+        model: address,
+        attributes: [['adm_area_lv2', 'city_name']]
+      },
+      {
+        model: page_view,
+        // attributes: [[Sequelize.fn('IFNULL', Sequelize.fn('COUNT', Sequelize.col('outletId')), 0), 'page_views']],
+        // include: [outlet]
+      }
+    ],
+    raw: true
+  })
+  .then(rows => {
+    category.findAll()
+    .then(cat => {
+      console.log(rows);
+      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+    })
+  })
+})
+
+router.get('/outlet/create-outlet', function(req, res) {
+  business.findAll({
+    where: {
+      userId: req.user.id
+    }
+  })
+  .then(rows => {
+    res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+  })
+});
+
+router.post('/outlet/delete/:id', function(req, res, next) {
+  outlet.destroy({
+    where: {
+      id : [req.params.id]
+    }
+  }).then(function(err) {
+    res.redirect('/business-owner/outlets')
+  })
+});
+
+router.get('/outlet/:id', function(req, res) {
+  outlet.findAll({
+    where: {
+      id: [req.params.id]
+    },
+    include: [
+      {
+        model: business,
+        attributes: ['id','name']
+      },
+      {
+        model: address
+      },
+      {
+        model: file,
+        attributes: ['name', ['relative_path', 'path']]
+      }
+    ],
+    raw:true
+  })
+  .then(rows => {
+    business.findAll({
+      where: {
+        userId: req.user.id
+      }
+    })
+    .then(bus => {
+      console.log('inioutlet',rows);
+      // console.log('itu', cat);
+      // console.log('try', rows[0]['address.raw_address']);
+      //console.log('aku', rows[0]['address.location'].coordinates[0]);
+      res.render('business-owner/edit-outlet', {
+        title: 'Edit Outlet | Outlet Finder', 
+        //data: rows,
+        //id:  rows[0].id,
+        outlet_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
+        path: rows[0]['file.path'], file_name: rows[0]['file.name'], 
+        address_id: rows[0].addressId,
+        raw_address: rows[0]['address.raw_address'], 
+        line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
+        adm_area_lv1: rows[0]['address.adm_area_lv1'], adm_area_lv2: rows[0]['address.adm_area_lv2'], adm_area_lv3: rows[0]['address.adm_area_lv3'], adm_area_lv4: rows[0]['address.adm_area_lv4'],
+        formatted_address: rows[0]['address.formatted_address'],
+        lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
+        businessId:rows[0].businessId, business_name: rows[0]['business.name'],
+        business: bus,
+        name: req.user.first_name + ' ' + req.user.last_name, 
+        photo:req.user[`file.pp`],
+        active2: 'active-navbar' 
+      })
+    })
+  }).catch(err => {
+    console.error(err);
+  });
 });
 
 router.get('/reviews', function(req, res) {
-  res.render('business-owner/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+  review.findAll({
+    attributes: ['id', 'name', 'email', 'content', 'rating'],
+    include: [
+      {
+        model: outlet,
+        include: [{
+          model: business,
+          where: {
+            userId: req.user.id
+          },
+          attributes:['id']
+        }],
+        attributes: ['id',['name', 'outlet_name']]
+      }
+    ],
+    raw:true
+  }).then(rows => {
+    business.findAll()
+    .then(bus => {
+      console.log('inireview',rows);
+      res.render('business-owner/reviews', { title: 'Reviews | Outlet Finder', data: rows, business: bus, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+    })
+  })
+  // res.render('business-owner/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
 });
 
 module.exports = router;

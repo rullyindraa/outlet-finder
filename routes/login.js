@@ -29,7 +29,7 @@ router.get('/signin', function(req, res, next) {
         username: [req.query.username]
       }
     }).then(function(rows) {
-        console.log('userr: ',rows)
+        //console.log('userr: ',rows)
         if(rows[0].two_fa === true) {
           req.login(users, function(err) {
             if (err) { return next(err); }

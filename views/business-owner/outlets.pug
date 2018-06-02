@@ -16,9 +16,9 @@ block content
           .col-lg-3.col-md-3.col-sm-3.col-xs-3
             .form-group
               select.form-control(name="orderby")
-                option(name='categories', value="categories") - Business -
-                option(name='it_service', value="it_service") Wonderlabs
-                option(name='fnb', value="fnb") Wonderfood
+                option(name='categories', value="categories") - Category -
+                each value in categories
+                  option(value=value.id) #{value.name}
           .col-lg-3.col-md-3.col-sm-3.col-xs-3
             .form-group
               select.form-control(name="sort")
@@ -27,7 +27,7 @@ block content
                 option(name='desc', value="DESC") Semarang
           .col-lg-1.col-md-1.col-sm-1.col-xs-1.mb-3
             input.btn.color-ink(type='submit', value='Search')
-          a.plugin(href='/business-owner/business/create-business')
+          a.plugin(href='/business-owner/outlet/create-outlet')
             i.fas.fa-plus-circle.fa-2x.my-float
           //- a.float(href='/business-owner/outlets/create-outlet')
           //-   i.fa.fa-plus.my-float
@@ -56,10 +56,10 @@ block content
                     a.btn.btn-sm.color-pblue.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                       | Action
                     .dropdown-menu.dropdown-menu-right
-                      a.dropdown-item(href='#') 
+                      a.dropdown-item(href='/business-owner/outlet/'+o.id) 
                         i.fa.fa-edit  
                         |  Edit
-                      a.dropdown-item(href='#') 
+                      a.dropdown-item(href='#', onclick='del('+o.id+')') 
                         i.fa.fa-trash
                         |  Delete
             
@@ -67,24 +67,24 @@ block content
         .modal-dialog(role='document')
           .modal-content(style='color: black') 
             .modal-header
-              h5#exampleModalLabel.modal-titleDelete Categories
+              h5#exampleModalLabel.modal-titleDelete Delete Outlet
               button.close(type='button', data-dismiss='modal', aria-label='Close')
                 span(aria-hidden='true') ×
             .modal-body
-              | Are you sure you want to delete this categories?
+              | Are you sure you want to delete this outlet?
             .modal-footer
-              button.btn.btn-danger(type='button', onclick='deleteBusiness()') Delete
+              button.btn.btn-danger(type='button', onclick='deleteOutlet()') Delete
               button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
 
       script(type='text/javascript').
         function del(e) {
-          window.idCategories = e;
+          window.idOutlet = e;
           $("#myModal").modal('show');
         }
-        function deleteCategories(){
-          var id = window.idCategories;
+        function deleteOutlet(){
+          var id = window.idOutlet;
           $.ajax({
-            url:'/admin/business/delete/'+id,
+            url:'/business-owner/outlet/delete/'+id,
             type:'POST',
             success : function (respon) {
             setTimeout(function() {$("#myModal").modal('hide');}, 1000);
