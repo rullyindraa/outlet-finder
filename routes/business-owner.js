@@ -237,53 +237,20 @@ router.post('/business/delete/:id', function(req, res, next) {
 });
 
 router.get('/outlet', function(req, res) {
-  // outlet.findAll({
-  //   where: {
-  //     businessId:2
-  //   },
-  //   attributes: ['id', ['name', 'outlet_name']],
-  //   include: [
-  //     {
-  //       model: business,
-  //       attributes: [['name', 'business_name']]
-  //     },
-  //     {
-  //       model: address,
-  //       attributes: [['adm_area_lv2', 'city_name']]
-  //     },
-  //     {
-  //       model: page_view,
-  //       attributes: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']]
-  //     }
-  //   ],
-  //   raw: true
-  // })
-  // .then(rows => {
-  //   category.findAll()
-  //   .then(cat => {
-  //     console.log(rows);
-  //     res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
-  //   })
-  // })
   outlet.findAll({
-    attributes: ['id', ['name', 'outlet_name']],
+    attributes: ['id', ['name', 'outlet_name'],
+    [Sequelize.fn('COUNT', Sequelize.col("page_view.id")), 'count_view']],
     // attributes: {
     //   include: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']]
     // },
+    group: ['outlet.id'],
     include: [
       {
         model: business,
-        // where: {
-        //   userId: req.user.id
-        // },
+        where: {
+          userId: req.user.id
+        },
         attributes: [['name', 'business_name']],
-        include: [{
-          model: user,
-          where: {
-            id: req.user.id
-          },
-          attributes:['id']
-        }]
       },
       {
         model: address,
@@ -295,7 +262,8 @@ router.get('/outlet', function(req, res) {
         // attributes: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']],
         //[[Sequelize.fn('IFNULL', Sequelize.fn('COUNT', Sequelize.col('outletId')), 0), 'page_views']],
         // include: [outlet]
-        required: false,
+        group: ['outletId'],
+        //required: false,
       },
     ],
     raw: true
