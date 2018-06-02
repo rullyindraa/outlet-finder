@@ -27,7 +27,7 @@ block content
         =business_name
       p.text-muted 
         | City: 
-        =adm_area_lv2
+        =city
         |  - Business: - Retail
         =category
       p.text-center
@@ -41,33 +41,33 @@ block content
             h3.mb-3 
               | Address
             p.text-muted.mb-0
-              | Jalan Laksda Adisucipto no 21, Kota Yogyakarta, Depok, 55238
+              =business_address
         .col-lg-3.col-md-6.text-center
           .detail-box.mt-5.mx-auto
             i.fa.fa-4x.fa-globe.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
             h3.mb-3 
               | Website
             p.text-muted.mb-0
-              | http://www.lorem.co.id 
+              =business_website
         .col-lg-3.col-md-6.text-center
           .detail-box.mt-5.mx-auto
             i.fa.fa-4x.fa-phone-square.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
             h3.mb-3 
               | Phone
             p.text-muted.mb-0
-              | 0274 567 890  
+              =business_phone 
         .col-lg-3.col-md-6.text-center
           .detail-box.mt-5.mx-auto
             i.fa.fa-4x.fa-envelope.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
             h3.mb-3 
               | E-mail
             p.text-muted.mb-0
-              | contact@lorem.co.id  
+              =business_email 
       a#info.btn.btn-detail.color-white.btn-xl.mt-4.text-uppercase(href='#info' style='border-radius: 300px; padding: 1rem 2rem;') View Outlet Info
   section.bg-section-1.info(style='padding-bottom: 50px;')
     .container
       h2.mb-2.text-center
-        | Wonderlabs Armstrong Campus
+        =outlet_name
       hr.detail.mt-4
     .container
       ul.timeline
@@ -81,19 +81,19 @@ block content
               p
                 .mt-2
                 i.fa.fa-fw.fa-map-marker
-                |  Jalan Laksda Adisucipto no 21, Kota Yogyakarta, Depok, 55238
+                =outlet_address
                 br
                 .mt-2
                 i.fa.fa-fw.fa-globe
-                |  http://www.lorem.co.id 
+                =outlet_website
                 br
                 .mt-2
                 i.fa.fa-fw.fa-phone-square
-                |  0274 567 890 
+                =outlet_phone 
                 br
                 .mt-2
                 i.fa.fa-fw.fa-envelope
-                |  contact@lorem.co.id 
+                =outlet_email
         li.timeline-inverted
           .timeline-badge.primary
             i.fa.fa-fw.fa-clock-o

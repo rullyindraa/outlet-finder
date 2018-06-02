@@ -35,7 +35,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
     include: [
       {
         model: business,
-        attributes: ['id', 'name', 'description'],
+        attributes: ['id', 'name', 'description', 'email', 'phone_number', 'website'],
         //group: ['business.id'],
         include: [
           {
@@ -44,7 +44,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           },
           {
             model: address,
-            //attribut: ['formatted_address']
+            attributes: ['adm_area_lv2', 'formatted_address']
           }
           // {
           //   model: category,
@@ -54,7 +54,8 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         ]
       },
       {
-        model: address
+        model: address,
+        attributes : ['adm_area_lv2', 'formatted_address', 'location']
       }
     ],
     raw:true
@@ -68,16 +69,19 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       title: rows[0].name+' | Outlet Finder', 
       //data: rows,
       //id:  rows[0].id,
-      outlet_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
-      path: rows[0]['business.file.path'], file_name: rows[0]['business.file.name'], 
+      outlet_name:  rows[0].name, outlet_phone: rows[0].phone_number, outlet_email: rows[0].email, outlet_website: rows[0].website, outlet_desc: rows[0].description, 
       address_id: rows[0].addressId,
-      raw_address: rows[0]['address.raw_address'], 
-      line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
-      adm_area_lv1: rows[0]['address.adm_area_lv1'], adm_area_lv2: rows[0]['address.adm_area_lv2'], adm_area_lv3: rows[0]['address.adm_area_lv3'], adm_area_lv4: rows[0]['address.adm_area_lv4'],
-      formatted_address: rows[0]['address.formatted_address'],
+      city: rows[0]['address.adm_area_lv2'], 
+      //city: rows[0]['business.address.adm_area_lv2'],
+      outlet_address: rows[0]['address.formatted_address'],
       lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
       businessId:rows[0].businessId, business_name: rows[0]['business.name'],
-      business_desc: rows[0]['business.description']
+      business_email: rows[0]['business.email'],
+      business_phone: rows[0]['business.phone_number'],
+      business_website: rows[0]['business.website'],
+      business_desc: rows[0]['business.description'],
+      business_address: rows[0]['business.address.formatted_address'],
+      path: rows[0]['business.file.path'], file_name: rows[0]['business.file.name'], 
       //category: 
     })
   }).catch(err => {
