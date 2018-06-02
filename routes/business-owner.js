@@ -16,6 +16,7 @@ const review = models.review;
 const validateJoi = require('../src/validation/create-business');
 var multer = require('multer');
 const path = require('path');
+const moment = require('moment');
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -390,7 +391,7 @@ router.get('/outlet/:id', function(req, res) {
 
 router.get('/reviews', function(req, res) {
   review.findAll({
-    attributes: ['id', 'name', 'email', 'content', 'rating'],
+    attributes: ['id', 'name', 'email', 'content', 'rating', 'createdAt'],
     include: [
       {
         model: outlet,
@@ -408,8 +409,30 @@ router.get('/reviews', function(req, res) {
   }).then(rows => {
     business.findAll()
     .then(bus => {
-      console.log('inireview',rows);
-      res.render('business-owner/reviews', { title: 'Reviews | Outlet Finder', data: rows, business: bus, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+      //console.log('inireview',rows);
+      // var created= moment(rows[0].createdAt).format('YYYY, M, DD');
+      // var createdAt= moment(rows[0].createdAt).fromNow();
+      // console.log(createdAt);
+      var reviewList = [];
+      for (var i = 0; i < rows.length; i++) {
+        var review = {
+          'name':rows[i].name,
+          'email':rows[i].email,
+          'content':rows[i].content,
+          'createdAt':moment(rows[0].createdAt).fromNow(),
+          'rating':rows[i].rating,
+          'outlet_id':rows[i]['outlet.id'],
+          'outlet_name': rows[i]['outlet.outlet_name']
+        }
+        reviewList.push(review);
+        console.log('revv',reviewList);
+      }
+      res.render('business-owner/reviews', { 
+        title: 'Reviews | Outlet Finder', data: reviewList, 
+        //created: rows[0].createdAt,
+        //created: moment(rows[0].createdAt).fromNow(),
+        business: bus, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] 
+      });
     })
   })
   // res.render('business-owner/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
