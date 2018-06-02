@@ -36,294 +36,32 @@ block content
               .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
                 select.form-control(name='category')
                   option(selected='', hidden='') Select Category
-                  option(value='arts') Arts
-                  option(value='business') Business
-                  option(value='computers') Computers
+                  each value in val
+                    option(value=value.id) #{value.name}
               .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
                 input.form-control(type='text', placeholder='Keywords', name='keywords')
               .col-lg-1.col-md-1.col-sm-1.col-xs-1
                 input.btn.color-ink.mb-3(type='submit', value='Search')
       .container
         .row
-          .col-sm-6.col-md-4.col-lg-3
-            .card
-              .card-block
-                h3.card-title The title
-                .card-text
-                  | The text
-          .col-sm-6.col-md-4.col-lg-3
-            .card
-              .card-block
-                h3.card-title The title
-                .card-text
-                  | The text
-          .col-sm-6.col-md-4.col-lg-3
-            .card
-              .card-block
-                h3.card-title The title
-                .card-text
-                  | The text
-          .col-sm-6.col-md-4.col-lg-3
-            .card
-              .card-block
-                h3.card-title The title
-                .card-text
-                  | The text
-          .col-sm-6.col-md-4.col-lg-3
-            .card
-              .card-block
-                h3.card-title The title
-                .card-text
-                  | The text
-          .col-sm-6.col-md-4.col-lg-3
-            .card
-              .card-block
-                h3.card-title The title
-                .card-text
-                  | The text
-        .card-deck.mt-5
-          .card
-            img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title ARTS
-              p.card-text
-                a(href='/detail') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top(src='/images/business1.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title BUSINESS
-              p.card-text
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title ARTS
-              p.card-text
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top(src='/images/business1.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title BUSINESS
-              p.card-text
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') more results..
-        .card-deck.mt-5
-          .card
-            img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title ARTS
-              p.card-text
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top(src='/images/business1.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title BUSINESS
-              p.card-text
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title ARTS
-              p.card-text
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top(src='/images/business1.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title BUSINESS
-              p.card-text
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') more results..
-        .card-deck.mt-5
-          .card
-            img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title ARTS
-              p.card-text
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top(src='/images/business1.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title BUSINESS
-              p.card-text
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title ARTS
-              p.card-text
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top(src='/images/business1.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title BUSINESS
-              p.card-text
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') more results..
-        .card-deck.mt-5
-          .card
-            img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title ARTS
-              p.card-text
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top(src='/images/business1.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title BUSINESS
-              p.card-text
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title ARTS
-              p.card-text
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') toko bunga jogja
-                |, 
-                a(href='#') more results..
-          .card
-            img.card-img-top(src='/images/business1.jpg', width='200px', height='200px', alt='Card image cap')
-            .card-body
-              h5.card-title BUSINESS
-              p.card-text
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') konsultan keuangan
-                |, 
-                a(href='#') more results..
+          each value in val
+            .col-sm-6.col-md-4.col-lg-3
+              .card.mt-5.mb-3
+                img.card-img-top.border-bottom(src='/images/arts.jpg', width='200px', height='200px', alt='Card image cap')
+                .card-body
+                  h4.card-title= value.name
+                  p.card-text
+                    a(href='/detail') toko bunga jogja
+                    |, 
+                    a(href='#') toko bunga jogja
+                    |, 
+                    a(href='#') toko bunga jogja
+                    |, 
+                    a(href='#') toko bunga jogja
+                    |, 
+                    a(href='#') toko bunga jogja
+                    |, 
+                    a(href='#') more results..
+              
     .mb-5
     include footer.pug

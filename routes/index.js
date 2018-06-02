@@ -6,7 +6,7 @@ const Sequelize = require('sequelize');
 const models = require('../src/models');
 const bcrypt = require('bcrypt-nodejs');
 const user = models.users;
-
+const category = models.category;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -16,7 +16,10 @@ router.get('/search-result', function(req, res, next) {
   res.render('guest/search-result', { title: 'Search Result | Oulet Finder' });
 });
 router.get('/categories', function(req, res, next) {
-  res.render('guest/categories', { title: 'Categories | Outlet Finder' });
+  category.findAll()
+  .then(categories => {
+    res.render('guest/categories', { title: 'Categories | Outlet Finder', val: categories });
+  })
 });
 router.get('/detail', function(req, res, next) {
   res.render('guest/detail', { title: 'Detail Outlet | Oulet Finder' });
