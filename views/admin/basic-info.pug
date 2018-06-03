@@ -11,7 +11,7 @@ block content
       li.nav-item
         a.nav-link(href='/security', style='color:black') Security
     .tab-content
-      form.needs-validation.mt-4.col-lg-12.col-md-12.col-sm-12.col-xs-12(enctype="multipart/form-data", action='#', method='POST', novalidate='', style='color: black;')
+      form.needs-validation.mt-3.col-lg-12.col-md-12.col-sm-12.col-xs-12(enctype="multipart/form-data", action='/basic-info', method='POST', novalidate='', style='color: black;')
         .form-row
           .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6
             label First Name:
@@ -35,11 +35,11 @@ block content
             .invalid-feedback
               | Please enter a valid phone number
           .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6(align='center')
-            img.img-thumbnail.mt-2.mb-2(src='https://thumbs.dreamstime.com/b/woman-black-hat-sun-glasses-avatar-people-icon-collection-cute-cartoon-character-beautiful-face-red-lips-female-head-72001813.jpg', alt='icon', width='180px', height='180px')
+            img.img-thumbnail.mt-2.mb-2(src=photo, alt=alt, width='180px', height='180px')
             .custom-file.mt-2
-              input.custom-file-input(type='file' accept="image/*")
-              label.custom-file-label Choose file...
-        input.btn.btn-md.color-ink.mb-3(type='submit', value='Save')
+              input#photo.form-control(type='file' accept="image/*" name='photo')
+              input(type='hidden', value=alt, name='old_photo')
+        input.btn.btn-md.color-ink.mb-3(type='submit', value='Save', name='photo')
   
   include ../includes/logout.pug
 

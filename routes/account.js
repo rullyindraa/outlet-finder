@@ -37,7 +37,11 @@ router.get('/security', function(req, res) {
         username: username
       }
     }).then(rows => {
-      res.render('admin/security', {stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken, scheck1: check1})
+      if(req.user.role === 1) {
+        res.render('admin/security', {stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken, scheck1: check1, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar'})
+      } else {
+        res.render('business-owner/security', {stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken, scheck1: check1, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'})
+      }
     })
   })
 });
@@ -53,7 +57,11 @@ router.get('/check', function(req, res, next) {
     console.log('input token: ', req.query.secret_token);
     if (verifyToken !== null) {
       req.flash('Valid', 'Two factor authentication now active !')
-      res.render('admin/security',{'valid': req.flash('Valid'), stwo_fa: rows.two_fa, qrcode: rows.qr_url, secret_key: rows.secret_key, scheck1: rows.two_fa})
+      if (req.user.role === 1) {
+        res.render('admin/security',{'valid': req.flash('Valid'), stwo_fa: rows.two_fa, qrcode: rows.qr_url, secret_key: rows.secret_key, scheck1: rows.two_fa, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar'})
+      } else {
+        res.render('business-owner/security',{'valid': req.flash('Valid'), stwo_fa: rows.two_fa, qrcode: rows.qr_url, secret_key: rows.secret_key, scheck1: rows.two_fa, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'})
+      }
     } else {
       console.log('INVALID TOKEN');
       res.send(false);
@@ -74,7 +82,11 @@ router.post('/check', function(req, res) {
   }).then(function(rows) {
     console.log('adalah..')
     req.flash('success', 'Horray! Two factor authentication is enabled.')
-    res.render('admin/security', { 'valid': req.flash('success'), scheck1: rows.two_fa })
+    if (req.user.role === 1) {
+      res.render('admin/security', { 'valid': req.flash('success'), scheck1: rows.two_fa, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar'})
+    } else {
+      res.render('business-owner/security', { 'valid': req.flash('success'), scheck1: rows.two_fa, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar' })
+    }
   })
 })
 
@@ -111,7 +123,8 @@ router.get('/basic-info', function(req, res, next) {
     ],
     raw:true
   }).then(function(rows) {
-    if(req.user.role === true) {
+    console.log(rows);
+    if(req.user.role === 1) {
       res.render('admin/basic-info', {
         title: 'Account Basic Info | Outlet Finder', 
         id: rows[0].id,
@@ -123,8 +136,6 @@ router.get('/basic-info', function(req, res, next) {
         photo: rows[0][`file.pp`],
         alt: rows[0][`file.p`],
         name: req.user.first_name + ' ' + req.user.last_name,
-        photo: rows[0][`file.pp`],
-        alt: rows[0][`file.p`],
         active5: 'active-navbar'
       })
     } else {
@@ -139,8 +150,6 @@ router.get('/basic-info', function(req, res, next) {
         photo: rows[0][`file.pp`],
         alt: rows[0][`file.p`],
         name: req.user.first_name + ' ' + req.user.last_name,
-        photo: rows[0][`file.pp`],
-        alt: rows[0][`file.p`],
         active2: 'active-navbar'
       })
     }
@@ -215,7 +224,7 @@ router.post('/basic-info', upload.single('photo'), function(req, res, next) {
       id: req.user.id
     }
   }).then(function(rows) {
-    if(req.user.role === true) {
+    if(req.user.role === 1) {
       res.redirect('/basic-info');
     } else {
       res.redirect('/basic-info');
@@ -226,10 +235,10 @@ router.post('/basic-info', upload.single('photo'), function(req, res, next) {
 });
 
 router.get('/change-password', function(req, res, next) {
-  if(req.user.role === true) {
-    res.render('admin/change-password', { title: 'Account Change Password | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar'  });
+  if(req.user.role === 1) {
+    res.render('admin/change-password', { title: 'Account Change Password | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar', photo:req.user[`file.pp`]});
   } else {
-    res.render('business-owner/change-password', { title: 'Account Change Password | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar'  });
+    res.render('business-owner/change-password', { title: 'Account Change Password | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar', photo:req.user[`file.pp`]});
   }
 })
 
@@ -270,7 +279,7 @@ router.post('/change-password', function(req, res, next) {
       })
     } else {
       req.flash('not_match', 'The new password and confirm password are not the same')
-      if(req.user.role === true) {
+      if(req.user.role === 1) {
         res.render('admin/change-password', { 'not_match': req.flash('not_match')})
       } else {
         res.render('business-owner/change-password', { 'not_match': req.flash('not_match')})
@@ -280,10 +289,10 @@ router.post('/change-password', function(req, res, next) {
 })
 
 router.get('/setting', function(req, res) {
-  if(req.user.role === true) {
-    res.render('admin/setting', { title: 'Account Setting | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+  if(req.user.role === 1) {
+    res.render('admin/setting', { title: 'Account Setting | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar', photo:req.user[`file.pp`]});
   } else {
-    res.render('business-owner/setting', { title: 'Account Setting | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar' });
+    res.render('business-owner/setting', { title: 'Account Setting | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar', photo:req.user[`file.pp`]});
   }
 });
 
@@ -291,7 +300,7 @@ router.get('/two_fa', function(req, res) {
   console.log('masuk sini')
   console.log(req.user.username)
   // res.render('login/two-fa')
-  res.render('login/two-fa', { title: 'Two Factor Authentication | Outlet Finder', susername: req.user.username});
+  res.render('login/two-fa', { title: 'Two Factor Authentication | Outlet Finder', susername: req.user.username, photo:req.user[`file.pp`]});
 })
 
 router.post('/two_fa', function(req, res, next) {
@@ -311,11 +320,11 @@ router.post('/two_fa', function(req, res, next) {
       req.flash('wrong', 'Please enter valid token !')
       res.render('login/two-fa',{'wrong': req.flash('wrong'), susername: rows.username})
     } else {
-      if(rows.role === true){
+      if(rows.role === 1){
         console.log('masuk ke admin')
-        res.render('admin/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+        res.render('admin/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar', photo:req.user[`file.pp`] });
       } else {
-        res.render('busines-owner/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+        res.render('busines-owner/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar', photo:req.user[`file.pp`] });
       }
     }
   })

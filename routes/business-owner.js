@@ -73,7 +73,7 @@ router.get('/business', function(req, res) {
 router.get('/business/create-business', function(req, res) {
   category.findAll()
   .then(rows => {
-    res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+    res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
   })
 });
 
@@ -155,7 +155,7 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
       category.findAll()
       .then(rows => {
         //if (err) return err;
-        res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', categories:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+        res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
       })
     } 
   })
@@ -216,9 +216,9 @@ router.get('/business/:id', function(req, res) {
         formatted_address: rows[0]['address.formatted_address'],
         lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
         categories: cat,
+        active3: 'active-navbar',
         name: req.user.first_name + ' ' + req.user.last_name, 
-        photo:req.user[`file.pp`],
-        active2: 'active-navbar' 
+        photo:req.user[`file.pp`]
       })
     })
   }).catch(err => {
@@ -272,7 +272,7 @@ router.get('/outlet', function(req, res) {
     category.findAll()
     .then(cat => {
       console.log(rows);
-      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
     })
   })
 });
@@ -307,7 +307,7 @@ router.get('/oulet/business/:id', function(req, res){
     category.findAll()
     .then(cat => {
       console.log(rows);
-      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
     })
   })
 })
@@ -319,7 +319,7 @@ router.get('/outlet/create-outlet', function(req, res) {
     }
   })
   .then(rows => {
-    res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+    res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', active4: 'active-navbar', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
   })
 });
 
@@ -377,10 +377,10 @@ router.get('/outlet/:id', function(req, res) {
         formatted_address: rows[0]['address.formatted_address'],
         lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
         businessId:rows[0].businessId, business_name: rows[0]['business.name'],
+        active4: 'active-navbar',
         business: bus,
         name: req.user.first_name + ' ' + req.user.last_name, 
-        photo:req.user[`file.pp`],
-        active2: 'active-navbar' 
+        photo:req.user[`file.pp`]
       })
     })
   }).catch(err => {

@@ -131,13 +131,13 @@ router.get('/business', function(req, res) {
       .then(categories => {
         console.log(rows);
         console.log(categories);
-        res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, val: categories, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'});
+        res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, val: categories, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
       })
   })
 });
 
 router.get('/outlets', function(req, res) {
-  res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active4:'active-navbar' });
+  res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
 });
 
 router.get('/reviews', function(req, res) {
@@ -161,22 +161,10 @@ router.get('/reviews', function(req, res) {
     business.findAll()
     .then(bus => {
       //console.log('inireview',rows);
-      res.render('admin/reviews', { title: 'Reviews | Outlet Finder', data: rows, business: bus, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5:'active-navbar' });
+      res.render('admin/reviews', { title: 'Reviews | Outlet Finder', data: rows, business: bus, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
     })
   })
   // res.render('admin/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5:'active-navbar' });
-});
-
-router.get('/basic-info', function(req, res) {
-  res.render('admin/basic-info', { title: 'Account Basic Info | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar' });
-});
-
-router.get('/change-password', function(req, res) {
-  res.render('admin/change-password', { title: 'Account Change Password | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar'  });
-});
-
-router.get('/security', function(req, res) {
-  res.render('admin/security', { title: 'Account Security | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar'  });
 });
 
 router.get('/add-admin', function(req, res, next) {

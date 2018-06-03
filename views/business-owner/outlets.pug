@@ -41,7 +41,7 @@ block content
               th Page Views
               th Local Competitor
               th Global Competitor
-              th Action
+              th#action Action
           tbody
             for o in data
               tr
@@ -97,6 +97,7 @@ block content
             "searching": false
           });
           $('#dataTable_paginate').addClass('pagination-sm');
+          $('#action').removeClass('sorting');
           $('#dataTable_paginate').addClass('mt-2');
         });
                     

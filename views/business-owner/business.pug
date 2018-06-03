@@ -36,7 +36,7 @@ block content
               th Name
               th Categories
               th Outlets
-              th Action
+              th#action Action
           tbody
             for b in data
               tr
@@ -91,6 +91,7 @@ block content
             "searching": false
           });
           $('#dataTable_paginate').addClass('pagination-sm');
+          $('#action').removeClass('sorting');
           $('#dataTable_paginate').addClass('mt-2');
         });
 
