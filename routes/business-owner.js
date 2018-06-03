@@ -416,6 +416,7 @@ router.get('/reviews', function(req, res) {
       var reviewList = [];
       for (var i = 0; i < rows.length; i++) {
         var review = {
+          'id' : rows[i].id,
           'name':rows[i].name,
           'email':rows[i].email,
           'content':rows[i].content,

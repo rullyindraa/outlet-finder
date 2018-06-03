@@ -10,13 +10,13 @@ block content
       form.needs-validation(action='#', method='POST', novalidate='', style='color: black; margin-left: -12px;')
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
-            label(for='student_id') Business:
+            label(for='business') Business:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
             select.form-control.selectpicker(name="business")
               each value in business
                 option(value=value.id) #{value.name}
             .invalid-feedback
-              | Please select categories
+              | Please select business
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='name') Outlet Name:
