@@ -10,9 +10,12 @@ const user = models.user;
 const category = models.category;
 const helper_category = models.helper_category;
 const business = models.business;
+const outlet = models.outlet;
+const page_view = models.page_view;
+const review = models.review;
 
 router.get('/', function(req, res, next) {
-  res.render('admin/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active1: 'active-navbar' });
+  res.render('admin/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
 });
 
 router.get('/categories', function(req, res) {
@@ -27,14 +30,14 @@ router.get('/categories', function(req, res) {
     ]
   }).then(rows => {
     console.log(rows);
-    res.render('admin/list-categories', { title: 'Category Lists | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name})
+    res.render('admin/list-categories', { title: 'Category Lists | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'})
   }).catch(err => {
     console.error(err);
   });
 });
 
 router.get('/categories/add-category', function(req, res) {
-  res.render('admin/add-category', { title: 'Add Category | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar'});
+  res.render('admin/add-category', { title: 'Add Category | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'});
 });
 
 router.post('/categories/add-category', function(req, res) {
@@ -73,6 +76,7 @@ router.get('/categories/:id', function(req, res) {
       name: rows[0].name,
       description: rows[0].description,
       name: req.user.first_name + ' ' + req.user.last_name, 
+      photo:req.user[`file.pp`], 
       active2: 'active-navbar' 
     })
   }).catch(err => {
@@ -127,33 +131,56 @@ router.get('/business', function(req, res) {
       .then(categories => {
         console.log(rows);
         console.log(categories);
-        res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, val: categories, name: req.user.first_name + ' ' + req.user.last_name});
+        res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, val: categories, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'});
       })
   })
 });
 
 router.get('/outlets', function(req, res) {
-  res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name });
+  res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active4:'active-navbar' });
 });
 
 router.get('/reviews', function(req, res) {
-  res.render('admin/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name });
+  review.findAll({
+    attributes: ['id', 'name', 'email', 'content', 'rating'],
+    include: [
+      {
+        model: outlet,
+        include: [{
+          model: business,
+          where: {
+            userId: req.user.id
+          },
+          attributes:['id']
+        }],
+        attributes: ['id',['name', 'outlet_name']]
+      }
+    ],
+    raw:true
+  }).then(rows => {
+    business.findAll()
+    .then(bus => {
+      //console.log('inireview',rows);
+      res.render('admin/reviews', { title: 'Reviews | Outlet Finder', data: rows, business: bus, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5:'active-navbar' });
+    })
+  })
+  // res.render('admin/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5:'active-navbar' });
 });
 
 router.get('/basic-info', function(req, res) {
-  res.render('admin/basic-info', { title: 'Account Basic Info | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+  res.render('admin/basic-info', { title: 'Account Basic Info | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar' });
 });
 
 router.get('/change-password', function(req, res) {
-  res.render('admin/change-password', { title: 'Account Change Password | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar'  });
+  res.render('admin/change-password', { title: 'Account Change Password | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar'  });
 });
 
 router.get('/security', function(req, res) {
-  res.render('admin/security', { title: 'Account Security | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar'  });
+  res.render('admin/security', { title: 'Account Security | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5: 'active-navbar'  });
 });
 
 router.get('/add-admin', function(req, res, next) {
-  res.render('admin/add-admin', { title: 'Add Administrator | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active3: 'active-navbar'  })
+  res.render('admin/add-admin', { title: 'Add Administrator | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'  })
 });
 
 router.post('/add-admin', function(req, res) {
@@ -190,7 +217,7 @@ router.get('/list-administrators', function(req, res, next) {
       role : [1]
     }
   }).then(function(rows) {
-    res.render('admin/list-administrators', { title: 'List Administrators | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, active3: 'active-navbar'  })
+    res.render('admin/list-administrators', { title: 'List Administrators | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'  })
   }).catch(err => {
     console.error(err);
   });
@@ -213,7 +240,7 @@ router.get('/list-business-owners', function(req, res, next) {
       role : [0]
     }
   }).then(function(rows) {
-    res.render('admin/list-business-owners', { title: 'List Business Owners | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, active4: 'active-navbar'  })
+    res.render('admin/list-business-owners', { title: 'List Business Owners | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active4: 'active-navbar'  })
   }).catch(err => {
     console.error(err);
   });

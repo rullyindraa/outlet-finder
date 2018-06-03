@@ -30,20 +30,29 @@ html
     script.
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -33.8688, lng: 151.2195},
+          center: {lat: -7.7830011, lng: 110.3892038},
           zoom: 13
         });
         var input = document.getElementById('pac-input');
+        
         //map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
         var autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
         var infowindow = new google.maps.InfoWindow();
         var infowindowContent = document.getElementById('infowindow-content');
         infowindow.setContent(infowindowContent);
+        //- var marker = new google.maps.Marker({
+        //-   map: map,
+        //-   draggable: true,
+        //-   animation: google.maps.Animation.DROP,
+        //-   position: {lat: 59.327, lng: 18.067}
+        //- });
         var marker = new google.maps.Marker({
           map: map,
+          draggable: true,
           anchorPoint: new google.maps.Point(0, -29)
         });
+        //marker.addListener('click', toggleBounce);
         autocomplete.addListener('place_changed', function() {
           infowindow.close();
           marker.setVisible(false);
