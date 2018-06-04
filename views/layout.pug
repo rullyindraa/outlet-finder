@@ -47,11 +47,11 @@ html
         //-   animation: google.maps.Animation.DROP,
         //-   position: {lat: 59.327, lng: 18.067}
         //- });
-        var marker = new google.maps.Marker({
-          map: map,
-          draggable: true,
-          anchorPoint: new google.maps.Point(0, -29)
-        });
+        //- var marker = new google.maps.Marker({
+        //-   map: map,
+        //-   draggable: true,
+        //-   anchorPoint: new google.maps.Point(0, -29)
+        //- });
         //marker.addListener('click', toggleBounce);
         autocomplete.addListener('place_changed', function() {
           infowindow.close();
@@ -96,8 +96,8 @@ html
           var address = '';
           var component = place.address_components;
           var formatted_address = place.formatted_address;
-          var lat = place.geometry.location.lat();
-          var lng = place.geometry.location.lng();
+          var lat1 = place.geometry.location.lat();
+          var lng1 = place.geometry.location.lng();
           if (route === undefined) {
             route = '';
           }
@@ -105,8 +105,8 @@ html
             st = '';
           }
           document.getElementById('line1').value = route + ' ' + st;
-          document.getElementById("lat").value = lat;
-          document.getElementById("lng").value = lng;
+          document.getElementById("lat").value = lat1;
+          document.getElementById("lng").value = lng1;
           document.getElementById("formatted_address").value = formatted_address;
           console.log(component);
           console.log(place);
@@ -123,7 +123,31 @@ html
           infowindowContent.children['place-address'].textContent = address;
           infowindow.open(map, marker);
         });
+
+        var lat = document.getElementById('lat').value;
+        var lng = document.getElementById('lng').value;
+        
+        var myLatLng = {lat: lat, lng: lng};
+
+        var marker = new google.maps.Marker({
+          map: map,
+          draggable: true,
+          position : {
+          lat : parseFloat( lat ),
+          lng : parseFloat( lng )}
+          //anchorPoint: new google.maps.Point(0, -29)
+        });
+        marker.addListener('click', toggleBounce);
       }
+
+      function toggleBounce() {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+      }
+      
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBSKactSNtQkMmc86xP_oknMBCABF2ioYI&libraries=places&callback=initMap', async='', defer='')
     script.
       $(document).ready(function () {

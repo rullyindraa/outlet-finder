@@ -211,6 +211,8 @@ router.get('/business/:id', function(req, res) {
         path: rows[0]['file.path'], file_name: rows[0]['file.name'], 
         address_id: rows[0]['address.id'],
         raw_address: rows[0]['address.raw_address'], 
+        country: rows[0]['address.country'],
+        postal_code: rows[0]['address.postal_code'],
         line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
         adm_area_lv1: rows[0]['address.adm_area_lv1'], adm_area_lv2: rows[0]['address.adm_area_lv2'], adm_area_lv3: rows[0]['address.adm_area_lv3'], adm_area_lv4: rows[0]['address.adm_area_lv4'],
         formatted_address: rows[0]['address.formatted_address'],

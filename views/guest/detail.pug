@@ -94,6 +94,12 @@ block content
                 .mt-2
                 i.fa.fa-fw.fa-envelope
                 =outlet_email
+              input#lat.form-control(type='hidden' value=lat)
+              input#lng.form-control(type='hidden' value=lng)
+              //- p#lat.hidden
+              //-   =lat
+              //- p#lng.hidden
+              //-   =lng
         li.timeline-inverted
           .timeline-badge.primary
             i.fa.fa-fw.fa-clock-o
