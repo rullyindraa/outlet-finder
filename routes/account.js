@@ -320,11 +320,30 @@ router.post('/two_fa', function(req, res, next) {
       req.flash('wrong', 'Please enter valid token !')
       res.render('login/two-fa',{'wrong': req.flash('wrong'), susername: rows.username})
     } else {
-      if(rows.role === 1){
-        console.log('masuk ke admin')
-        res.render('admin/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar', photo:req.user[`file.pp`] });
+      if(rows.role === true){
+        var last_login = new Date();
+        user.update({
+          last_login : last_login
+        }, {
+          where : {
+            username : username
+          }
+        }).then(rows => {
+            console.log('masuk ke admin')
+            res.render('admin/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+        });
       } else {
-        res.render('busines-owner/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active2: 'active-navbar', photo:req.user[`file.pp`] });
+        var last_login = new Date();
+        user.update({
+          last_login : last_login
+        }, {
+          where : {
+            username : username
+          }
+        }).then(rows => {
+            res.render('busines-owner/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+        });
+        
       }
     }
   })

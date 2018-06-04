@@ -19,6 +19,7 @@ router.get('/', function(req, res, next) {
 router.get('/signin', function(req, res, next) {
   passport.authenticate('local', function(err, users, info) {
     console.log("coba", req.query.username)
+    var username = req.query.username;
     // console.log('two-fa', req.query.two_fa)
     if (err){ return next(err) }
     if (!users) {
@@ -26,10 +27,10 @@ router.get('/signin', function(req, res, next) {
     }
     user.findAll({
       where: {
-        username: [req.query.username]
+        username: [username]
       }
     }).then(function(rows) {
-        //console.log('userr: ',rows)
+        console.log('userr: ',rows)
         if(rows[0].two_fa === true) {
           req.login(users, function(err) {
             if (err) { return next(err); }
@@ -40,15 +41,33 @@ router.get('/signin', function(req, res, next) {
           if(rows[0].role === true) {
             req.login(users, function(err) {
               if (err) { return next(err); }
-              console.log('akjsh')
-              return res.redirect('/admin/');
+              var last_login = new Date();
+              user.update({
+                last_login : last_login
+              }, {
+                where : {
+                  username : username
+                }
+              }).then(rows => {
+                console.log('akjsh')
+                return res.redirect('/admin/');
+              });
             });
           }
           else{
             req.login(users, function(err) {
               if (err) { return next(err); }
-              console.log('akjsh')
-              return res.redirect('/business-owner/');
+              var last_login = new Date();
+              user.update({
+                last_login : last_login
+              }, {
+                where : {
+                  username : username
+                }
+              }).then(rows => {
+                console.log('akjsh')
+                return res.redirect('/business-owner/');
+              });
             });
           }
         }
