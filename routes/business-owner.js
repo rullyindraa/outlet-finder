@@ -419,7 +419,7 @@ router.get('/reviews', function(req, res) {
           'name':rows[i].name,
           'email':rows[i].email,
           'content':rows[i].content,
-          'createdAt':moment(rows[0].createdAt).fromNow(),
+          'createdAt':moment(rows[i].createdAt).fromNow(),
           'rating':rows[i].rating,
           'outlet_id':rows[i]['outlet.id'],
           'outlet_name': rows[i]['outlet.outlet_name']
