@@ -7,18 +7,20 @@ block content
       // Breadcrumbs
       ol.breadcrumb(style='background-color: #DAE1E7')
         li.breadcrumb-item.active.h4 Edit Business 2
-      form.needs-validation(enctype="multipart/form-data", action='/business-owner/business/create-business', method='POST', novalidate='', style='color: black; margin-left: -12px;')
+      form.needs-validation(enctype="multipart/form-data", action='/business-owner/business/edit-business', method='POST', novalidate='', style='color: black; margin-left: -12px;')
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='categories') Categories:
+            input.form-control(type='hidden', id='cat' value=valCat)
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            //- select.form-control(name="orderby")
-            //-   option(name='categories', value="categories") - Category -
-            //-   each value in categories
-            //-     option(value=value.id) #{value.name}
             select.form-control.selectpicker(name="category" multiple='')
               each value in categories
                 option(value=value.id) #{value.name}
+              script.
+                var values = $('input#cat').val();
+                $.each(values.split(","), function(i,e){
+                  $("select[name=category] option[value='" + e + "']").prop("selected", true);
+                });
             .invalid-feedback
               | Please select category  
         .form-group

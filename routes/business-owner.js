@@ -171,18 +171,17 @@ router.get('/business/:id', function(req, res) {
       id: [req.params.id]
     },
     // attributes: ['*', ['name', 'b_name']],
-    // attributes: ['id', 'name', 'phone_number', 'email', 'website', 'description'],
+    attributes: ['id', 'name', 'phone_number', 'email', 'website', 'description', 
+    [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("DISTINCT(categories.id) SEPARATOR ','")), 'category_id'],],
+    group: ['business.id'],
     include: [
       {
-        model: helper_category,
-        // attributes: [[Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names']],
-        include: [
-          {
-            model: category,
-            // attributes: ['name']
-          }
-        ]
-        // attributes: ['name']
+        model: category,
+        attributes: ['id']
+      },
+      {
+        model: outlet,
+        group: ['businessId']
       },
       {
         model: address
@@ -192,14 +191,13 @@ router.get('/business/:id', function(req, res) {
         attributes: ['name', ['relative_path', 'path']]
       }
     ],
-    // group: ['business.id'],
     distinct: true,
     raw:true
   })
   .then(rows => {
     category.findAll()
     .then(cat => {
-      // console.log('ini',rows[0]);
+      console.log('ini',rows);
       // console.log('itu', cat);
       // console.log('try', rows[0]['address.raw_address']);
       //console.log('aku', rows[0]['address.location'].coordinates[0]);
@@ -218,6 +216,7 @@ router.get('/business/:id', function(req, res) {
         formatted_address: rows[0]['address.formatted_address'],
         lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
         categories: cat,
+        valCat: rows[0].category_id,
         active3: 'active-navbar',
         name: req.user.first_name + ' ' + req.user.last_name, 
         photo:req.user[`file.pp`]
@@ -226,6 +225,106 @@ router.get('/business/:id', function(req, res) {
   }).catch(err => {
     console.error(err);
   });
+});
+
+//edit bisnis
+router.post('/business/edit-business', upload.single('photo'), function(req, res){
+  // var target_path = '/files/' + req.file.filename;
+
+  validateJoi.validate({ 
+    name: req.body.name, 
+    email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
+    description: req.body.description, line1: req.body.line1, line2: req.body.line2,
+    adm_area_lv1: req.body.adm_area_lv1, adm_area_lv2: req.body.adm_area_lv2, 
+    adm_area_lv3: req.body.adm_area_lv3, adm_area_lv4: req.body.adm_area_lv4, 
+    postal_code: req.body.postal_code, lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
+      console.log(errors);
+      if (!errors) {
+        address.update({
+          line1: req.body.line1, 
+          line2: req.body.line2,
+          adm_area_lv1: req.body.adm_area_lv1, 
+          adm_area_lv2: req.body.adm_area_lv2, 
+          adm_area_lv3: req.body.adm_area_lv3, 
+          adm_area_lv4: req.body.adm_area_lv4, 
+          raw_address: req.body.line1+ ` ` +req.body.line2,
+          formatted_address: req.body.formatted_address,
+          postal_code: req.body.postal_code,
+          country: req.body.country,
+          //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+          location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`),
+          updatedAt: new Date()
+        }, {
+          where: {
+            id: id
+          }
+        },{
+          include: [{
+            model: business
+          }]
+        },
+      )
+      // .then(row => {
+      //   file.update({
+      //     name: req.file.filename,
+      //     relative_path: target_path,
+      //     original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
+      //     mime_type : req.file.mimetype,
+      //     updatedAt: new Date()
+      //   },{
+      //     include: [{
+      //       model: business
+      //     }]
+      //   })
+        .then(row => {
+          // console.log(row);
+          // console.log(req.file);
+          business.update({
+            //userId: req.user.id,
+            name: req.body.name,
+            addressId: row.id,
+            fileId: row.id,
+            email: req.body.email,
+            phone_number: req.body.phone_number,
+            website: req.body.website,
+            description: req.body.description,
+            updatedAt: new Date()
+          }, {
+            where: {
+              id: req.params.id
+            }
+          }, {
+            include: [{
+              model: helper_category
+            }]
+          })
+          .then(row => {
+            for(var i = 0; i < req.body.category.length; i++ ) {
+              helper_category.update({
+                categoryId: req.body.category[i],
+                businessId: row.id,
+                updatedAt: new Date()
+              }, {
+                where: {
+                  id: id
+                }
+              })
+            }
+          })
+          .then(rows => {
+            console.log(rows);
+            res.redirect('/business-owner/business');
+          })
+        //}) 
+      })
+    } else {
+      category.findAll()
+      .then(rows => {
+        //if (err) return err;
+        res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+      })
+    } 
+  })
 });
 
 router.post('/business/delete/:id', function(req, res, next) {
