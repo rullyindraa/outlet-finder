@@ -30,6 +30,7 @@ block content
               th Name
               th Email
               th Phone Number
+              th Last Login
               th Status
               th#action Action
           tbody
@@ -39,6 +40,7 @@ block content
                 td= bo.first_name + ' ' + bo.last_name
                 td= bo.email
                 td= bo.phone_number
+                td= bo.last_login
                 - var status = bo.status
                 if status === true
                   td= 'Active'

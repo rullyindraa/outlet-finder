@@ -33,6 +33,7 @@ block content
               th Username
               th Name
               th Email
+              th Last Login
               th#action Action
           tbody
             for admin in data
@@ -40,6 +41,7 @@ block content
                 td= admin.username
                 td= admin.first_name + ' ' + admin.last_name
                 td= admin.email
+                td= admin.last_login
                 td
                   a(href='#')
                     button.btn.btn-danger.btn-sm(type='button', onclick='del('+admin.id+')')
