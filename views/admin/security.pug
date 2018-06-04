@@ -20,23 +20,30 @@ block content
       form.mt-4.col-lg-12.col-md-12.col-sm-12.col-xs-12(action='/check', method='POST', novalidate='', style='color: black;')
         .form-row( data-toggle="modal" data-target="#myModal")
           .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8
-            label(for='name') Enable two factor authentication token
-          .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2
+            label Enable two factor authentication token
+          .form-group
             label.switch
               input#check1(type='checkbox', name='check1', checked=scheck1)
               span.slider.round
+          //- .form-group
+          //-   input#help(type='text', value=value1, name='help')
+          |
+          - if(valid) {
+          .form-group.mb-2
+            .floatCheck
+              .fa-2x.green
+                i.fa.fa-fw.fa-lg.fa-check-circle
+          -}
         .form-row
           .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8
             label(for='name') Prevent login from other IP address (current IP address: 144.205.77.102)
           .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
             label.switch
-              input#ip(type='checkbox', checked=false)
+              input#check2(type='checkbox', checked=false, name='check2')
               span.slider.round
-          |
-          - if(valid) {
-            form(action='/check', method='POST')
-              input.btn.btn-dark(type='submit', style='margin-top: 10px', value='Save Changes')
-          - }
+        //- form.col-lg-12.col-md-12.col-sm-12.col-xs-12(action='/check', method='POST')
+        button.btn.btn-dark(type='submit', style='margin-top: 10px') Save Change
+
       script(type='text/javascript', src='../javascripts/account.js')
       form.m-4(action='/check', style='margin-top: 30px')
         #set.modal.fade(tabindex='0', role='dialog')
@@ -65,6 +72,22 @@ block content
                       td
                         //- input#tok.form-control.w-full(type='text', name='tok', value=tok)
                         input#secret_token.form-control.w-full(type='text', name='secret_token')
+                    tr
+                      td
+                        button.btn.btn-primary.ml-4(type='submit', value='Verify') Confirm
+
+      form.m-4(action='#', style='margin-top: 30px')
+        #set2.modal.fade(tabindex='0', role='dialog')
+          .modal-dialog(role='document')
+            .modal-content
+              .modal-header
+                h5.modal-title Set Up a Whitelilst IP Address
+                    button#cancel.close(type='button', data-dismiss='modal', aria-label='Close' , name = 'close1')
+                      span(aria-hidden='true') ×
+              .modal-body
+                table.w-full.max-w-md( style='color:black')
+                    tr
+                      textarea#ip_address(name="", cols="30", rows="10")
                     tr
                       td
                         button.btn.btn-primary.ml-4(type='submit', value='Verify') Confirm

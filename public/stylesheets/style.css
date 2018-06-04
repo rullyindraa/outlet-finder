@@ -113,6 +113,10 @@ body.fixed-nav {
   color: #F6993F;
 }
 
+.green {
+  color: #008800;
+}
+
 a:hover {
   color:  #193446;
 }
@@ -182,6 +186,11 @@ a:hover {
 
 .my-float{
   margin-top:11px;
+}
+
+.floatCheck{
+  margin-top:-13px;
+  margin-left: 10px
 }
 
 a.dropdown-item:hover {

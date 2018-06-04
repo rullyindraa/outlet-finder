@@ -72,6 +72,7 @@ passport.use('local', new LocalStrategy({
         bcrypt.compare(password, dbPassword, function(err, res) {
           if(res) {
             console.log("berhasil login")
+            // var last_login = new Date();
             return done(null, rows[0]);
            } else {
              console.log('tidak berhasil login')

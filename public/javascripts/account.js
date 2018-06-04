@@ -5,6 +5,26 @@ $('#check1').on('change', function(e) {
       keyboard: false
     });
   } else {
+    $.ajax({
+      url:'/account/check',
+      type:'POST',
+      data: {check1:false}
+    })
+  }
+})
+
+$('#check2').on('change', function(e) {
+  if(e.target.checked){
+    $('#set2').modal({
+      backdrop: 'static',
+      keyboard: false
+    });
+  } else {
+    $.ajax({
+      url:'/account/check',
+      type:'POST',
+      data: {check1:false}
+    })
   }
 })
 
@@ -26,6 +46,29 @@ function check(){
   })
 }
 
+// function enable(){
+//   var id = $('#id').val();
+//   $.ajax({
+//     url:'/admin/enable/'+id,
+//     type:'POST',
+//     success : function (respon) {
+//       $('#set').modal('hide')
+//       $( "#check1" ).prop( "checked", true); 
+//     }
+//   })
+// }  
+
+// function disable(){
+//   var id = $('#id').val();
+//   $.ajax({
+//     url:'/disable/'+id,
+//     type:'POST',
+//     success : function (respon) {
+//       $('#set').modal('hide')
+//       $( "#check1" ).prop( "checked", false); 
+//     }
+//   })
+// } 
 
 var password = document.getElementsByName("new_password")
   , confirm_password = document.getElementsByName("confirm_password");
