@@ -13,6 +13,7 @@ const file = models.file;
 const category = models.category;
 const review = models.review;
 const moment = require('moment');
+const flash = require('connect-flash')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -79,6 +80,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
     // console.log('try', rows[0]['address.raw_address']);
     //console.log('aku', rows[0]['address.location'].coordinates[0]);
     var reviewList = [];
+    if(rows[0]['review.id'] != null){
       for (var i = 0; i < 3; i++) {
         var review = {
           'id' : rows[i]['review.id'],
@@ -93,6 +95,9 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         reviewList.push(review);
         //console.log('revv',reviewList);
       }
+      req.flash('more', 'See more >');
+    }
+    else req.flash('info', 'Be the first to add review.');
     res.render('guest/detail', {
       title: rows[0].name+' | Outlet Finder', data: reviewList, 
       //data: rows,
@@ -111,8 +116,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       business_address: rows[0]['business.address.formatted_address'],
       path: rows[0]['business.file.path'], file_name: rows[0]['business.file.name'], 
       //category: 
-      // review_name: rows['review.name'], review_content: rows['review.content'], 
-      // review_rating: rows['review.rating'], review_dateCreata: rows['review.createdAt']
+      'info': req.flash('info'), 'more': req.flash('more'), 
     })
   }).catch(err => {
     console.error(err);

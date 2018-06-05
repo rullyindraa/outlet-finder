@@ -150,6 +150,10 @@ block content
       hr.detail.mt-4
     .container.mt-4
       .col-lg-12.col-md-12.col-sm-12.col-xs-12
+        span.text-secondary
+          - if (info){
+              p #{info} 
+          - }  
         for r in data
           strong
             h6(style='color: black;')
@@ -164,9 +168,13 @@ block content
           p(style='margin-top: -30px;')
             .star-box(style='display: inline-block;width:auto ;white-space: nowrap;')
               span.unfilled(style='color:#d3d3d3; position: absolute;') ★★★★★
-              span.filled(style='color:#e9ce18; white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*14+'px') ★★★★★
+              span.filled(style='color:#e9ce18; white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*0.85+'em') ★★★★★
           br
-        a(href='#') more reviews >
+        span
+          - if (more){
+            a(href='#') #{more}
+          - } 
+        //a(href='#') more reviews >
     .container.text-center
       button.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(style='border-radius: 300px; padding: 1rem 2rem;', type='button', data-toggle='modal', data-target='.bd-example-modal-lg') Add Review
       a#other.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-4.text-uppercase(href='#other' style='border-radius: 300px; padding: 1rem 2rem;') Find Other Outlet
