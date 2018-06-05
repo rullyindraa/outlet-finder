@@ -161,27 +161,11 @@ block content
               =r.outlet_name
           p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
             =r.content
-          //- p#rate.hidden
-          //-   =r.rating
-          //- p#rate(data-rt=r.rating style='color: black')
-          //-   =r.rating
-          //- span#stars
-          //- span(class='stars')
-          input(type='hidden', name='amount', value=r.rating)
-          p.ini
-            span.stars
-
-          script.
-            $(function() {    		
-              $('p.ini').html('<span class="stars">'+parseFloat($('input[name=amount]').val())+'</span>');
-              $('span.stars').stars();
-            });
-
-            $.fn.stars = function() {
-              return $(this).each(function() {
-                $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
-              });
-            }
+          p(style='margin-top: -30px;')
+            .star-box(style='display: inline-block;width:auto ;white-space: nowrap;')
+              span.unfilled(style='color:#d3d3d3; position: absolute;') ★★★★★
+              span.filled(style='color:#e9ce18; white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*14+'px') ★★★★★
+          br
         a(href='#') more reviews >
     .container.text-center
       button.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(style='border-radius: 300px; padding: 1rem 2rem;', type='button', data-toggle='modal', data-target='.bd-example-modal-lg') Add Review

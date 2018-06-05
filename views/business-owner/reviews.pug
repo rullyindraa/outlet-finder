@@ -39,42 +39,10 @@ block content
               =r.outlet_name
           p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
             =r.content
-          //- p#rate.hidden
-          //-   =r.rating
-          //- p#rate(data-rt=r.rating style='color: black')
-          //-   =r.rating
-          //- span#stars
-          //- span(class='stars')
-          input(type='hidden', name='amount', value=r.rating)
-          p.ini
-            span.stars
-
-          script.
-            $(function() {    		
-              $('p.ini').html('<span class="stars">'+parseFloat($('input[name=amount]').val())+'</span>');
-              $('span.stars').stars();
-            });
-
-            $.fn.stars = function() {
-              return $(this).each(function() {
-                $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
-              });
-            }
-            //- document.getElementById("stars").innerHTML = getStars(document.getElementById("rate").innerHTML);
-            //- //- document.getElementById("stars").innerHTML = getStars('4');
-            //- function getStars(rating) {
-            //-   rating = Math.round(rating * 2) / 2;
-            //-   let output = [];
-            //-   for (var i = rating; i >= 1; i--){
-            //-     output.push('<i class="fa fa-fw fa-star star-orange" aria-hidden="true"></i>');
-            //-   }
-            //-   if (i == .5) output.push('<i class="fa fa-fw fa-star-half-o star-orange" aria-hidden="true"></i>');
-            //-   for (let i = (5 - rating); i >= 1; i--){
-            //-     output.push('<i class="fa fa-fw fa-star-o star-orange" aria-hidden="true"></i>');
-            //-   }
-            //-   return output.join('');
-            //- } 
-          
+          p(style='margin-top: -30px;')
+            .star-box(style='display: inline-block;width:auto ;white-space: nowrap;')
+              span.unfilled(style='color:#d3d3d3; position: absolute;') ★★★★★
+              span.filled(style='color:#e9ce18; white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*14+'px') ★★★★★
           hr
           
       ul.pagination.pagination-sm.float-sm-left.mb-4.mt-3
