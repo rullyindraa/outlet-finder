@@ -264,18 +264,18 @@ router.post('/business/edit-business', upload.single('photo'), function(req, res
           }]
         },
       )
-      // .then(row => {
-      //   file.update({
-      //     name: req.file.filename,
-      //     relative_path: target_path,
-      //     original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
-      //     mime_type : req.file.mimetype,
-      //     updatedAt: new Date()
-      //   },{
-      //     include: [{
-      //       model: business
-      //     }]
-      //   })
+      .then(row => {
+        file.update({
+          name: req.file.filename,
+          relative_path: target_path,
+          original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
+          mime_type : req.file.mimetype,
+          updatedAt: new Date()
+        },{
+          include: [{
+            model: business
+          }]
+        })
         .then(row => {
           // console.log(row);
           // console.log(req.file);
@@ -315,7 +315,7 @@ router.post('/business/edit-business', upload.single('photo'), function(req, res
             console.log(rows);
             res.redirect('/business-owner/business');
           })
-        //}) 
+        }) 
       })
     } else {
       category.findAll()

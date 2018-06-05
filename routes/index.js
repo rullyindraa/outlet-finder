@@ -11,6 +11,8 @@ const business = models.business;
 const address = models.address;
 const file = models.file;
 const category = models.category;
+const review = models.review;
+const moment = require('moment');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -59,7 +61,15 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       {
         model: address,
         attributes : ['adm_area_lv2', 'formatted_address', 'location']
-      }
+      },
+      {
+        model: review,
+        //order: ['id', 'ASC'],
+        //limit: 1,
+      },
+    ],
+    order: [
+      [ review, 'createdAt', 'DESC' ]
     ],
     raw:true
   })
@@ -68,8 +78,23 @@ router.get('/detail/outlet/:id', function(req, res, next) {
     // console.log('itu', cat);
     // console.log('try', rows[0]['address.raw_address']);
     //console.log('aku', rows[0]['address.location'].coordinates[0]);
+    var reviewList = [];
+      for (var i = 0; i < 3; i++) {
+        var review = {
+          'id' : rows[i]['review.id'],
+          'name':rows[i]['review.name'],
+          'email':rows[i]['review.email'],
+          'content':rows[i]['review.content'],
+          'createdAt':moment(rows[i]['review.createdAt']).fromNow(),
+          'rating':rows[i]['review.rating'],
+          'outlet_id':rows[i].id,
+          'outlet_name': rows[i].name
+        }
+        reviewList.push(review);
+        //console.log('revv',reviewList);
+      }
     res.render('guest/detail', {
-      title: rows[0].name+' | Outlet Finder', 
+      title: rows[0].name+' | Outlet Finder', data: reviewList, 
       //data: rows,
       //id:  rows[0].id,
       outlet_name:  rows[0].name, outlet_phone: rows[0].phone_number, outlet_email: rows[0].email, outlet_website: rows[0].website, outlet_desc: rows[0].description, 
@@ -86,6 +111,8 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       business_address: rows[0]['business.address.formatted_address'],
       path: rows[0]['business.file.path'], file_name: rows[0]['business.file.name'], 
       //category: 
+      // review_name: rows['review.name'], review_content: rows['review.content'], 
+      // review_rating: rows['review.rating'], review_dateCreata: rows['review.createdAt']
     })
   }).catch(err => {
     console.error(err);

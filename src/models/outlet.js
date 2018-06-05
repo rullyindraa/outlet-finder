@@ -80,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
     outlet.belongsTo(models['address']);
     outlet.hasOne(models['page_view']);
     outlet.belongsTo(models['file']);
-    //outlet.hasOne(models['review']);
+    outlet.hasOne(models['review']);
   };
   return outlet;
 };

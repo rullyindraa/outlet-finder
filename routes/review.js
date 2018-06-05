@@ -40,7 +40,8 @@ router.post('/add_review', function(req, res, next) {
       var review_content = req.body.review_content;
       var rating = req.body.rating;
       var data = {
-        name : name, email : email, content : review_content, rating : rating, outletId:'1'
+        name : name, email : email, content : review_content, rating : rating, 
+        outletId: req.params.id
       }
 
       review.create(data).then(function(rows, err) {
