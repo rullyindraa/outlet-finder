@@ -77,7 +77,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       city: rows[0]['address.adm_area_lv2'], 
       //city: rows[0]['business.address.adm_area_lv2'],
       outlet_address: rows[0]['address.formatted_address'],
-      lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
+      lat: rows[0]['address.location'].coordinates[0], lng: rows[0]['address.location'].coordinates[1],
       businessId:rows[0].businessId, business_name: rows[0]['business.name'],
       business_email: rows[0]['business.email'],
       business_phone: rows[0]['business.phone_number'],

@@ -11,10 +11,20 @@ block content
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='business') Business:
+            input.form-control(type='hidden', id='buss' value=businessId)
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            select.form-control.selectpicker(name="business")
+            select.form-control.selectpicker(name="business" id="bu")
               each value in business
                 option(value=value.id) #{value.name}
+            script.
+              //$(document).ready(function(){
+                //$("#bu option[value='Kimia Farma']").attr("selected", true);
+                //$("#bu").title("Jawapos");
+              //$('#bu').selectpicker('val', 'Kimia Farma');
+              //var bId = document.getElementById('bnm').value;
+              var bId = $('input#buss').val();
+              $('select[name=business]').val(bId);
+              //};
             .invalid-feedback
               | Please select business
         .form-group
