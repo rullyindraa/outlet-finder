@@ -1,35 +1,35 @@
 .modal.fade.bd-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')
   .modal-dialog.modal-lg
     .modal-content
-      .modal-header
-        h4 Write a Review
-      .modal-body
-        form.container.mb-2
-          .row
-            .col-md-6
-              .form-group
-                label(for='name_reviews') Name :
-                input#name_reviews.form-control(type='text')
-              .form-group
-                label(for='email_reviews') Email :
-                input#email_reviews.form-control(type='email', placeholder='name@example.com')
-            .col-md-6
-              .form-group
-                label Click to rate :
-                .star-rating
-                  input#5-stars(type='radio', name='rating', value='5')
-                  label.star(for='5-stars') ★
-                  input#4-stars(type='radio', name='rating', value='4')
-                  label.star(for='4-stars') ★
-                  input#3-stars(type='radio', name='rating', value='3')
-                  label.star(for='3-stars') ★
-                  input#2-stars(type='radio', name='rating', value='2')
-                  label.star(for='2-stars') ★
-                  input#1-star(type='radio', name='rating', value='1')
-                  label.star(for='1-star') ★
-          .form-group
-            label(for='reviews') Reviews
-            textarea#reviews.form-control(rows='3')
-      .modal-footer
-        button.btn.color-ink(type='button') Submit
-        button.btn.color-nantucket(type='button', data-dismiss='modal') Cancel
+      form.container.mb-2(action = '/add_review', method='POST')
+        .modal-header
+          h4 Write a Review
+        .modal-body
+            .row
+              .col-md-6
+                .form-group
+                  label(for='name_reviews') Name :
+                  input#name.form-control(type='text', name = 'name')
+                .form-group
+                  label(for='email_reviews') Email :
+                  input#email.form-control(type='email', placeholder='name@example.com', name = 'email')
+              .col-md-6
+                .form-group
+                  label Click to rate :
+                  .star-rating
+                    input#5-stars(type='radio', name='rating', value='5')
+                    label.star(for='5-stars') ★
+                    input#4-stars(type='radio', name='rating', value='4')
+                    label.star(for='4-stars') ★
+                    input#3-stars(type='radio', name='rating', value='3')
+                    label.star(for='3-stars') ★
+                    input#2-stars(type='radio', name='rating', value='2')
+                    label.star(for='2-stars') ★
+                    input#1-star(type='radio', name='rating', value='1')
+                    label.star(for='1-star') ★
+            .form-group
+              label(for='reviews') Reviews
+              textarea#reviews_content.form-control(rows='3', name = 'review_content')
+        .modal-footer
+          button.btn.color-ink(type='submit') Submit
+          button.btn.color-nantucket(type='button', data-dismiss='modal') Cancel
