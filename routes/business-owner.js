@@ -383,10 +383,9 @@ router.get('/oulet/business/:id', function(req, res){
     where: {
       businessId: [req.params.id]
     },
-    attributes: ['id', ['name', 'outlet_name']],
-    // attributes: {
-    //   include: [[Sequelize.fn('COUNT', Sequelize.col('outletId')), 'page_views']]
-    // },
+    attributes: ['id', ['name', 'outlet_name'],
+    [Sequelize.fn('COUNT', Sequelize.col("page_view.id")), 'count_view']],
+    group: ['outlet.id'],
     include: [
       {
         model: business,
@@ -398,6 +397,7 @@ router.get('/oulet/business/:id', function(req, res){
       },
       {
         model: page_view,
+        group: ['outletId'],
         // attributes: [[Sequelize.fn('IFNULL', Sequelize.fn('COUNT', Sequelize.col('outletId')), 0), 'page_views']],
         // include: [outlet]
       }
@@ -500,7 +500,7 @@ router.get('/reviews', function(req, res) {
           where: {
             userId: req.user.id
           },
-          attributes:['id']
+          attributes:['id'],
         }],
         attributes: ['id',['name', 'outlet_name']]
       }
@@ -528,6 +528,7 @@ router.get('/reviews', function(req, res) {
         reviewList.push(review);
         console.log('revv',reviewList);
       }
+      //console.log('userr',req.user.id);
       res.render('business-owner/reviews', { 
         title: 'Reviews | Outlet Finder', data: reviewList, 
         //created: rows[0].createdAt,

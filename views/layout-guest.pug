@@ -15,7 +15,7 @@ html
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='/stylesheets/style-guest.css')
     link(rel='icon', href='/images/square-icon.png')
-    script.
+    //script.
       //- function initMap() {
       //-   var map = new google.maps.Map(document.getElementById('map'), {
       //-   center: {
@@ -68,34 +68,34 @@ html
       //-   'Error: Your browser doesnt support geolocation.');
       //- }
 
-      function initMap() {
-        var lat = document.getElementById('lat').value;
-        var lng = document.getElementById('lng').value;
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 13,
-          center: {lat: -7.7830011, lng: 110.3892038}
-        });
+    //-   function initMap() {
+    //-     var lat = document.getElementById('lat').value;
+    //-     var lng = document.getElementById('lng').value;
+    //-     var map = new google.maps.Map(document.getElementById('map'), {
+    //-       zoom: 13,
+    //-       center: {lat: -7.7830011, lng: 110.3892038}
+    //-     });
 
-        var marker = new google.maps.Marker({
-          map: map,
-          draggable: true,
-          animation: google.maps.Animation.DROP,
-          position : {
-          lat : parseFloat( lat ),
-          lng : parseFloat( lng )}
-        });
-        marker.addListener('click', toggleBounce);
-      }
+    //-     var marker = new google.maps.Marker({
+    //-       map: map,
+    //-       draggable: true,
+    //-       animation: google.maps.Animation.DROP,
+    //-       position : {
+    //-       lat : parseFloat( lat ),
+    //-       lng : parseFloat( lng )}
+    //-     });
+    //-     marker.addListener('click', toggleBounce);
+    //-   }
 
-      function toggleBounce() {
-        if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
-        } else {
-          marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
-      }
+    //-   function toggleBounce() {
+    //-     if (marker.getAnimation() !== null) {
+    //-       marker.setAnimation(null);
+    //-     } else {
+    //-       marker.setAnimation(google.maps.Animation.BOUNCE);
+    //-     }
+    //-   }
     
-    script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBpk20FbiTlQeiV5gCPRY_83idTVbLpyDI&callback=initMap')
+    //- script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBpk20FbiTlQeiV5gCPRY_83idTVbLpyDI&callback=initMap')
     script.
       $(document).ready(function(){
         $("#home").click(function (){
