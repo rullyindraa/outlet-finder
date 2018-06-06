@@ -234,26 +234,47 @@ router.get('/outlets', function(req, res) {
 
 router.get('/reviews', function(req, res) {
   review.findAll({
-    attributes: ['id', 'name', 'email', 'content', 'rating'],
+    attributes: ['id', 'name', 'email', 'content', 'rating', 'createdAt'],
     include: [
       {
         model: outlet,
         include: [{
           model: business,
-          where: {
-            userId: req.user.id
-          },
+          // where: {
+          //   userId: req.user.id
+          // },
           attributes:['id']
         }],
         attributes: ['id',['name', 'outlet_name']]
       }
+    ],
+    order: [
+      ['createdAt', 'DESC' ]
     ],
     raw:true
   }).then(rows => {
     business.findAll()
     .then(bus => {
       //console.log('inireview',rows);
-      res.render('admin/reviews', { title: 'Reviews | Outlet Finder', data: rows, business: bus, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+      var reviewList = [];
+      for (var i = 0; i < rows.length; i++) {
+        var review = {
+          'id' : rows[i].id,
+          'name':rows[i].name,
+          'email':rows[i].email,
+          'content':rows[i].content,
+          'createdAt':moment(rows[i].createdAt).fromNow(),
+          'rating':rows[i].rating,
+          'outlet_id':rows[i]['outlet.id'],
+          'outlet_name': rows[i]['outlet.outlet_name']
+        }
+        reviewList.push(review);
+        console.log('revv',reviewList);
+      }
+      res.render('admin/reviews', { title: 'Reviews | Outlet Finder', 
+        data: reviewList, business: bus, 
+        name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]
+      });
     })
   })
   // res.render('admin/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5:'active-navbar' });
