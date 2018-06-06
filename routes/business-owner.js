@@ -30,7 +30,47 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 router.get('/', function(req, res) {
-  res.render('business-owner/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
+  business.findAndCountAll(
+    {
+    where: {
+      userId: req.user.id
+    },
+    attributes: [
+      'id',['name', 'business'],
+    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.id"))), 'count_outlet'],
+    //[Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.review.id"))), 'count_review']
+    ],
+    include: [
+      {
+        model: outlet,
+        attributes: ['id', 
+          //[Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('review.id'))), 'count_review']
+        ],
+        include: [
+          {
+            model: review,
+            attributes: ['id'],
+          }
+        ],
+      }
+    ],
+    //required: true,
+    distinct:true,
+    raw:true
+  })
+  .then(result => {
+    console.log('ini', result);
+    var rows = result.rows[0].count_outlet;
+    var count = result.count;
+    //console.log('yes', count)
+    res.render('business-owner/index', {
+      title: 'Dashboard | Outlet Finder', 
+      totalo:rows, totalb: count, 
+      name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`],
+      active1: 'active-navbar'
+    });
+  })
+  //res.render('business-owner/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
 });
 
 router.get('/business', function(req, res) {
@@ -501,6 +541,7 @@ router.get('/reviews', function(req, res) {
             userId: req.user.id
           },
           attributes:['id'],
+          required: true
         }],
         attributes: ['id',['name', 'outlet_name']]
       }
@@ -509,7 +550,7 @@ router.get('/reviews', function(req, res) {
   }).then(rows => {
     business.findAll()
     .then(bus => {
-      //console.log('inireview',rows);
+      console.log('inireview',rows);
       // var created= moment(rows[0].createdAt).format('YYYY, M, DD');
       // var createdAt= moment(rows[0].createdAt).fromNow();
       // console.log(createdAt);
