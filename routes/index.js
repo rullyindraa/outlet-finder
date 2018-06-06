@@ -80,7 +80,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
     // console.log('try', rows[0]['address.raw_address']);
     //console.log('aku', rows[0]['address.location'].coordinates[0]);
     var reviewList = [];
-    if(rows[0]['review.id'] != null){
+    if(rows[0]['review.id'] != undefined){
       for (var i = 0; i < 3; i++) {
         var review = {
           'id' : rows[i]['review.id'],
@@ -95,7 +95,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         reviewList.push(review);
         //console.log('revv',reviewList);
       }
-      req.flash('more', 'See more >');
+      if(rows.length > 3) req.flash('more', 'See more >');
     }
     else req.flash('info', 'Be the first to add review.');
     res.render('guest/detail', {
