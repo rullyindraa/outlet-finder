@@ -17,8 +17,8 @@ block content
             .form-group
               select.form-control(name="orderby")
                 option(name='categories', value="categories") - Category -
-                option(name='it_service', value="it_service") IT Service
-                option(name='fnb', value="fnb") Food and Beverage
+                each value in categories
+                  option(value=value.id) #{value.name}
           .col-lg-3.col-md-3.col-sm-3.col-xs-3
             .form-group
               select.form-control(name="sort")
@@ -37,82 +37,38 @@ block content
               th Page Views
               th#action Action
           tbody
-            tr
-              td Wonderlabs Armstrong Campus
-              td Wonderlabs
-              td Yogyakarta
-              td 110
-              td 
-                a(href='#')
-                  button.btn.btn-danger.btn-sm(type='button', onclick='')
-                    i.fa.fa-trash
-            tr
-              td Wonderlabs Explorer Campus
-              td Wonderlabs
-              td Yogyakarta
-              td 55
-              td 
-                a(href='#')
-                  button.btn.btn-danger.btn-sm(type='button', onclick='')
-                    i.fa.fa-trash
-            tr
-              td Wonderlabs Sputnik Campus
-              td Wonderlabs
-              td Yogyakarta
-              td 120
-              td 
-                a(href='#')
-                  button.btn.btn-danger.btn-sm(type='button', onclick='')
-                    i.fa.fa-trash
-            tr
-              td Wonderlabs Houston Campus
-              td Wonderlabs
-              td Yogyakarta
-              td 100
-              td 
-                a(href='#')
-                  button.btn.btn-danger.btn-sm(type='button', onclick='')
-                    i.fa.fa-trash
-            tr
-              td Wonderzza
-              td Wonderfood
-              td Yogyakarta
-              td 150
-              td 
-                a(href='#')
-                  button.btn.btn-danger.btn-sm(type='button', onclick='')
-                    i.fa.fa-trash
-            tr
-              td Wonder Cake
-              td Wonderfood
-              td Semarang
-              td 5
-              td 
-                a(href='#')
-                  button.btn.btn-danger.btn-sm(type='button', onclick='')
-                    i.fa.fa-trash
-                    
-      //- ul.pagination.pagination-sm.float-sm-left.mb-4.pb-5.mt-3
-      //-   li.page-item
-      //-     a.page-link(href='#') Previous
-      //-   li.page-item.active
-      //-     a.page-link(href='#') 1
-      //-   li.page-item
-      //-     a.page-link(href='#') 2
-      //-   li.page-item
-      //-     a.page-link(href='#') 3
-      //-   li.page-item
-      //-     a.page-link(href='#') Next
-      
+            for o in data
+              tr
+                td=o.outlet_name
+                td=o[`business.business_name`]
+                td=o[`address.city_name`]
+                td=o.count_view
+                td 
+                  a(href='#')
+                    button.btn.btn-danger.btn-sm(type='button', onclick='del('+o.id+')')
+                      i.fa.fa-trash
+            
+      #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+        .modal-dialog(role='document')
+          .modal-content(style='color: black') 
+            .modal-header
+              h5#exampleModalLabel.modal-titleDelete Delete Outlet
+              button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') ×
+            .modal-body
+              | Are you sure you want to delete this outlet?
+            .modal-footer
+              button.btn.btn-danger(type='button', onclick='deleteOutlet()') Delete
+              button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
       script(type='text/javascript').
         function del(e) {
-          window.idCategories = e;
+          window.idOutlet = e;
           $("#myModal").modal('show');
         }
-        function deleteCategories(){
-          var id = window.idCategories;
+        function deleteOutlet(){
+          var id = window.idOutlet;
           $.ajax({
-            url:'/admin/categories/delete/'+id,
+            url:'/admin/outlet/delete/'+id,
             type:'POST',
             success : function (respon) {
             setTimeout(function() {$("#myModal").modal('hide');}, 1000);

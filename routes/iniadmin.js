@@ -14,7 +14,6 @@ const business = models.business;
 const outlet = models.outlet;
 const page_view = models.page_view;
 const review = models.review;
-const moment = require('moment')
 
 router.get('/', function(req, res, next) {
   business.findAndCountAll(
@@ -69,7 +68,7 @@ router.get('/', function(req, res, next) {
       })
     })
   })
-  // res.render('admin/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
+  //res.render('admin/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
 });
 
 router.get('/categories', function(req, res) {
@@ -291,25 +290,13 @@ router.post('/add-admin', function(req, res) {
 });
 
 router.get('/list-administrators', function(req, res, next) {
-  var admin_list =[];
+  var adminList =[];
   user.findAll({
     where: {
       role : [1]
     }
   }).then(function(rows) {
-    var list_admin = [];
-    for (var i = 0; i < rows.length; i++) {
-      var list = {
-        'id' : rows[i].id,
-        'first_name':rows[i].first_name,
-        'last_name':rows[i].last_name,
-        'email':rows[i].email,
-        'username':rows[i].username,
-        'last_login':moment(rows[i].last_login).format('MMMM Do YYYY, h:mm:ss a')
-      }
-      admin_list.push(list);
-    }
-    res.render('admin/list-administrators', { title: 'List Administrators | Outlet Finder', data: admin_list, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'  })
+    res.render('admin/list-administrators', { title: 'List Administrators | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'  })
   }).catch(err => {
     console.error(err);
   });
@@ -332,22 +319,7 @@ router.get('/list-business-owners', function(req, res, next) {
       role : [0]
     }
   }).then(function(rows) {
-    var list_bo = [];
-    for (var i = 0; i < rows.length; i++) {
-      var list = {
-        'id' : rows[i].id,
-        'first_name':rows[i].first_name,
-        'last_name':rows[i].last_name,
-        'email':rows[i].email,
-        'phone_number':rows[i].phone_number,
-        'username':rows[i].username,
-        'last_login':moment(rows[i].last_login).format('MMMM Do YYYY, h:mm:ss a'),
-        'status': rows[i].status
-
-      }
-      list_bo.push(list);
-    }
-    res.render('admin/list-business-owners', { title: 'List Business Owners | Outlet Finder', data: list_bo, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active4: 'active-navbar'  })
+    res.render('admin/list-business-owners', { title: 'List Business Owners | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active4: 'active-navbar'  })
   }).catch(err => {
     console.error(err);
   });
