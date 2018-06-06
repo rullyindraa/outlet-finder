@@ -184,11 +184,21 @@ html
                 =r.outlet_name
             p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
               =r.content
-            p(style='margin-top: -30px;')
-              .star-box(style='display: inline-block;width:auto ;white-space: nowrap;')
-                span.unfilled(style='color:#d3d3d3; position: absolute;') ★★★★★
-                span.filled(style='color:#e9ce18; white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*0.85+'em') ★★★★★
-            br
+            p(style='margin-top: -18px;')
+              .star-box(style='display: inline-block;width:auto ;white-space: nowrap; margin-left: -2px')
+                span.unfilled(style='position: absolute;') 
+                  i.fa.fa-fw.fa-star.star-grey
+                  i.fa.fa-fw.fa-star.star-grey
+                  i.fa.fa-fw.fa-star.star-grey
+                  i.fa.fa-fw.fa-star.star-grey
+                  i.fa.fa-fw.fa-star.star-grey
+                span.filled(style='white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*1.25+'em')
+                  i.fa.fa-fw.fa-star.star-orange
+                  i.fa.fa-fw.fa-star.star-orange
+                  i.fa.fa-fw.fa-star.star-orange
+                  i.fa.fa-fw.fa-star.star-orange
+                  i.fa.fa-fw.fa-star.star-orange
+                br
           span
             - if (more){
               a(href='#') #{more}
