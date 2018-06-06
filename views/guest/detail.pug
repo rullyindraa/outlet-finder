@@ -1,254 +1,244 @@
-extends ../layout-guest
-
-block content
-  nav.navbar.navbar-expand-lg.navbar-light.color-ink
-    a.navbar-brand(href='/' style="color: #FFFFFF;")
-      img(src="/images/logo-light.png" height="31" alt="")
-    button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
-      span.i.fa.fa-fw.fa-bars(style='color: white;')
-    #navbarSupportedContent.collapse.navbar-collapse.justify-content-right
-      ul.navbar-nav.ml-auto.justify-content-right
-        li.nav-item.mr-2
-          a.nav-link.nav-top.rounded.border-light.text-white(href='/')
-            |  Home
-        li.nav-item.mr-2
-          a.nav-link.nav-top.rounded.border-light.text-white(href='/categories')
-            |  Browse Directory
-        li.nav-item.mr-2
-          a.signin.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.login')
-            |  Login
-        li.nav-item.mr-2
-          a.signup.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.register')
-            |  Register
-  header.bg-header.text-center
-    .container
-      img.img-fluid.mb-4.d-block.mx-auto(src=path, alt='' style="width: 200px;")
-      h1.text-uppercase.mb-2
-        =business_name
-      p.text-muted 
-        | City: 
-        =city
-        |  - Business: - Retail
-        =category
-      p.text-center
-        =business_desc
-      hr.detail.mt-4
-    .container
-      .row
-        .col-lg-3.col-md-6.text-center
-          .detail-box.mt-5.mx-auto
-            i.fa.fa-4x.fa-map-marker.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
-            h3.mb-3 
-              | Address
-            p.text-muted.mb-0
-              =business_address
-        .col-lg-3.col-md-6.text-center
-          .detail-box.mt-5.mx-auto
-            i.fa.fa-4x.fa-globe.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
-            h3.mb-3 
-              | Website
-            p.text-muted.mb-0
-              =business_website
-        .col-lg-3.col-md-6.text-center
-          .detail-box.mt-5.mx-auto
-            i.fa.fa-4x.fa-phone-square.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
-            h3.mb-3 
-              | Phone
-            p.text-muted.mb-0
-              =business_phone 
-        .col-lg-3.col-md-6.text-center
-          .detail-box.mt-5.mx-auto
-            i.fa.fa-4x.fa-envelope.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
-            h3.mb-3 
-              | E-mail
-            p.text-muted.mb-0
-              =business_email 
-      a#info.btn.btn-detail.color-white.btn-xl.mt-4.text-uppercase(href='#info' style='border-radius: 300px; padding: 1rem 2rem;') View Outlet Info
-  section.bg-section-1.info(style='padding-bottom: 50px;')
-    .container
-      h2.mb-2.text-center
-        =outlet_name
-      hr.detail.mt-4
-    .container
-      ul.timeline
-        li
-          .timeline-badge.blue
-            i.fa.fa-fw.fa-info
-          .timeline-panel.blue
-            .timeline-heading
-              h4.timeline-title Outlet Info
-            .timeline-body
-              p
-                .mt-2
-                i.fa.fa-fw.fa-map-marker
-                =outlet_address
-                br
-                .mt-2
-                i.fa.fa-fw.fa-globe
-                =outlet_website
-                br
-                .mt-2
-                i.fa.fa-fw.fa-phone-square
-                =outlet_phone 
-                br
-                .mt-2
-                i.fa.fa-fw.fa-envelope
-                =outlet_email
-              input#lat.form-control(type='hidden' value=lat)
-              input#lng.form-control(type='hidden' value=lng)
-              //- p#lat.hidden
-              //-   =lat
-              //- p#lng.hidden
-              //-   =lng
-        li.timeline-inverted
-          .timeline-badge.primary
-            i.fa.fa-fw.fa-clock-o
-          .timeline-panel.primary
-            .timeline-heading
-              h4.timeline-title Open Now
-            .timeline-body
-              p
-                .row
-                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
-                    | Monday
-                  .col-lg-6.col-md-6.col-sm-6.col-xs-6 
-                    | 8.00 - 18.00
-                .row
-                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
-                    | Tuesday
-                  .col-lg-6.col-md-6.col-sm-6.col-xs-6
-                    | 8.00 - 18.00
-                .row
-                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
-                    | Wednesday
-                  .col-lg-6.col-md-6.col-sm-6.col-xs-6
-                    | 8.00 - 18.00
-                .row
-                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
-                    | Thursday
-                  .col-lg-6.col-md-6.col-sm-6.col-xs-6
-                    | 8.00 - 18.00
-                .row
-                  .col-lg-5.col-md-5.col-sm-6.col-xs-6
-                    | Friday
-                  .col-lg-6.col-md-6.col-sm-6.col-xs-6
-                    | 8.00 - 18.00   
-      .container.text-center
-        a#maps.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(href='#maps' style='border-radius: 300px; padding: 1rem 2rem;') View in Maps
-  section.bg-section-2.maps.text-center(style='padding-bottom: 50px;')
-    .container-fluid
-      .row
-        #map.map-detail(style='margin-top: -30px;')
-        .mt-5
-      a.btn.btn-ink.color-ink.btn-xl.mt-5.text-uppercase(href='#' style='border-radius: 300px; padding: 1rem 2rem;') Get Direction
-      a.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-5.text-uppercase(href='#' style='border-radius: 300px; padding: 1rem 2rem;') Find Similar
-      a#comment.btn.btn-detail.btn-detail-page.color-white.btn-xl.mt-5.text-uppercase(href='#comment' style='border-radius: 300px; padding: 1rem 2rem;') Find Out Review
-      script.
-        function initMap() {
-          var lat = document.getElementById('lat').value;
-          var lng = document.getElementById('lng').value;
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
-            center: {lat: -7.7830011, lng: 110.3892038}
-          });
-
-          var marker = new google.maps.Marker({
-            map: map,
-            draggable: true,
-            animation: google.maps.Animation.DROP,
-            position : {
-            lat : parseFloat( lat ),
-            lng : parseFloat( lng )}
-          });
-          marker.addListener('click', toggleBounce);
-        }
-
-        function toggleBounce() {
-          if (marker.getAnimation() !== null) {
-            marker.setAnimation(null);
-          } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-          }
-        }
-    
+doctype html
+html
+  head
+    title=title
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/style-guest.css')
+    link(rel='icon', href='/images/square-icon.png')
+    script(src='/javascripts/one-page.js')
+    script(src='/javascripts/maps-detail.js')
     script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBpk20FbiTlQeiV5gCPRY_83idTVbLpyDI&callback=initMap')
-  section.bg-section-1.comment(style='padding-bottom: 50px;')
-    .container
-      h2.mb-2.text-center
-        | Review
-      hr.detail.mt-4
-    .container.mt-4
-      .col-lg-12.col-md-12.col-sm-12.col-xs-12
-        span.text-secondary
-          - if (info){
-              p #{info} 
-          - }  
-        for r in data
-          strong
-            h6(style='color: black;')
-              =r.name
-          p(style='color: gray; font-size: 14px')
-            =r.createdAt
-            |   - outlet : 
-            a(href='/detail/outlet/'+r.outlet_id)
-              =r.outlet_name
-          p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
-            =r.content
-          p(style='margin-top: -30px;')
-            .star-box(style='display: inline-block;width:auto ;white-space: nowrap;')
-              span.unfilled(style='color:#d3d3d3; position: absolute;') ★★★★★
-              span.filled(style='color:#e9ce18; white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*0.85+'em') ★★★★★
-          br
-        span
-          - if (more){
-            a(href='#') #{more}
-          - } 
-        //a(href='#') more reviews >
-    .container.text-center
-      button.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(style='border-radius: 300px; padding: 1rem 2rem;', type='button', data-toggle='modal', data-target='.bd-example-modal-lg') Add Review
-      a#other.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-4.text-uppercase(href='#other' style='border-radius: 300px; padding: 1rem 2rem;') Find Other Outlet
-  section.bg-section-2.other(style='padding-bottom: 50px;')
-    .container
-      h2.mb-2.text-center
-        | Other Outlet
-      hr.detail.mt-4
-    .container.mt-4
-      .table-responsive-lg(style='color: black;')
-        table.table-striped.table.col-lg-12.col-md-12.col-sm-12.col-xs-12
-          thead
-            tr
-              th Name
-              th Business
-              th City
-              th 
-          tbody
-            tr
-              td Wonderlabs Armstrong Campus
-              td Wonderlabs
-              td Yogyakarta
-              td 
-                a(href='#') view outlets >
-            tr
-              td Wonderlabs Explorer Campus
-              td Wonderlabs
-              td Yogyakarta
-              td 
-                a(href='#') view outlets >
-            tr
-              td Wonderlabs Sputnik Campus
-              td Wonderlabs
-              td Yogyakarta
-              td 
-                a(href='#') view outlets >
-            tr
-              td Wonderlabs Houston Campus
-              td Wonderlabs
-              td Yogyakarta
-              td 
-                a(href='#') view outlets >
+  body(onload='getLocation()')
+    nav.navbar.navbar-expand-lg.navbar-light.color-ink
+      a.navbar-brand(href='/' style="color: #FFFFFF;")
+        img(src="/images/logo-light.png" height="31" alt="")
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+        span.i.fa.fa-fw.fa-bars(style='color: white;')
+      #navbarSupportedContent.collapse.navbar-collapse.justify-content-right
+        ul.navbar-nav.ml-auto.justify-content-right
+          li.nav-item.mr-2
+            a.nav-link.nav-top.rounded.border-light.text-white(href='/')
+              |  Home
+          li.nav-item.mr-2
+            a.nav-link.nav-top.rounded.border-light.text-white(href='/categories')
+              |  Browse Directory
+          li.nav-item.mr-2
+            a.signin.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.login')
+              |  Login
+          li.nav-item.mr-2
+            a.signup.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.register')
+              |  Register
+    header.bg-header.text-center
+      .container
+        img.img-fluid.mb-4.d-block.mx-auto(src=path, alt='' style="width: 200px;")
+        h1.text-uppercase.mb-2
+          =business_name
+        p.text-muted 
+          | City: 
+          =city
+          |  - Business: - Retail
+          =category
+        p.text-center
+          =business_desc
+        hr.detail.mt-4
+      .container
+        .row
+          .col-lg-3.col-md-6.text-center
+            .detail-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-map-marker.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+              h3.mb-3 
+                | Address
+              p.text-muted.mb-0
+                =business_address
+          .col-lg-3.col-md-6.text-center
+            .detail-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-globe.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+              h3.mb-3 
+                | Website
+              p.text-muted.mb-0
+                =business_website
+          .col-lg-3.col-md-6.text-center
+            .detail-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-phone-square.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+              h3.mb-3 
+                | Phone
+              p.text-muted.mb-0
+                =business_phone 
+          .col-lg-3.col-md-6.text-center
+            .detail-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-envelope.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+              h3.mb-3 
+                | E-mail
+              p.text-muted.mb-0
+                =business_email 
+        a#info.btn.btn-detail.color-white.btn-xl.mt-4.text-uppercase(href='#info' style='border-radius: 300px; padding: 1rem 2rem;') View Outlet Info
+    section.bg-section-1.info(style='padding-bottom: 50px;')
+      .container
+        h2.mb-2.text-center
+          =outlet_name
+        hr.detail.mt-4
+      .container
+        ul.timeline
+          li
+            .timeline-badge.blue
+              i.fa.fa-fw.fa-info
+            .timeline-panel.blue
+              .timeline-heading
+                h4.timeline-title Outlet Info
+              .timeline-body
+                p
+                  .mt-2
+                  i.fa.fa-fw.fa-map-marker
+                  =outlet_address
+                  br
+                  .mt-2
+                  i.fa.fa-fw.fa-globe
+                  =outlet_website
+                  br
+                  .mt-2
+                  i.fa.fa-fw.fa-phone-square
+                  =outlet_phone 
+                  br
+                  .mt-2
+                  i.fa.fa-fw.fa-envelope
+                  =outlet_email
+                input#lat.form-control(type='hidden' value=lat)
+                input#lng.form-control(type='hidden' value=lng)
+          li.timeline-inverted
+            .timeline-badge.primary
+              i.fa.fa-fw.fa-clock-o
+            .timeline-panel.primary
+              .timeline-heading
+                h4.timeline-title Open Now
+              .timeline-body
+                p
+                  .row
+                    .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                      | Monday
+                    .col-lg-6.col-md-6.col-sm-6.col-xs-6 
+                      | 8.00 - 18.00
+                  .row
+                    .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                      | Tuesday
+                    .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                      | 8.00 - 18.00
+                  .row
+                    .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                      | Wednesday
+                    .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                      | 8.00 - 18.00
+                  .row
+                    .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                      | Thursday
+                    .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                      | 8.00 - 18.00
+                  .row
+                    .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                      | Friday
+                    .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                      | 8.00 - 18.00   
+        .container.text-center
+          a#maps.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(href='#maps' style='border-radius: 300px; padding: 1rem 2rem;') View in Maps
+    section.bg-section-2.maps.text-center(style='padding-bottom: 50px;')
+      .container-fluid
+        .row
+          #map.map-detail(style='margin-top: -30px;')
+          .mt-5
+      form#calculate-route(name='calculate-route', action='#', method='get')
+        input#from.form-control(type='hidden', name='from')
+        input#to.form-control(type='hidden', name='to', value=outlet_address)
+        br
+        input.btn.btn-ink.color-ink.btn-xl.mt-5.text-uppercase(type='submit' value='Get Direction' style='border-radius: 300px; padding: 1rem 2rem;') 
+        //a.btn.btn-ink.color-ink.btn-xl.mt-5.text-uppercase(href='#' style='border-radius: 300px; padding: 1rem 2rem;') Get Direction
+        a.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-5.text-uppercase(href='#' style='border-radius: 300px; padding: 1rem 2rem;') Find Similar
+        a#comment.btn.btn-detail.btn-detail-page.color-white.btn-xl.mt-5.text-uppercase(href='#comment' style='border-radius: 300px; padding: 1rem 2rem;') Find Out Review
+    section.bg-section-1.comment(style='padding-bottom: 50px;')
+      .container
+        h2.mb-2.text-center
+          | Review
+        hr.detail.mt-4
+      .container.mt-4
+        .col-lg-12.col-md-12.col-sm-12.col-xs-12
+          span.text-secondary
+            - if (info){
+                p #{info} 
+            - }  
+          for r in data
+            strong
+              h6(style='color: black;')
+                =r.name
+            p(style='color: gray; font-size: 14px')
+              =r.createdAt
+              |   - outlet : 
+              a(href='/detail/outlet/'+r.outlet_id)
+                =r.outlet_name
+            p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
+              =r.content
+            p(style='margin-top: -30px;')
+              .star-box(style='display: inline-block;width:auto ;white-space: nowrap;')
+                span.unfilled(style='color:#d3d3d3; position: absolute;') ★★★★★
+                span.filled(style='color:#e9ce18; white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*0.85+'em') ★★★★★
+            br
+          span
+            - if (more){
+              a(href='#') #{more}
+            - } 
+          //a(href='#') more reviews >
+      .container.text-center
+        button.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(style='border-radius: 300px; padding: 1rem 2rem;', type='button', data-toggle='modal', data-target='.bd-example-modal-lg') Add Review
+        a#other.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-4.text-uppercase(href='#other' style='border-radius: 300px; padding: 1rem 2rem;') Find Other Outlet
+    section.bg-section-2.other(style='padding-bottom: 50px;')
+      .container
+        h2.mb-2.text-center
+          | Other Outlet
+        hr.detail.mt-4
+      .container.mt-4
+        .table-responsive-lg(style='color: black;')
+          table.table-striped.table.col-lg-12.col-md-12.col-sm-12.col-xs-12
+            thead
+              tr
+                th Name
+                th Business
+                th City
+                th 
+            tbody
+              tr
+                td Wonderlabs Armstrong Campus
+                td Wonderlabs
+                td Yogyakarta
+                td 
+                  a(href='#') view outlets >
+              tr
+                td Wonderlabs Explorer Campus
+                td Wonderlabs
+                td Yogyakarta
+                td 
+                  a(href='#') view outlets >
+              tr
+                td Wonderlabs Sputnik Campus
+                td Wonderlabs
+                td Yogyakarta
+                td 
+                  a(href='#') view outlets >
+              tr
+                td Wonderlabs Houston Campus
+                td Wonderlabs
+                td Yogyakarta
+                td 
+                  a(href='#') view outlets >
 
-  div(style='margin-top: -20px;')
+    div(style='margin-top: -20px;')
 
-  include footer.pug
-    
-  include add-review.pug
+    include footer.pug
+      
+    include add-review.pug
