@@ -15,7 +15,59 @@ const page_view = models.page_view;
 const review = models.review;
 
 router.get('/', function(req, res, next) {
-  res.render('admin/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
+  business.findAndCountAll(
+    {
+    // where: {
+    //   userId: req.user.id
+    // },
+    attributes: [
+      //'id',['name', 'business'],
+    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.id"))), 'count_outlet'],
+    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet->review.id"))), 'count_review']
+    
+    ],
+    include: [
+      {
+        model: outlet,
+        attributes: ['id', 
+        //[Sequelize.fn('COUNT', Sequelize.col("outlet.review.id")), 'count_review']
+        ],
+        include: [
+          {
+            model: review,
+            attributes: ['id',
+            // [Sequelize.fn('COUNT', Sequelize.col("review.id")), 'count_review']
+            ],
+            //required: true,
+          }
+        ],
+      }
+    ],
+    //required: true,
+    distinct:true,
+    raw:true
+  })
+  .then(result => {
+    category.findAndCountAll()
+    .then(cat => {
+      console.log('result', result);
+      console.log('cat', cat);
+      var rows = result.rows[0].count_outlet,
+        count = result.count,
+        count_review= result.rows[0].count_review,
+        count_cat = cat.count;
+      //console.log('yes', count)
+      res.render('admin/index', {
+        title: 'Dashboard | Outlet Finder', 
+        totalo:rows, totalb: count, 
+        totalr:count_review,
+        totalc: count_cat,
+        name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`],
+        active1: 'active-navbar'
+      })
+    })
+  })
+  // res.render('admin/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
 });
 
 router.get('/categories', function(req, res) {
@@ -117,27 +169,65 @@ router.post('/categories/delete/:id', function(req, res, next) {
 
 router.get('/business', function(req, res) {
   business.findAll({
-    attributes: [['name', 'business'],
-    [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names']],
+    attributes: ['id', ['name', 'business'],
+    //[Sequelize.fn('GROUP_CONCAT', Sequelize.literal("categories.name SEPARATOR ', '")), 'category_names']],
+    [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("DISTINCT(categories.name) SEPARATOR ', '")), 'category_names'],
+    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.id"))), 'count_outlet']
+    ],
     group: ['business.id'],
     include: [
       {
         model: category,
         attributes: ['name'] 
+      },
+      {
+        model: outlet,
+        group: ['businessId']
       }
-    ]
+    ],
+    raw:true
   }).then(rows => {
     category.findAll()
-      .then(categories => {
+      .then(cat => {
         console.log(rows);
-        console.log(categories);
-        res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, val: categories, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+        //console.log(categories);
+        res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
       })
   })
 });
 
 router.get('/outlets', function(req, res) {
-  res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+  outlet.findAll({
+    attributes: ['id', ['name', 'outlet_name'],
+    [Sequelize.fn('COUNT', Sequelize.col("page_view.id")), 'count_view']],
+    group: ['outlet.id'],
+    include: [
+      {
+        model: business,
+        // where: {
+        //   userId: req.user.id
+        // },
+        attributes: [['name', 'business_name']],
+      },
+      {
+        model: address,
+        attributes: [['adm_area_lv2', 'city_name']]
+      },
+      {
+        model: page_view,
+        group: ['outletId'],
+      },
+    ],
+    raw: true
+  })
+  .then(rows => {
+    category.findAll()
+    .then(cat => {
+      console.log(rows);
+      res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+    })
+  })
+  //res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
 });
 
 router.get('/reviews', function(req, res) {

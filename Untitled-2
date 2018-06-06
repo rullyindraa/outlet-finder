@@ -30,51 +30,41 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 router.get('/', function(req, res) {
-  business.findAndCountAll(
+  business.findAll(
     {
     where: {
+      // userId:1
       userId: req.user.id
     },
-    attributes: [
-      'id',['name', 'business'],
-    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.id"))), 'count_outlet'],
-    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet->review.id"))), 'count_review']
-    
+    attributes: ['id',['name', 'business'],
+    //[Sequelize.fn('GROUP_CONCAT', Sequelize.literal("DISTINCT(categories.name) SEPARATOR ', '")), 'category_names'],
+    //[Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("business.id"))), 'count_business']
+    [Sequelize.fn('SUM', Sequelize.col('id')), 'total']
+    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.id"))), 'count_outlet']
     ],
+    // distinct: true,
+    group: ['business.id'],
     include: [
+      // {
+      //   model: category,
+      //   attributes: ['name']
+      // },
       {
         model: outlet,
-        attributes: ['id', 
-        //[Sequelize.fn('COUNT', Sequelize.col("outlet.review.id")), 'count_review']
-        ],
-        include: [
-          {
-            model: review,
-            attributes: ['id',
-            // [Sequelize.fn('COUNT', Sequelize.col("review.id")), 'count_review']
-            ],
-            //required: true,
-          }
-        ],
+        attributes: ['id'],
+        // distinct: ['businessId'],
+        // attributes: [[Sequelize.fn('COUNT', Sequelize.col("outlet.businessId")), 'count_outlet']],
+        //group: ['businessId']
       }
     ],
-    //required: true,
-    distinct:true,
     raw:true
-  })
-  .then(result => {
-    console.log('ini', result);
-    var rows = result.rows[0].count_outlet,
-      count = result.count,
-      count_review= result.rows[0].count_review;
-    //console.log('yes', count)
-    res.render('business-owner/index', {
-      title: 'Dashboard | Outlet Finder', 
-      totalo:rows, totalb: count, 
-      totalr:count_review,
-      name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`],
-      active1: 'active-navbar'
-    });
+  }).then(rows => {
+    // category.findAll()
+    // .then(cat => {
+      console.log('ini',rows);
+      //console.log('itu',cat);
+      res.render('business-owner/index', {title: 'Dashboard | Outlet Finder', data:rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+    //})
   })
   //res.render('business-owner/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
 });
@@ -110,7 +100,7 @@ router.get('/business', function(req, res) {
     category.findAll()
     .then(cat => {
       console.log('ini',rows);
-      //console.log('itu',cat);
+      console.log('itu',cat);
       res.render('business-owner/business', {title: 'Business Lists | Outlet Finder', data:rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
     })
   })
@@ -547,20 +537,15 @@ router.get('/reviews', function(req, res) {
             userId: req.user.id
           },
           attributes:['id'],
-          required: true
         }],
-        attributes: ['id',['name', 'outlet_name']],
-        required: true
+        attributes: ['id',['name', 'outlet_name']]
       }
-    ],
-    order: [
-      ['createdAt', 'DESC' ]
     ],
     raw:true
   }).then(rows => {
     business.findAll()
     .then(bus => {
-      console.log('inireview',rows);
+      //console.log('inireview',rows);
       // var created= moment(rows[0].createdAt).format('YYYY, M, DD');
       // var createdAt= moment(rows[0].createdAt).fromNow();
       // console.log(createdAt);
