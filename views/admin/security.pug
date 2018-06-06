@@ -42,7 +42,10 @@ block content
               input#check2(type='checkbox', checked=false, name='check2')
               span.slider.round
         //- form.col-lg-12.col-md-12.col-sm-12.col-xs-12(action='/check', method='POST')
-        button.btn.btn-dark(type='submit', style='margin-top: 10px') Save Change
+        |
+        - if(valid) {
+          button.btn.btn-dark(type='submit', style='margin-top: 10px') Save Change
+        -}
 
       script(type='text/javascript', src='../javascripts/account.js')
       form.m-4(action='/check', style='margin-top: 30px')
@@ -51,8 +54,8 @@ block content
             .modal-content
               .modal-header
                 h5.modal-title Set Up a Third Party App to Generate Codes 
-                    button#cancel.close(type='button', data-dismiss='modal', aria-label='Close' , name = 'close1')
-                      span(aria-hidden='true') ×
+                button#cancel.close(type='button', data-dismiss='modal', aria-label='Close' , name = 'close1')
+                  span.xclose(aria-hidden='true') ×
               .modal-body
                 table.w-full.max-w-md( style='color:black')
                     tr
@@ -74,23 +77,19 @@ block content
                         input#secret_token.form-control.w-full(type='text', name='secret_token')
                     tr
                       td
-                        button.btn.btn-primary.ml-4(type='submit', value='Verify') Confirm
+                        button.btn.btn-primary.ml-1.mt-2(type='submit', value='Verify') Confirm
 
-      form.m-4(action='#', style='margin-top: 30px')
-        #set2.modal.fade(tabindex='0', role='dialog')
+      form.m-4(action='#')
+        #set2.modal.fade(tabindex='0')
           .modal-dialog(role='document')
             .modal-content
               .modal-header
                 h5.modal-title Set Up a Whitelilst IP Address
-                    button#cancel.close(type='button', data-dismiss='modal', aria-label='Close' , name = 'close1')
-                      span(aria-hidden='true') ×
+                button#cancel.close(type='button', data-dismiss='modal', aria-label='Close', name = 'close1')
+                  span.xclose(aria-hidden='true') ×
               .modal-body
-                table.w-full.max-w-md( style='color:black')
-                    tr
-                      textarea#ip_address(name="", cols="30", rows="10")
-                    tr
-                      td
-                        button.btn.btn-primary.ml-4(type='submit', value='Verify') Confirm
+                textarea#ip_address.ml-1.mr-2(name="", cols="54", rows="10")
+                button.btn.btn-primary.ml-1.mt-2(type='submit', value='Verify') Confirm
 
   include ../includes/logout.pug
 

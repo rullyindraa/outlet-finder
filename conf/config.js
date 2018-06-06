@@ -6,8 +6,8 @@ var config = {
     database : 'outlet-finder'
   },
   register_message: {
-    from: 'register@demo.com',
-    subject_register: 'Node.js Register Account',
+    from: 'register@outlet-finder.com',
+    subject_register: 'Outlet-Finder Register Account',
     text_register1: 'Are you creating new account?',
     text_register2: 'If that`s not you, you can ignore this message' 
   },
@@ -20,7 +20,13 @@ var config = {
     address: 'http://' ,
     text_confirm: 'Hello,\n\n' +
     'This is a confirmation that the password for your account has just been changed.\n'
-  }
+  },
+  review: {
+    from: 'outlet@outlet-finder.com',
+    subject_review: 'Outlet-Finder Review Confirmation',
+    text_review1: 'You are receiving this because you (or someone else) have writen a review in Outlet-Finder. Please click on the followig link to submit your review ',
+    text_review2: 'If that`s not you, you can ignore this message' 
+  },
 }
 
 module.exports = config;

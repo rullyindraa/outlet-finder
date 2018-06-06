@@ -3,6 +3,7 @@ extends layout-login
 block content
   .container
     .wrapper
+      script(type='text/javascript', src='../javascripts/register.js')
       form.form.form-signin(method='POST')
         img.img-thumbnail.center(src="/images/logo-dark-trans.png" alt="")
         p.fieldset
@@ -18,9 +19,10 @@ block content
         p.fieldset
           label.image-replace.password Confirm Password
           input#password_confirm.full-width.has-padding.has-border(type='password', placeholder='Confirm Password', name='password_confirm')
+          //- span#message Matching
         p.fieldset
           // input.full-width(type='submit', value='Login')
         p.fieldset
-          input.full-width.has-padding(type='submit', value='Continue Registration')
+          input#submit.full-width.has-padding(type='submit', value='Continue Registration', name='submit', onclick='return Validate()')
 
         

@@ -188,6 +188,15 @@ a:hover {
   margin-top:11px;
 }
 
+.xclose{
+  margin-right: 10px;
+}
+
+.modal-content{
+  color: black;
+  /* margin-right: 10px; */
+}
+
 .floatCheck{
   margin-top:-13px;
   margin-left: 10px

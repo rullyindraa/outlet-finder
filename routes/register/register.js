@@ -40,6 +40,7 @@ router.post('/verify_account', function(req, res, next) {
         var insert_user = {
           username: username, email: email, token: token_active, create_at: create_at, role:0
         }
+        console.log("isian akun :", insert_user)
 
         // user.create(insert_user).then(function(rows, err) {
         //   user.findAll({
@@ -52,20 +53,28 @@ router.post('/verify_account', function(req, res, next) {
         // })
 
         user.findAll({
-          where: {
+          where: Sequelize.or({
             username: username
-          }
+          }, {
+            email : email
+          })
         }).then(function(rows) {
           if(rows.length>0) {
-            alert('username already used!');
+            alert('username or email already used!');
           } else {
+            var create_at = moment().toDate();
+            var insert_user = {
+              username: username, email: email, token: token_active, create_at: create_at, role:0
+            }
+            console.log('pengecekan kketiga')
             user.create(insert_user).then(function(rows, err) {
               user.findAll({
                 where : {
                   username : username
                 }
-              }).then(function(err, rows) {
-                alert('check your email to confirm your account!')
+              }).then(function(wrr, rows) {
+                alert('check your email to verify your account!');
+                res.redirect('/login')
                 done(err, token, rows)
               })
             })
@@ -93,7 +102,7 @@ router.post('/verify_account', function(req, res, next) {
       });
 
 
-  res.redirect('/register')
+  // res.redirect('/register')
 });
 
 router.get('/register_next', function(req, res) {
@@ -119,7 +128,7 @@ router.get('/next/:token', function(req, res,){
 });
 
 router.post('/next/:token', function(req, res, next) {
-  var username = req.body.username;
+  // var username = req.body.username;
   console.log("masuk ke post");
   async.waterfall ([
     function(done) {
@@ -133,6 +142,9 @@ router.post('/next/:token', function(req, res, next) {
         var password = req.body.password;
         var password2 = req.body.password_confirm;
         var pass = bcrypt.hashSync(password);
+        if (password !== password2){
+          alert('Password doesn`t match!')
+        } else {
         user.update({
           password: pass,
           token: null,
@@ -145,10 +157,15 @@ router.post('/next/:token', function(req, res, next) {
         }).catch(function(err) {
           throw err;
         })
-        // res.redirect('/busines-owner/')
-        done(rows, 'done')
+        console.log(rows)
+        // req.login(users, function(err) {
+            // console.log('user 2:')
+            return res.redirect('/business-owner/')
+        // });
+          done(rows, 'done') }
       })
-      res.redirect('/business-owner')
+    
+      
     },
     // function(rows, done) {
     //   console.log('rooowa', rows)

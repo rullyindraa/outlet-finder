@@ -160,6 +160,10 @@ router.post('/reset', function(req, res) {
   var username = req.body.username;
   var email = req.body.email;
   var password = req.body.password;
+  var password_confirm = req.body.cofirm_password;
+  if (password !== password_confirm) {
+    alert('Your password doesn`t match !')
+  } else {
   user.findAll({
     where: {
       username:username
@@ -180,7 +184,7 @@ router.post('/reset', function(req, res) {
       throw err;
     })
   })
-  res.redirect('/login')
+  res.redirect('/login') }
 })
 
 
