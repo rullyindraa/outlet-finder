@@ -14,7 +14,21 @@ const business = models.business;
 const outlet = models.outlet;
 const page_view = models.page_view;
 const review = models.review;
+const file = models.file;
 const moment = require('moment')
+const validateJoi = require('../src/validation/create-user');
+var multer = require('multer');
+
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, './public/files/')
+	},
+	filename: (req, file, cb) => {
+		cb(null, Date.now() + path.extname(file.originalname));
+	}
+})
+
+const upload = multer({storage: storage});
 
 router.get('/', function(req, res, next) {
   business.findAndCountAll(
@@ -68,6 +82,10 @@ router.get('/', function(req, res, next) {
         active1: 'active-navbar'
       })
     })
+    .catch(err => {
+      console.error(err);
+      res.render('error');
+    }); 
   })
   // res.render('admin/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
 });
@@ -86,7 +104,7 @@ router.get('/categories', function(req, res) {
     console.log(rows);
     res.render('admin/list-categories', { title: 'Category Lists | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'})
   }).catch(err => {
-    console.error(err);
+    res.render('error');
   });
 });
 
@@ -114,7 +132,7 @@ router.post('/categories/add-category', function(req, res) {
       res.redirect('/admin/categories')
     }
   }).catch(function(err) {
-    throw err;
+    res.render('error');
   })
 });
 
@@ -134,7 +152,7 @@ router.get('/categories/:id', function(req, res) {
       active2: 'active-navbar' 
     })
   }).catch(err => {
-    console.error(err);
+    res.render('error');
   });
 });
 
@@ -155,7 +173,7 @@ router.post('/categories/edit', function(req, res) {
   }).then(function(rows) {
     res.redirect('/admin/categories')
   }).catch(err => {
-    console.error(err);
+    res.render('error');
   });
 });
 
@@ -166,6 +184,8 @@ router.post('/categories/delete/:id', function(req, res, next) {
     }
   }).then(function(err) {
     res.redirect('/admin/categories')
+  }).catch(err => {
+    res.render('error');
   })
 });
 
@@ -195,6 +215,12 @@ router.get('/business', function(req, res) {
         //console.log(categories);
         res.render('admin/list-all-business', { title: 'Business Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
       })
+      .catch(err => {
+        res.render('error');
+      })
+  })
+  .catch(err =>{
+    res.render('error');
   })
 });
 
@@ -228,6 +254,12 @@ router.get('/outlets', function(req, res) {
       console.log(rows);
       res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
     })
+    .catch(err =>{
+      res.render('error');
+    })
+  })
+  .catch(err => {
+    res.render('error');
   })
   //res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
 });
@@ -276,6 +308,12 @@ router.get('/reviews', function(req, res) {
         name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]
       });
     })
+    .catch(err => {
+      res.render('error');
+    })
+  })
+  .catch(err => {
+    res.render('error');
   })
   // res.render('admin/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5:'active-navbar' });
 });
@@ -284,31 +322,94 @@ router.get('/add-admin', function(req, res, next) {
   res.render('admin/add-admin', { title: 'Add Administrator | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'  })
 });
 
-router.post('/add-admin', function(req, res) {
-  var username = req.body.username;
-  var email = req.body.email;
-  var password = username;
-  var first_name = req.body.first_name;
-  var last_name = req.body.last_name;
-  var pass = bcrypt.hashSync(password)
-  var data_user = {username: username, email: email, password: pass, first_name: first_name, last_name:last_name, role: '1', status: '1'};
+router.post('/add-admin', upload.single('photo'), function(req, res) {
+  validateJoi.validate({
+    username : req.body.username,
+    email : req.body.email
+  }, function(errors, values) {
+    var username = req.body.username;
+    var email = req.body.email;
+    var password = username;
+    var first_name = req.body.first_name;
+    var last_name = req.body.last_name;
+    var pass = bcrypt.hashSync(password)
+    // var data_user = {username: username, 
+    //   email: email, 
+    //   password: pass, 
+    //   first_name: first_name, 
+    //   last_name:last_name, role: '1', 
+    //   status: '1', 
+    //   last_login : moment().toDate(),
+    //   fileId: row.id
+    // };
 
-  user.findAll({
-    where: {
-      username: [username]
-    }
-  }).then(function(rows) {
-    if(rows.length > 0){
-      alert('Username already in use!')
-    } else {
-      user.bulkCreate([data_user]).then(function(rows) {
-        console.log(rows);
-      })
-      res.redirect('/admin/list-administrators')
-    }
-  }).catch(function(err) {
-    throw err;
+    user.findAll({
+      where: {
+        username: [username]
+      }
+    }).then(function(rows) {
+      if(rows.length > 0){
+        alert('Username already in use!')
+      } else {
+        file.create({
+          relative_path: 'https://krowdster-11pcypgr4.netdna-ssl.com/wp-content/uploads/2015/11/Twitter-Egg.jpg'
+        }, {
+          include: [{
+            model: user
+          }]
+        })
+        .then(row => {
+          user.create({
+            username: username, 
+            email: email, 
+            password: pass, 
+            first_name: first_name, 
+            last_name:last_name, role: '1', 
+            status: '1', 
+            last_login : moment().toDate(),
+            fileId: row.id
+          }).then(function(rows) {
+            // console.log(rows);
+            res.redirect('/admin/list-administrators')
+          })
+          .catch(err => {
+            res.render('error');
+          })
+        })
+        .catch(err => {
+          res.render('error');
+        })
+          
+      }
+    }).catch(function(err) {
+      throw err;
+    })
   })
+
+  // var username = req.body.username;
+  // var email = req.body.email;
+  // var password = username;
+  // var first_name = req.body.first_name;
+  // var last_name = req.body.last_name;
+  // var pass = bcrypt.hashSync(password)
+  // var data_user = {username: username, email: email, password: pass, first_name: first_name, last_name:last_name, role: '1', status: '1'};
+
+  // user.findAll({
+  //   where: {
+  //     username: [username]
+  //   }
+  // }).then(function(rows) {
+  //   if(rows.length > 0){
+  //     alert('Username already in use!')
+  //   } else {
+  //     user.bulkCreate([data_user]).then(function(rows) {
+  //       console.log(rows);
+  //     })
+  //     res.redirect('/admin/list-administrators')
+  //   }
+  // }).catch(function(err) {
+  //   throw err;
+  // })
 });
 
 router.get('/list-administrators', function(req, res, next) {
@@ -332,7 +433,7 @@ router.get('/list-administrators', function(req, res, next) {
     }
     res.render('admin/list-administrators', { title: 'List Administrators | Outlet Finder', data: admin_list, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'  })
   }).catch(err => {
-    console.error(err);
+    res.render('error');
   });
 });
 
@@ -343,6 +444,9 @@ router.post('/delete/:id', function(req, res, next) {
     }
   }).then(function(err) {
     res.redirect('/admin/list-administrators')
+  })
+  .catch(err => {
+    res.render('error');
   })
 });
 
@@ -370,7 +474,7 @@ router.get('/list-business-owners', function(req, res, next) {
     }
     res.render('admin/list-business-owners', { title: 'List Business Owners | Outlet Finder', data: list_bo, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active4: 'active-navbar'  })
   }).catch(err => {
-    console.error(err);
+    res.render('error');
   });
 });
 
