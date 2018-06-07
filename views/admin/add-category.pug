@@ -7,12 +7,13 @@ block content
       // Breadcrumbs
       ol.breadcrumb.color-pblue
         li.breadcrumb-item.active.h4 Create Category
+    script(type='text/javascript', src='../javascripts/validation.js')
     form.needs-validation(action='/admin/categories/add-category', method='POST', novalidate='', style='color: black;')
       .form-group
         .col-lg-4.col-md-4.col-sm-4.col-xs-4
           label(for='category-name') Category Name:
         .col-lg-6.col-md-6.col-sm-6.col-xs-6
-          input.form-control(type='text', name='name', placeholder='Category Name', required='')
+          input.form-control(type='text', name='name', placeholder='Category Name', required)
           .invalid-feedback
             | Please enter your category name
       .form-group
