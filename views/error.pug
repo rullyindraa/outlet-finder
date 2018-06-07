@@ -1,6 +1,42 @@
-extends layout
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+    link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.0.13/css/all.css', integrity='sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp', crossorigin='anonymous')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js')
+    link(href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css', rel='stylesheet')
+    script(type='text/javascript', charset='utf8', src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js')
+    script(type='text/javascript', charset='utf8', src='https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js')
+    link(rel='stylesheet', href='/stylesheets/style-error.css')
+    link(rel='icon', href='/images/square-icon.png')
+    title Something Wrong
 
-block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  body
+    #container
+      #error-box
+        //- .dot
+        //- .dot.two
+        .face2
+          .eye
+          .eye.right
+          .mouth.sad
+        .shadow.move
+        .message
+          h1.alert Error!
+          p oh no, something went wrong.
+        //- button.button-box
+        //-   a(href='')
+        //-     h1.red try again
+    //- h1= message
+    //- h2= error.status
+    //- pre #{error.stack}
