@@ -8,8 +8,8 @@ block content
       ol.breadcrumb(style='background-color: #DAE1E7')
         li.breadcrumb-item.active.h4 Edit Business
       form.needs-validation(enctype="multipart/form-data", action='/business-owner/business/edit-business', method='POST', novalidate='', style='color: black; margin-left: -12px;')
-        input.form-control(type='text', name='Bid', value=id)
         .form-group
+          input.form-control(type='text', name='Bid', value=id)
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='categories') Categories:
             input.form-control(type='hidden', id='cat' value=valCat)
