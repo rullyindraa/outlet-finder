@@ -104,6 +104,7 @@ router.get('/categories', function(req, res) {
     console.log(rows);
     res.render('admin/list-categories', { title: 'Category Lists | Outlet Finder', data: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'})
   }).catch(err => {
+    console.log(err);
     res.render('error');
   });
 });
@@ -132,6 +133,7 @@ router.post('/categories/add-category', function(req, res) {
       res.redirect('/admin/categories')
     }
   }).catch(function(err) {
+    console.log(err);
     res.render('error');
   })
 });
@@ -152,6 +154,7 @@ router.get('/categories/:id', function(req, res) {
       active2: 'active-navbar' 
     })
   }).catch(err => {
+    console.log(err);
     res.render('error');
   });
 });
@@ -185,6 +188,7 @@ router.post('/categories/delete/:id', function(req, res, next) {
   }).then(function(err) {
     res.redirect('/admin/categories')
   }).catch(err => {
+    console.log(err);
     res.render('error');
   })
 });
@@ -220,6 +224,7 @@ router.get('/business', function(req, res) {
       })
   })
   .catch(err =>{
+    console.log(err);
     res.render('error');
   })
 });
@@ -255,10 +260,12 @@ router.get('/outlets', function(req, res) {
       res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
     })
     .catch(err =>{
+      console.log(err);
       res.render('error');
     })
   })
   .catch(err => {
+    console.log(err);
     res.render('error');
   })
   //res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
@@ -344,10 +351,12 @@ router.get('/reviews', function(req, res) {
       });
     })
     .catch(err => {
+      console.log(err);
       res.render('error');
     })
   })
   .catch(err => {
+    console.log(err);
     res.render('error');
   })
   // res.render('admin/reviews', { title: 'Reviews | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active5:'active-navbar' });
@@ -408,10 +417,12 @@ router.post('/add-admin', upload.single('photo'), function(req, res) {
             res.redirect('/admin/list-administrators')
           })
           .catch(err => {
+            console.log(err);
             res.render('error');
           })
         })
         .catch(err => {
+          console.log(err);
           res.render('error');
         })
           
@@ -468,6 +479,7 @@ router.get('/list-administrators', function(req, res, next) {
     }
     res.render('admin/list-administrators', { title: 'List Administrators | Outlet Finder', data: admin_list, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active3: 'active-navbar'  })
   }).catch(err => {
+    console.log(err);
     res.render('error');
   });
 });
@@ -481,6 +493,7 @@ router.post('/delete/:id', function(req, res, next) {
     res.redirect('/admin/list-administrators')
   })
   .catch(err => {
+    console.log(err);
     res.render('error');
   })
 });
@@ -509,6 +522,7 @@ router.get('/list-business-owners', function(req, res, next) {
     }
     res.render('admin/list-business-owners', { title: 'List Business Owners | Outlet Finder', data: list_bo, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active4: 'active-navbar'  })
   }).catch(err => {
+    console.log(err);
     res.render('error');
   });
 });

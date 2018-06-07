@@ -44,6 +44,10 @@ router.get('/security', function(req, res) {
         res.render('business-owner/security', {stwo_fa: rows[0].two_fa, qrcode: newSecret.qr, secret_key: newSecret.secret, data: rows, tok: newToken, scheck1: check1, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'})
       }
     })
+    .catch(err => {
+      console.log(err)
+      res.render('error')
+    })
   })
 });
 
@@ -70,6 +74,10 @@ router.get('/check', function(req, res, next) {
     }
     console.log("sampe sini")
   })
+  .catch(err => {
+    console.log(err);
+    res.render('error')
+  })
 })
 
 router.post('/check', function(req, res) {
@@ -88,6 +96,10 @@ router.post('/check', function(req, res) {
     } else {
       res.render('business-owner/security', { 'valid': req.flash('success'), scheck1: rows.two_fa, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar' })
     }
+  })
+  .catch(err => {
+    console.log(err);
+    res.render('error')
   })
 })
 
@@ -156,6 +168,7 @@ router.get('/basic-info', function(req, res, next) {
     }
   }).catch(err => {
     console.error(err);
+    res.render('error')
   });
 });
 
@@ -215,6 +228,7 @@ router.post('/basic-info', upload.single('photo'), function(req, res, next) {
         res.redirect('/basic-info');
       }).catch(err => {
         console.error(err);
+        res.render('error')
       });
     }
     user.update({
@@ -236,6 +250,7 @@ router.post('/basic-info', upload.single('photo'), function(req, res, next) {
       }
     }).catch(err => {
       console.error(err);
+      res.render('error')
     });
   })
 });
@@ -281,6 +296,10 @@ router.post('/change-password', function(req, res, next) {
             }).then(rows => {
               alert('Password has been changed')
             })
+            .catch(err => {
+              console.log(err);
+              res.render('error')
+            })
           } else {
             alert('wrong old password!')
           }
@@ -294,6 +313,10 @@ router.post('/change-password', function(req, res, next) {
           res.render('business-owner/change-password', { 'not_match': req.flash('not_match')})
         }
       }
+    })
+    .catch(err => {
+      console.log(err);
+      res.render('error')
     })
   })
   
@@ -342,7 +365,11 @@ router.post('/two_fa', function(req, res, next) {
         }).then(rows => {
             console.log('masuk ke admin')
             res.render('admin/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
-        });
+        })
+        .catch(err => {
+          console.log(err);
+          res.render('error')
+        })
       } else {
         var last_login = new Date();
         user.update({
@@ -353,6 +380,10 @@ router.post('/two_fa', function(req, res, next) {
           }
         }).then(rows => {
             res.render('busines-owner/index', { title: 'Account Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, active5: 'active-navbar' });
+        })
+        .catch(err => {
+          console.log(err);
+          res.render('error')
         });
         
       }

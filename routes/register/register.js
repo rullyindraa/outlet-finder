@@ -92,11 +92,13 @@ router.post('/verify_account', function(req, res, next) {
                   done(err, token, rows)
                 })
                 .catch(err => {
+                  console.log(err);
                   res.render('error');
                 })
               })
             }
           }).catch(function(err) {
+            console.log(err);
             res.render('error');
           })
         },
@@ -142,6 +144,7 @@ router.get('/next/:token', function(req, res,){
     }
   })
   .catch(err => {
+    console.log(err);
     res.render('error');
   })
 });
@@ -183,10 +186,12 @@ router.post('/next/:token', upload.single('photo'), function(req, res, next) {
               }
             }).then(function(rows) {
             }).catch(function(err) {
+              console.log(err);
               res.render('error');
             })
           })
           .catch(err => {
+            console.log(err);
             res.render('error');
           })
        
@@ -198,6 +203,7 @@ router.post('/next/:token', upload.single('photo'), function(req, res, next) {
           done(rows, 'done') }
       })
       .catch(err => {
+        console.log(err);
         res.render('error');
       })
     
