@@ -92,7 +92,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/categories', function(req, res) {
   category.findAll({
-    attributes: [['name', 'category_name'], [Sequelize.fn('COUNT', Sequelize.col('businessId')), 'num_of_business']],
+    attributes: ['id', ['name', 'category_name'], [Sequelize.fn('COUNT', Sequelize.col('businessId')), 'num_of_business']],
     group: [['id']],
     include: [
       {
@@ -257,7 +257,7 @@ router.get('/outlets', function(req, res) {
     category.findAll()
     .then(cat => {
       console.log(rows);
-      res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+      res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', data: rows, categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
     })
     .catch(err =>{
       console.log(err);
@@ -388,12 +388,12 @@ router.post('/add-admin', upload.single('photo'), function(req, res) {
     // };
 
     user.findAll({
-      where: {
+      where: Sequelize.or({
         username: [username]
-      }
+      }, {email : email}) 
     }).then(function(rows) {
       if(rows.length > 0){
-        alert('Username already in use!')
+        alert('Username or email already in use!')
       } else {
         file.create({
           relative_path: 'https://krowdster-11pcypgr4.netdna-ssl.com/wp-content/uploads/2015/11/Twitter-Egg.jpg'
