@@ -112,9 +112,9 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           reviewList.push(review);
           //console.log('revv',reviewList);
         }
-        //req.flash('more', 'See more >');
+        req.flash('more', 'See more >');
       }
-      if(rows.length > 3) req.flash('more', 'See more >');
+      //if(rows.length > 3) req.flash('more', 'See more >');
     }
     else req.flash('info', 'Be the first to add review.');
     res.render('guest/detail', {
