@@ -17,6 +17,7 @@ module.exports = Joi.object().keys({
   // adm_area_lv4: Joi.string().error(new Error('Administrative Area Level 4 is required.')).required(),
   // postal_code: Joi.string().error(new Error('Postal Code is required.')).required(),
   lat: Joi.string().error(new Error('Latitude is required.')).required(),
-  lng: Joi.string().error(new Error('Longitude is required.')).required()
+  lng: Joi.string().error(new Error('Longitude is required.')).required(),
+  formatted_address: Joi.string().error(new Error('Formatted Address 4 is required.')).required(),
   // image: Joi.string().error(new Error('Image is Required')).required(),
 })
