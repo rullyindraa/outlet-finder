@@ -17,23 +17,24 @@ a:hover {
   text-decoration: none;
 }
 #container {
-  position: absolute;
+  position: fixed;
   margin: 0;
   overflow: hidden;
-  top: 50%;
+  top: 30%;
   left: 50%;
-  margin-right: -50%;
+  margin-left: 50px;
+  /* margin-right: -50%; */
   transform: translate(-50%, -50%);
   width: 700px;
   height: 250px;
 }
 h1 {
-  font-size: 0.9em;
+  /* font-size: 2em; */
   font-weight: 100;
   letter-spacing: 3px;
   padding-top: 5px;
-  color: #fcfcfc;
-  padding-bottom: 5px;
+  color: #193446;
+  /* padding-bottom: 5px; */
   text-transform: uppercase;
 }
 .green {
@@ -47,11 +48,11 @@ h1 {
   letter-spacing: 5px;
 }
 p {
-  margin-top: -5px;
-  font-size: 0.5em;
+  margin-top: -25px; 
+  font-size: 14px;
   font-weight: 100;
   color: #5e5e5e;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; */
 }
 button, .dot {
   cursor: pointer;
@@ -68,12 +69,13 @@ button, .dot {
 }
 #error-box {
   position: absolute;
-  width: 35%;
-  height: 100%;
+  width: 50%;
+  height: 144%;
   right: 33%;
-  background: linear-gradient(to bottom left, #ef8d9c 40%, #ffc39e 100%);
-  border-radius: 20px;
-  box-shadow: 5px 5px 20px rgba(203, 205, 211, 10);
+  margin-top: -10px;
+  background: linear-gradient(to bottom left, #ffff 50%, rgb(255, 255, 255) 120%);
+  /* border-radius: 20px; */
+  /* box-shadow: 5px 5px 20px rgba(203, 205, 211, 10); */
 }
 .dot {
   width: 8px;
@@ -151,7 +153,7 @@ button, .dot {
   width: 21%;
   height: 3%;
   opacity: 0.5;
-  background: #777;
+  background: rgba(83, 81, 81, 0.753);
   left: 40%;
   top: 43%;
   border-radius: 50%;
@@ -188,6 +190,7 @@ button, .dot {
   transform: scale(1.05);
   transition: all 0.3s ease-in-out;
 }
+
 @keyframes bounce {
   50% {
     transform: translateY(-10px);
