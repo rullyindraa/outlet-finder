@@ -66,7 +66,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       {
         model: review,
         //order: ['id', 'ASC'],
-        //limit: 1,
+        //limit: 3,
       },
     ],
     order: [
@@ -81,19 +81,38 @@ router.get('/detail/outlet/:id', function(req, res, next) {
     //console.log('aku', rows[0]['address.location'].coordinates[0]);
     var reviewList = [];
     if(rows[0]['review.id'] != undefined){
-      for (var i = 0; i < 3; i++) {
-        var review = {
-          'id' : rows[i]['review.id'],
-          'name':rows[i]['review.name'],
-          'email':rows[i]['review.email'],
-          'content':rows[i]['review.content'],
-          'createdAt':moment(rows[i]['review.createdAt']).fromNow(),
-          'rating':rows[i]['review.rating'],
-          'outlet_id':rows[i].id,
-          'outlet_name': rows[i].name
+      if (rows.length < 3){
+        for (var i = 0; i < rows.length; i++) {
+          var review = {
+            'id' : rows[i]['review.id'],
+            'name':rows[i]['review.name'],
+            'email':rows[i]['review.email'],
+            'content':rows[i]['review.content'],
+            'createdAt':moment(rows[i]['review.createdAt']).fromNow(),
+            'rating':rows[i]['review.rating'],
+            'outlet_id':rows[i].id,
+            'outlet_name': rows[i].name
+          }
+          reviewList.push(review);
         }
-        reviewList.push(review);
-        //console.log('revv',reviewList);
+
+      } 
+      else {
+        for (var i = 0; i < 3; i++) {
+          var review = {
+            'id' : rows[i]['review.id'],
+            'name':rows[i]['review.name'],
+            'email':rows[i]['review.email'],
+            'content':rows[i]['review.content'],
+            'createdAt':moment(rows[i]['review.createdAt']).fromNow(),
+            'rating':rows[i]['review.rating'],
+            'outlet_id':rows[i].id,
+            'outlet_name': rows[i].name
+          }
+          reviewList.push(review);
+          //console.log('revv',reviewList);
+        }
+        //req.flash('more', 'See more >');
       }
       if(rows.length > 3) req.flash('more', 'See more >');
     }
