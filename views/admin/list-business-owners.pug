@@ -40,7 +40,11 @@ block content
                 td= bo.first_name + ' ' + bo.last_name
                 td= bo.email
                 td= bo.phone_number
-                td= bo.last_login
+                - var last = bo.last_login
+                if last !== 'Invalid date'
+                  td= last
+                else
+                  td= '-'
                 - var status = bo.status
                 if status === true
                   td= 'Active'

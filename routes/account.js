@@ -14,6 +14,7 @@ const flash = require('express-flash');
 const multer = require('multer');
 const path = require('path');
 var fs = require('fs');
+const validateJoi = require('../src/validation/create-user');
 
 router.get('/security', function(req, res) {
   // var username:
@@ -159,79 +160,84 @@ router.get('/basic-info', function(req, res, next) {
 });
 
 router.post('/basic-info', upload.single('photo'), function(req, res, next) {
-  var first_name = req.body.first_name;
-  var last_name = req.body.last_name;
-  var email = req.body.email;
-  var username = req.body.username;
-  var phone_number = req.body.phone_number;
-  // var updatedAt = new Date();
-
-  if (req.file) {
-		// if old photo exists (old photo not empty) then unlink / remove the photo in directory
-		if (req.body.old_photo !== '')
-			fs.unlink(`public/files/${req.body.old_photo}`);
-    var target_path = '/files/' + req.file.filename;
-    file.update(
-      {
-        name: req.file.filename,
-        relative_path: target_path,
-        original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
-        mime_type : req.file.mimetype,
-        updatedAt: new Date()
-      },
-      {
-        where: {
-          id: req.user.fileId
-        }
-      },
-      {
-        include: [{
-          model: user
-        }]
-      }
-    )
-    .then(row => {
-      user.update(
+  validateJoi.validate({
+    username : req.body.username,
+    email : req.body.email
+  }, function(errors, values) {
+    var first_name = req.body.first_name;
+    var last_name = req.body.last_name;
+    var email = req.body.email;
+    var username = req.body.username;
+    var phone_number = req.body.phone_number;
+    // var updatedAt = new Date();
+  
+    if (req.file) {
+      // if old photo exists (old photo not empty) then unlink / remove the photo in directory
+      if (req.body.old_photo !== '')
+        fs.unlink(`public/files/${req.body.old_photo}`);
+      var target_path = '/files/' + req.file.filename;
+      file.update(
         {
-        first_name: first_name, 
-        last_name: last_name,
-        email: email, 
-        username: username, 
-        phone_number: phone_number,
-        updatedAt: new Date()
-        } , {
-        where: {
-          id: req.user.id
+          name: req.file.filename,
+          relative_path: target_path,
+          original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
+          mime_type : req.file.mimetype,
+          updatedAt: new Date()
+        },
+        {
+          where: {
+            id: req.user.fileId
+          }
+        },
+        {
+          include: [{
+            model: user
+          }]
         }
+      )
+      .then(row => {
+        user.update(
+          {
+          first_name: first_name, 
+          last_name: last_name,
+          email: email, 
+          username: username, 
+          phone_number: phone_number,
+          updatedAt: new Date()
+          } , {
+          where: {
+            id: req.user.id
+          }
+        })
       })
-    })
-    .then(function(rows) {
-      // console.log(req.file);
-      res.redirect('/basic-info');
+      .then(function(rows) {
+        // console.log(req.file);
+        res.redirect('/basic-info');
+      }).catch(err => {
+        console.error(err);
+      });
+    }
+    user.update({
+      first_name: first_name, 
+      last_name: last_name,
+      email: email, 
+      username: username, 
+      phone_number: phone_number, 
+      updatedAt: new Date()
+    } , {
+      where: {
+        id: req.user.id
+      }
+    }).then(function(rows) {
+      if(req.user.role === 1) {
+        res.redirect('/basic-info');
+      } else {
+        res.redirect('/basic-info');
+      }
     }).catch(err => {
       console.error(err);
     });
-  }
-  user.update({
-    first_name: first_name, 
-    last_name: last_name,
-    email: email, 
-    username: username, 
-    phone_number: phone_number, 
-    updatedAt: new Date()
-  } , {
-    where: {
-      id: req.user.id
-    }
-  }).then(function(rows) {
-    if(req.user.role === 1) {
-      res.redirect('/basic-info');
-    } else {
-      res.redirect('/basic-info');
-    }
-  }).catch(err => {
-    console.error(err);
-  });
+  })
 });
 
 router.get('/change-password', function(req, res, next) {
@@ -243,49 +249,54 @@ router.get('/change-password', function(req, res, next) {
 })
 
 router.post('/change-password', function(req, res, next) {
-  user.findOne({
-    where: {
-      username: req.user.username
-    }
-  }).then(rows => {
-    console.log(req.body.old_password)
-    var old_password = req.body.old_password;
-    var new_password = req.body.new_password;
-    var confirm_password = req.body.confirm_password;
-    console.log('new password', new_password);
-    console.log('confirm', confirm_password)
-
-    if (new_password === confirm_password) {
-      var dbPassword  = rows.password;
-      console.log(dbPassword)
-      bcrypt.compare(old_password, dbPassword, function(err, rest) {
-        if(rest) {
-          console.log(new_password);
-          var pass = bcrypt.hashSync(new_password);
-          // console.log('username: ', rows.username)
-          user.update({
-            password: pass
-          }, {
-            where: {
-              username: rows.username
-            }
-          }).then(rows => {
-            alert('Password has been changed')
-          })
-        } else {
-          alert('wrong old password!')
-        }
-        res.redirect('/change-password')
-      })
-    } else {
-      req.flash('not_match', 'The new password and confirm password are not the same')
-      if(req.user.role === 1) {
-        res.render('admin/change-password', { 'not_match': req.flash('not_match')})
-      } else {
-        res.render('business-owner/change-password', { 'not_match': req.flash('not_match')})
+  validateJoi.validate({
+    password : req.body.old_password
+  }, function(errors, values) {
+    user.findOne({
+      where: {
+        username: req.user.username
       }
-    }
+    }).then(rows => {
+      console.log(req.body.old_password)
+      var old_password = req.body.old_password;
+      var new_password = req.body.new_password;
+      var confirm_password = req.body.confirm_password;
+      console.log('new password', new_password);
+      console.log('confirm', confirm_password)
+  
+      if (new_password === confirm_password) {
+        var dbPassword  = rows.password;
+        console.log(dbPassword)
+        bcrypt.compare(old_password, dbPassword, function(err, rest) {
+          if(rest) {
+            console.log(new_password);
+            var pass = bcrypt.hashSync(new_password);
+            // console.log('username: ', rows.username)
+            user.update({
+              password: pass
+            }, {
+              where: {
+                username: rows.username
+              }
+            }).then(rows => {
+              alert('Password has been changed')
+            })
+          } else {
+            alert('wrong old password!')
+          }
+          res.redirect('/change-password')
+        })
+      } else {
+        req.flash('not_match', 'The new password and confirm password are not the same')
+        if(req.user.role === 1) {
+          res.render('admin/change-password', { 'not_match': req.flash('not_match')})
+        } else {
+          res.render('business-owner/change-password', { 'not_match': req.flash('not_match')})
+        }
+      }
+    })
   })
+  
 })
 
 router.get('/setting', function(req, res) {
