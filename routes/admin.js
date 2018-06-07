@@ -264,6 +264,41 @@ router.get('/outlets', function(req, res) {
   //res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
 });
 
+router.get('/oulets/business/:id', function(req, res){
+  outlet.findAll({
+    where: {
+      businessId: [req.params.id]
+    },
+    attributes: ['id', ['name', 'outlet_name'],
+    [Sequelize.fn('COUNT', Sequelize.col("page_view.id")), 'count_view']],
+    group: ['outlet.id'],
+    include: [
+      {
+        model: business,
+        attributes: [['name', 'business_name']],
+      },
+      {
+        model: address,
+        attributes: [['adm_area_lv2', 'city_name']]
+      },
+      {
+        model: page_view,
+        group: ['outletId'],
+        // attributes: [[Sequelize.fn('IFNULL', Sequelize.fn('COUNT', Sequelize.col('outletId')), 0), 'page_views']],
+        // include: [outlet]
+      }
+    ],
+    raw: true
+  })
+  .then(rows => {
+    category.findAll()
+    .then(cat => {
+      console.log(rows);
+      res.render('admin/list-all-outlet', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+    })
+  })
+})
+
 router.get('/reviews', function(req, res) {
   review.findAll({
     attributes: ['id', 'name', 'email', 'content', 'rating', 'createdAt'],

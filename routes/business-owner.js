@@ -130,10 +130,12 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
     // category: req.body.category, 
     name: req.body.name, 
     email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
-    description: req.body.description, line1: req.body.line1, line2: req.body.line2,
-    adm_area_lv1: req.body.adm_area_lv1, adm_area_lv2: req.body.adm_area_lv2, 
-    adm_area_lv3: req.body.adm_area_lv3, adm_area_lv4: req.body.adm_area_lv4, 
-    postal_code: req.body.postal_code, lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
+    description: req.body.description, 
+    // line1: req.body.line1, line2: req.body.line2,
+    // adm_area_lv1: req.body.adm_area_lv1, adm_area_lv2: req.body.adm_area_lv2, 
+    // adm_area_lv3: req.body.adm_area_lv3, adm_area_lv4: req.body.adm_area_lv4, 
+    // postal_code: req.body.postal_code, 
+    lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
       console.log(errors);
       if (!errors) {
         address.create({

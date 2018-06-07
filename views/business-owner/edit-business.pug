@@ -81,6 +81,8 @@ block content
                 span#place-name.title
                 br
                 span#place-address
+              script(src='/javascripts/maps-business.js')
+              script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBSKactSNtQkMmc86xP_oknMBCABF2ioYI&libraries=places&callback=initMap', async='', defer='')
               hr
               .form-row
                 .form-group.col-lg-6.col-md-6.col-sm-6.col-xl-6
