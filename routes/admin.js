@@ -67,7 +67,7 @@ router.get('/', function(req, res, next) {
     category.findAndCountAll()
     .then(cat => {
       console.log('result', result);
-      console.log('cat', cat);
+      //console.log('cat', cat);
       var rows = result.rows[0].count_outlet,
         count = result.count,
         count_review= result.rows[0].count_review,

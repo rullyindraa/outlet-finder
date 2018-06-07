@@ -7,6 +7,7 @@ block content
       // Breadcrumbs
       ol.breadcrumb.color-pblue
         li.breadcrumb-item.active.h4 Add Admin
+    script(type='text/javascript', src='../../javascripts/validation.js')
     form.needs-validation(action='/admin/add-admin', method='POST', novalidate='', style='color: black;')
       .form-group
         .col-lg-4.col-md-4.col-sm-4.col-xs-4
@@ -33,7 +34,7 @@ block content
         .col-lg-4.col-md-4.col-sm-4.col-xs-4
           label(for='email') Email:
         .col-lg-4.col-md-4.col-sm-4.col-xs-4
-          input.form-control(type='text', name='email', placeholder='Email', required='')
+          input.form-control(type='email', name='email', placeholder='Email', required='')
           .invalid-feedback
             | Please enter your email
       input.btn.btn-md.color-ink.ml-3.mb-3(type='submit', value='Submit')

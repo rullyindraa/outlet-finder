@@ -7,42 +7,43 @@ block content
       // Breadcrumbs
       ol.breadcrumb(style='background-color: #DAE1E7')
         li.breadcrumb-item.active.h4 Create Business
+      script(type='text/javascript', src='../../javascripts/validation.js')
       form.needs-validation(enctype="multipart/form-data", action='/business-owner/business/create-business', method='POST', novalidate='', style='color: black; margin-left: -12px;')
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='categories') Categories:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            select.form-control.selectpicker(name="category" multiple='')
+            select.form-control.selectpicker(name="category" multiple='', required)
               each value in Categories
                 option(value=value.id) #{value.name}
-            .invalid-feedback
-              | Please select category
+                .invalid-feedback
+                  | Please select category
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='name') Business Name:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='name', placeholder='Business Name', required)
+            input.form-control(type='text', name='name', placeholder='Business Name', required='')
             .invalid-feedback
               | Please enter your business name
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='email') Email:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='email', name='email', placeholder='Email', required)
+            input.form-control(type='email', name='email', placeholder='Email', required='')
             .invalid-feedback
               | Please enter a valid email
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='phone_number') Phone Number:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='phone_number', placeholder='Phone Number', required)
+            input.form-control(type='text', name='phone_number', placeholder='Phone Number', required='')
             .invalid-feedback
               | Please enter a valid phone number
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='website') Website:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='website', placeholder='Website', required)
+            input.form-control(type='text', name='website', placeholder='Website', required='')
             .invalid-feedback
               | Please enter your website
         .form-group
@@ -58,15 +59,15 @@ block content
             label(for='description') Description:
           .col-lg-8.col-md-8.col-sm-8.col-xs-8
             textarea.form-control(name="description", rows="4")
-            .invalid-feedback
-              | Please enter your description
         .form-group.col-lg-10.col-md-10.col-sm-10.col-xl-10
           label(for='address') Address:
           .card.mb-3
             .card-body
               .form-row
                 .form-group.col-lg-12.col-md-12.col-sm-12.col-xl-12
-                  input#pac-input.form-control(type='text', name='raw_address', placeholder='Enter an address', required)
+                  input#pac-input.form-control(type='text', name='raw_address', placeholder='Enter an address', required='')
+                  .invalid-feedback
+                    | Please enter your address
               #map
               #infowindow-content
                 img#place-icon(src='', width='16', height='16')
@@ -106,14 +107,14 @@ block content
               .form-row
                 .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6
                   label Latitude:
-                  input#lat.form-control(type='text', name='lat', placeholder='Latitude', required)
+                  input#lat.form-control(type='text', name='lat', placeholder='Latitude', required='')
                 .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6
                   label Longitude:
-                  input#lng.form-control(type='text', name='lng', placeholder='Longitude', required)
+                  input#lng.form-control(type='text', name='lng', placeholder='Longitude', required='')
               .form-row
                 .form-group.col-lg-12.col-md-12.col-sm-12.col-xl-12
                   label Formatted Address:
-                  input#formatted_address.form-control(type='text', name='formatted_address', placeholder='Enter an address', required)
+                  input#formatted_address.form-control(type='text', name='formatted_address', placeholder='Enter an address', required='')
         input.btn.btn-md.color-ink.ml-3.mb-5(type='submit', value='Submit')
         input.btn.btn-md.color-ink.ml-2.mb-5(type='submit', value='Submit and Add Outlet >')
   
