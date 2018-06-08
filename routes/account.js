@@ -391,6 +391,25 @@ router.post('/two_fa', function(req, res, next) {
   })
 })
 
+router.post('/diactivated', function(req,res, next) {
+  username = req.user.username;
+  console.log(username)
+  user.update({
+    status : 0
+  }, {
+    where : {
+      username : username
+    }
+  }).then(rows => {
+    req.logout();
+    res.redirect('/');
+  })
+  .catch(err => {
+    console.log(err);
+    res.render('error')
+  })
+})
+
 router.get('/logout', function(req,res){
   console.log('logout')
   req.logout();
