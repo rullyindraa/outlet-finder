@@ -35,15 +35,15 @@ block content
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='email') Email:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='email', name='email', placeholder='Email', required='' value=email)
-            .invalid-feedback
+            input#email.form-control(type='email', name='email', placeholder='Email', required='' value=email)
+            //.invalid-feedback
               | Please enter a valid email
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
-            label(for='phone_number') Phone Number:
+            label(for='phone_number') Contact Number:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='phone_number', placeholder='Phone Number', required='' value=phone_number)
-            .invalid-feedback
+            input#phone_number.form-control(type='text', name='phone_number', placeholder='Phone Number', required='' value=phone_number)
+            //.invalid-feedback
               | Please enter a valid phone number
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
@@ -156,3 +156,5 @@ block content
     function cancel() {
       $("#myModal").modal('show');
     }
+    bootstrapValidate('#email', 'email:Please enter a valid email address');
+    bootstrapValidate('#phone_number', 'numeric:Please only enter numeric characters!')
