@@ -9,7 +9,7 @@ block content
         li.breadcrumb-item.active.h4 Edit Business
       form.needs-validation(enctype="multipart/form-data", action='/business-owner/business/edit-business', method='POST', novalidate='', style='color: black; margin-left: -12px;')
         .form-group
-          input.form-control(type='text', name='Bid', value=id)
+          input.form-control(type='hidden', name='Bid', value=id)
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='categories') Categories:
             input.form-control(type='hidden', id='cat' value=valCat)
@@ -53,7 +53,7 @@ block content
             .invalid-feedback
               | Please enter your website
         .form-group
-          input.form-control(type='text', name='Fid', value=Fid)
+          input.form-control(type='hidden', name='Fid', value=Fid)
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='photo') Photo:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
@@ -88,7 +88,7 @@ block content
               script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBSKactSNtQkMmc86xP_oknMBCABF2ioYI&libraries=places&callback=initMap', async='', defer='')
               hr
               .form-row
-                input#address_id.form-control(type='text', name='address_id', value=address_id)
+                input#address_id.form-control(type='hidden', name='address_id', value=address_id)
                 .form-group.col-lg-6.col-md-6.col-sm-6.col-xl-6
                   label Line 1:
                   input#line1.form-control(type='text', name='line1', placeholder='Line 1 Address', required='' value=line1)
@@ -127,14 +127,32 @@ block content
                   label Formatted Address:
                   input#formatted_address.form-control(type='text', name='formatted_address', placeholder='Enter an address', required='' value=formatted_address)
         input.btn.btn-md.color-ink.ml-3.mb-5(type='submit', value='Save')
-        input.btn.btn-md.color-ink.ml-2.mb-5(type='submit', value='Cancel')
+        button.btn.btn-md.color-ink.ml-2.mb-5(type='button', onClick="cancel()") Cancel
+        //button.btn.btn-md.color-ink.ml-2.mb-5(type='reset') Reset
   
   include ../includes/logout.pug
 
   include ../includes/footer.pug
-  
+  #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+    .modal-dialog(role='document')
+      .modal-content(style='color: black') 
+        .modal-header
+          h5#exampleModalLabel.modal-titleDelete Edit Business
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body
+          | Are you sure cancel editing this page? Any unsaved changes will be lost.
+        .modal-footer
+          button.btn.btn-danger(type='button')
+            a.cancel.text-white(href='/business-owner/business') Yes anyway
+          button.btn.btn-secondary(type='button', data-dismiss='modal') No
+
   script.
     $('.selectpicker').selectpicker({
       style: 'btn-select',
       size: 4
     });
+  script(type='text/javascript').
+    function cancel() {
+      $("#myModal").modal('show');
+    }

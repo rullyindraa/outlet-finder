@@ -21,6 +21,10 @@ body.fixed-nav {
   overflow: hidden !important;
 }
 
+a.cancel:hover  {
+  text-decoration: none;
+}
+
 .card-body-icon {
   position: absolute;
   z-index: 0;
