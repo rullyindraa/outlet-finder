@@ -82,8 +82,24 @@ body {
   color: #F6993F;
 }
 
-.star-grey {
+.star-gray {
   color: #C4D4E0;
+}
+
+.un-star {
+  color: #fff;
+  border: 1px solid #F6993F;
+}
+
+.star-white {
+  color: #FFF;
+}
+
+.rating-block {
+  background-color: #FAFAFA;
+  border: 1px solid #EFEFEF;
+  padding: 15px 15px 15px 15px;
+  border-radius: 3px;
 }
 
 @media (min-width: 992px) {

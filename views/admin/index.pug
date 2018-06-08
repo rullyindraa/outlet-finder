@@ -78,22 +78,20 @@ block content
                   th Name
                   th Categories
                   th Outlets
-                  th 
+                  th City
+                  th Owner
+                  th Created Date
               tbody
-                tr
-                  td Wonderlabs
-                  td IT Services
-                  td 4 
-                    a(href='#') view outlets >
-                  td 
-                    a(href='#') view business >
-                tr
-                  td Wonderfood
-                  td Food and Beverages
-                  td 10 
-                    a(href='#') view outlets >
-                  td 
-                    a(href='#') view business >
+                for b in data_b
+                  tr
+                    td=b.business
+                    td=b.category_names
+                    td=b.count_outlet
+                      | 
+                      a(href='/admin/oulets/business/'+b.id) view outlets >
+                    td=b['address.city']
+                    td=b['user.username']
+                    td=b.createdAt
       br
       .card.mb-3.mt-7
         .card-header
@@ -108,44 +106,18 @@ block content
                   th Name
                   th Business
                   th City
-                  th Action
+                  th Page Views
+                  th Created Date
               tbody
-                tr
-                  td Wonderlabs Armstrong Campus
-                  td Wonderlabs
-                  td Yogyakarta
-                  td 
-                    a(href='#') view outlets >
-                tr
-                  td Wonderlabs Explorer Campus
-                  td Wonderlabs
-                  td Yogyakarta
-                  td 
-                    a(href='#') view outlets >
-                tr
-                  td Wonderlabs Sputnik Campus
-                  td Wonderlabs
-                  td Yogyakarta
-                  td 
-                    a(href='#') view outlets >
-                tr
-                  td Wonderlabs Houston Campus
-                  td Wonderlabs
-                  td Yogyakarta
-                  td 
-                    a(href='#') view outlets >
-                tr
-                  td Wonderzza
-                  td Wonderfood
-                  td Yogyakarta
-                  td 
-                    a(href='#') view outlets >
-                tr
-                  td Wonder Cake
-                  td Wonderfood
-                  td Semarang
-                  td 
-                    a(href='#') view outlets >
+                for o in data_o
+                  tr
+                    td=o.outlet_name
+                    td=o[`business.business_name`]
+                    td=o[`address.city_name`]
+                    td=o.count_view
+                    td=o.createdAt
+                      | 
+                      a(href='/detail/outlet/'+o.id) view detail >
 
   include ../includes/logout.pug
 
