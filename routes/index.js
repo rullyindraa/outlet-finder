@@ -112,9 +112,9 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           reviewList.push(review);
           //console.log('revv',reviewList);
         }
-        req.flash('more', 'See more >');
+        //req.flash('more', 'See more >');
       }
-      //if(rows.length > 3) req.flash('more', 'See more >');
+      if(rows.length > 3) req.flash('more', 'See more >');
     }
     else req.flash('info', 'Be the first to add review.');
     res.render('guest/detail', {
@@ -143,8 +143,8 @@ router.get('/detail/outlet/:id', function(req, res, next) {
   //res.render('guest/detail', { title: 'Detail Outlet | Oulet Finder' });
 });
 
-// router.get('/login', function(req, res, next) {
-//   res.render('login/login-regist', { title: 'LOGIN' });
-// });
+router.get('/more-reviews', function(req, res, next) {
+  res.render('guest/more-reviews', { title: 'More Reviews' });
+});
 
 module.exports = router;
