@@ -31,61 +31,113 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 router.get('/', function(req, res, next) {
-  business.findAndCountAll(
-    {
-    // where: {
-    //   userId: req.user.id
-    // },
-    attributes: [
-      //'id',['name', 'business'],
-    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.id"))), 'count_outlet'],
-    [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet->review.id"))), 'count_review']
-    
-    ],
-    include: [
-      {
-        model: outlet,
-        attributes: ['id', 
-        //[Sequelize.fn('COUNT', Sequelize.col("outlet.review.id")), 'count_review']
-        ],
-        include: [
-          {
-            model: review,
-            attributes: ['id',
-            // [Sequelize.fn('COUNT', Sequelize.col("review.id")), 'count_review']
+  business.count()
+  .then(countb => {
+    outlet.count()
+    .then(counto => {
+      review.count()
+      .then(countr => {
+        category.count()
+        .then(countc => {
+          business.findAll({
+            attributes: ['id', ['name', 'business'], 'createdAt',
+            [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("DISTINCT(categories.name) SEPARATOR ', '")), 'category_names'],
+            [Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col("outlet.id"))), 'count_outlet']
             ],
-            //required: true,
-          }
-        ],
-      }
-    ],
-    //required: true,
-    distinct:true,
-    raw:true
-  })
-  .then(result => {
-    category.findAndCountAll()
-    .then(cat => {
-      console.log('result', result);
-      //console.log('cat', cat);
-      var rows = result.rows[0].count_outlet,
-        count = result.count,
-        count_review= result.rows[0].count_review,
-        count_cat = cat.count;
-      //console.log('yes', count)
-      res.render('admin/index', {
-        title: 'Dashboard | Outlet Finder', 
-        totalo:rows, totalb: count, 
-        totalr:count_review,
-        totalc: count_cat,
-        name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`],
-        active1: 'active-navbar'
+            order: [['createdAt', 'DESC']],
+            limit: 5,
+            subQuery: false,
+            group: ['business.id'],
+            include: [
+              {
+                model: category,
+                attributes: ['name'] 
+              },
+              {
+                model: outlet,
+                group: ['businessId']
+              },
+              {
+                model: user,
+                attributes: ['username']
+              },
+              {
+                model: address,
+                attributes: [['adm_area_lv2', 'city']],
+                required: true
+              },
+            ],
+            //order: ['createdAt', 'DESC'],
+            raw:true
+          })
+          .then(resultb => {
+            outlet.findAll({
+              attributes: ['id', ['name', 'outlet_name'], 'createdAt',
+              [Sequelize.fn('COUNT', Sequelize.col("page_view.id")), 'count_view']],
+              order: [['createdAt', 'DESC']],
+              limit: 5,
+              subQuery: false,
+              group: ['outlet.id'],
+              include: [
+                {
+                  model: business,
+                  attributes: [['name', 'business_name']],
+                  required: true
+                },
+                {
+                  model: address,
+                  attributes: [['adm_area_lv2', 'city_name']],
+                  required: true
+                },
+                {
+                  model: page_view,
+                  group: ['outletId'],
+                },
+              ],
+              raw: true
+            })
+            .then(resulto => {
+            console.log('resultb', resultb);
+            //console.log('resulto', resulto);
+            // console.log('resultw', resultr);
+            // console.log('resultc', resultc);
+              res.render('admin/index', {
+                title: 'Dashboard | Outlet Finder', 
+                totalb: countb, 
+                totalo: counto, 
+                totalr: countr,
+                totalc: countc,
+                data_b : resultb,
+                data_o : resulto,
+                name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`],
+                active1: 'active-navbar'
+              }).catch(err => {
+                console.error('render',err);
+                //res.render('error');
+              })
+            }).catch(err => {
+              console.error('reso',err);
+              //res.render('error');
+            })
+          }).catch(err => {
+            console.error('resb',err);
+            //res.render('error');
+          })
+        }).catch(err => {
+          console.error('countc',err);
+          //res.render('error');
+        }) 
+      }).catch(err => {
+        console.error('countr',err);
+        //res.render('error');
       })
+    }).catch(err => {
+      console.error('counto',err);
+      //res.render('error');
     })
-    .catch(err => {
-      console.error(err);
-      res.render('error');
-    }); 
+  }).catch(err => {
+    console.error('countb',err);
+    //res.render('error');
   })
   // res.render('admin/index', { title: 'Dashboard | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active1: 'active-navbar' });
 });
@@ -305,6 +357,7 @@ router.get('/oulets/business/:id', function(req, res){
     })
   })
 })
+
 
 router.get('/reviews', function(req, res) {
   review.findAll({

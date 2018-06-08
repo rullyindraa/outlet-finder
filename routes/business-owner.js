@@ -17,6 +17,7 @@ const validateJoi = require('../src/validation/create-business');
 var multer = require('multer');
 const path = require('path');
 const moment = require('moment');
+var fs = require('fs');
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -277,7 +278,7 @@ router.get('/business/:id', function(req, res) {
       },
       {
         model: file,
-        attributes: ['name', ['relative_path', 'path']]
+        attributes: ['id', 'name', ['relative_path', 'path']]
       }
     ],
     distinct: true,
@@ -295,7 +296,7 @@ router.get('/business/:id', function(req, res) {
         //data: rows,
         id:  rows[0].id,
         business_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
-        path: rows[0]['file.path'], file_name: rows[0]['file.name'], 
+        path: rows[0]['file.path'], file_name: rows[0]['file.name'], Fid: rows[0]['file.id'],
         address_id: rows[0]['address.id'],
         raw_address: rows[0]['address.raw_address'], 
         country: rows[0]['address.country'],
@@ -361,6 +362,98 @@ router.post('/business/edit-business', upload.single('photo'), function(req, res
       //   },
       // )
       // .then(row => {
+        if (req.file) {
+          // if old photo exists (old photo not empty) then unlink / remove the photo in directory
+          if (req.body.old_photo !== '')
+            fs.unlink(`public/files/${req.body.old_photo}`);
+          var target_path = '/files/' + req.file.filename;
+          file.update(
+            {
+              name: req.file.filename,
+              relative_path: target_path,
+              original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
+              mime_type : req.file.mimetype,
+              updatedAt: new Date()
+            },
+            {
+              where: {
+                id: req.body.Fid
+              }
+            },
+            {
+              include: [{
+                model: business
+              }]
+            }
+          )
+          .then(row => {
+            address.update({
+              line1: req.body.line1, 
+              line2: req.body.line2,
+              adm_area_lv1: req.body.adm_area_lv1, 
+              adm_area_lv2: req.body.adm_area_lv2, 
+              adm_area_lv3: req.body.adm_area_lv3, 
+              adm_area_lv4: req.body.adm_area_lv4, 
+              raw_address: req.body.line1+ ` ` +req.body.line2,
+              formatted_address: req.body.formatted_address,
+              postal_code: req.body.postal_code,
+              country: req.body.country,
+              //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+              location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`),
+              updatedAt: new Date()
+            }, {
+              where: {
+                id: req.body.address_id
+              }
+            }
+          )
+          .then(rows => {
+            business.update({
+              name: req.body.name,
+              //addressId: row.id,
+              //fileId: row.id,
+              email: req.body.email,
+              phone_number: req.body.phone_number,
+              website: req.body.website,
+              description: req.body.description,
+              updatedAt: new Date()
+            }, 
+            {
+              where: {
+                id: req.body.Bid
+              }
+            })
+          })
+          .then(rows => {
+            console.log(rows);
+            res.redirect('/business-owner/business');
+          }).catch(err => {
+            console.error('errpostnya', err);
+          });
+          }) 
+        }
+        
+        address.update({
+          line1: req.body.line1, 
+          line2: req.body.line2,
+          adm_area_lv1: req.body.adm_area_lv1, 
+          adm_area_lv2: req.body.adm_area_lv2, 
+          adm_area_lv3: req.body.adm_area_lv3, 
+          adm_area_lv4: req.body.adm_area_lv4, 
+          raw_address: req.body.line1+ ` ` +req.body.line2,
+          formatted_address: req.body.formatted_address,
+          postal_code: req.body.postal_code,
+          country: req.body.country,
+          //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+          location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`),
+          updatedAt: new Date()
+        }, {
+          where: {
+            id: req.body.address_id
+          }
+        }
+      )
+      .then(rows => {
         business.update({
           name: req.body.name,
           //addressId: row.id,
@@ -382,6 +475,7 @@ router.post('/business/edit-business', upload.single('photo'), function(req, res
         }).catch(err => {
           console.error('errpostnya', err);
         })
+      }) 
       //})
     } else {
       category.findAll()
