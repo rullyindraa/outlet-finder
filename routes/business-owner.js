@@ -31,11 +31,14 @@ const storage = multer.diskStorage({
 function fileFilter(req, file, cb) {
   if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg' ) {
       console.log('File type is not supported');
-      //return cb(null, false);
+      cb(new Error('File type is not supported'));
+      return cb(null, false);
+      
   }
   if ( file.size > 5000 ){
       console.log('File is too large');
-      //return cb(null, false);
+      cb(new Error('File is too large.'));
+      return cb(null, false);
   }
   cb(null, true);
 }
@@ -147,7 +150,107 @@ router.get('/business/create-business', function(req, res) {
 
 router.post('/business/create-business', upload.single('photo'), function(req, res){
   //var target_path = '/files/' + req.file.filename;
-
+  upload(req, res, function (err) {
+    if (err) {
+      // An error occurred when uploading
+      return err;
+    }
+    validateJoi.validate({ 
+      // category: req.body.category, 
+      name: req.body.name, 
+      email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
+      description: req.body.description, 
+      // line1: req.body.line1, line2: req.body.line2,
+      // adm_area_lv1: req.body.adm_area_lv1, adm_area_lv2: req.body.adm_area_lv2, 
+      // adm_area_lv3: req.body.adm_area_lv3, adm_area_lv4: req.body.adm_area_lv4, 
+      // postal_code: req.body.postal_code, 
+      formatted_address: req.body.formatted_address,
+      lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
+        console.log(errors);
+        if (!errors) {
+          address.create({
+            line1: req.body.line1, 
+            line2: req.body.line2,
+            adm_area_lv1: req.body.adm_area_lv1, 
+            adm_area_lv2: req.body.adm_area_lv2, 
+            adm_area_lv3: req.body.adm_area_lv3, 
+            adm_area_lv4: req.body.adm_area_lv4, 
+            raw_address: req.body.line1+ ` ` +req.body.line2,
+            formatted_address: req.body.formatted_address,
+            postal_code: req.body.postal_code,
+            country: req.body.country,
+            //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+            location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`)
+          }, {
+            include: [{
+              model: business
+            }]
+          }
+        )
+        .then(row => {
+          if (req.file !== undefined){
+            var name = req.file.filename,
+              relative_path = '/files/' + req.file.filename,
+              original_name = !req.file ? 'placeholder.jpg' : req.file.originalname,
+              mime_type = req.file.mimetype;
+          }
+          else {
+            var name = null,
+              relative_path = 'http://www.morpho.pl/en/wp-content/uploads/2015/06/icon_nologo_black.png',
+              original_name = null,
+              mime_type = null;
+          }
+          file.create({
+            name: name,
+            relative_path: relative_path,
+            original_name: original_name,
+            mime_type : mime_type
+          }, {
+            include: [{
+              model: business
+            }]
+          })
+          .then(row => {
+            // console.log(row);
+            // console.log(req.file);
+            business.create({
+              userId: req.user.id,
+              name: req.body.name,
+              addressId: row.id,
+              fileId: row.id,
+              email: req.body.email,
+              phone_number: req.body.phone_number,
+              website: req.body.website,
+              description: req.body.description
+            }, {
+              include: [{
+                model: helper_category
+              }]
+            })
+            .then(row => {
+              for(var i = 0; i < req.body.category.length; i++ ) {
+                helper_category.create({
+                  categoryId: req.body.category[i],
+                  businessId: row.id
+                })
+              }
+            })
+            .then(rows => {
+              console.log(rows);
+              res.redirect('/business-owner/business');
+            })
+          }) 
+        })
+      } else {
+        category.findAll()
+        .then(rows => {
+          //if (err) return err;
+          res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+        })
+      } 
+    })
+    // Everything went fine
+  })
   validateJoi.validate({ 
     // category: req.body.category, 
     name: req.body.name, 
@@ -521,6 +624,7 @@ router.get('/outlet', function(req, res) {
           userId: req.user.id
         },
         attributes: [['name', 'business_name']],
+        required:true
       },
       {
         model: address,
@@ -544,6 +648,9 @@ router.get('/outlet', function(req, res) {
       console.log(rows);
       res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
     })
+  }).catch(err => {
+    console.error('countb',err);
+    res.send('error');
   })
 });
 
@@ -551,6 +658,13 @@ router.get('/oulet/business/:id', function(req, res){
   outlet.findAll({
     where: {
       businessId: [req.params.id]
+      // [Sequelize.Op.and]: [
+      //   {
+      //     businessId: [req.params.id]
+      //   }, {
+      //     userId: req.user.id
+      //   }
+      // ]
     },
     attributes: ['id', ['name', 'outlet_name'],
     [Sequelize.fn('COUNT', Sequelize.col("page_view.id")), 'count_view']],
@@ -558,7 +672,11 @@ router.get('/oulet/business/:id', function(req, res){
     include: [
       {
         model: business,
-        attributes: [['name', 'business_name']],
+        // where: {
+        //   userId: [req.user.id]
+        // },
+        attributes: [['name', 'business_name'], 'userId'],
+        //required:true
       },
       {
         model: address,
@@ -579,8 +697,11 @@ router.get('/oulet/business/:id', function(req, res){
       console.log(rows);
       res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
     })
+  }).catch(err => {
+    console.error('countb',err);
+    res.send('error');
   })
-})
+});
 
 router.get('/outlet/create-outlet', function(req, res) {
   business.findAll({
