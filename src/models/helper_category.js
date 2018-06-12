@@ -35,12 +35,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   helper_category.associate = function(models) {
-    // associations can be defined here
-    // helper_category.belongsTo(models['category'], {foreignKey: models.category.categoryId});
-    // helper_category.belongsTo(models['business'], {foreignKey: models.business.businessId});
-    //User.belongsTo(Company, {foreignKey: 'fk_company'})
-    //helper_category.hasOne(models.business, {foreignKey: models.business.businessId});
-    //helper_category.belongsTo(models.business, {foreignKey: models.business.businessId});
     helper_category.belongsTo(models['business']);
     helper_category.belongsTo(models['category']);
   };

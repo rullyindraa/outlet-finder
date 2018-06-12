@@ -1,34 +1,21 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var review = sequelize.define('review', {
+  var open_hours = sequelize.define('open_hours', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
+    day: {
+      type: DataTypes.INTEGER
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
-    rating: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    token: {
-      type: DataTypes.CHAR(60),
+    open_time: {
+      type: DataTypes.TIME,
       allowNull: true
     },
-    ip_address: {
-      type: DataTypes.STRING,
+    close_time: {
+      type: DataTypes.TIME,
       allowNull: true
     },
     outletId: {
@@ -48,15 +35,10 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE
-    },
-    status: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true
     }
   }, {});
-  review.associate = function(models) {
+  open_hours.associate = function(models) {
     // associations can be defined here
-    review.belongsTo(models['outlet']);
   };
-  return review;
+  return open_hours;
 };

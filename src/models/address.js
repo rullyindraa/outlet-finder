@@ -24,9 +24,6 @@ module.exports = (sequelize, DataTypes) => {
     adm_area_lv4: {
       type: DataTypes.STRING
     },
-    adm_area_lv4: {
-      type: DataTypes.STRING
-    },
     raw_address: {
       type: DataTypes.TEXT,
       allowNull: true
