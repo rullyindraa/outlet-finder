@@ -13,6 +13,7 @@ const outlet = models.outlet;
 const page_view = models.page_view;
 const user = models.user;
 const review = models.review;
+const open_hours = models.open_hours;
 const validateJoi = require('../src/validation/create-business');
 var multer = require('multer');
 const path = require('path');
@@ -714,6 +715,114 @@ router.get('/outlet/create-outlet', function(req, res) {
   })
   .then(rows => {
     res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', active4: 'active-navbar', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+  })
+});
+
+router.post('/outlet/create-outlet', function(req, res){
+  upload(req, res, function (err) {
+    if (err) {
+      res.render('error', {message: err})
+    }
+    validateJoi.validate({ 
+      // category: req.body.category, 
+      name: req.body.name, 
+      email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
+      description: req.body.description, 
+      formatted_address: req.body.formatted_address,
+      lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
+        console.log(errors);
+        if (!errors) {
+          address.create({
+            line1: req.body.line1, 
+            line2: req.body.line2,
+            adm_area_lv1: req.body.adm_area_lv1, 
+            adm_area_lv2: req.body.adm_area_lv2, 
+            adm_area_lv3: req.body.adm_area_lv3, 
+            adm_area_lv4: req.body.adm_area_lv4, 
+            raw_address: req.body.line1+ ` ` +req.body.line2,
+            formatted_address: req.body.formatted_address,
+            postal_code: req.body.postal_code,
+            country: req.body.country,
+            //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+            location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`)
+          }, {
+            include: [{
+              model: outlet
+            }]
+          }
+        )
+        .then(address => {
+          if (req.file !== undefined){
+            var name = req.file.filename,
+              relative_path = '/files/' + req.file.filename,
+              original_name = !req.file ? 'placeholder.jpg' : req.file.originalname,
+              mime_type = req.file.mimetype;
+          }
+          else {
+            var name = null,
+              relative_path = 'http://www.morpho.pl/en/wp-content/uploads/2015/06/icon_nologo_black.png',
+              original_name = null,
+              mime_type = null;
+          }
+          file.create({
+            name: name,
+            relative_path: relative_path,
+            original_name: original_name,
+            mime_type : mime_type
+          }, {
+            include: [{
+              model: outlet
+            }]
+          })
+          .then(file => {
+            // console.log(row);
+            // console.log(req.file);
+            outlet.create({
+              businessId: req.body.business,
+              name: req.body.name,
+              addressId: address.id,
+              fileId: file.id,
+              email: req.body.email,
+              phone_number: req.body.phone_number,
+              website: req.body.website,
+              description: req.body.description
+            }, {
+              include: [{
+                model: open_hours
+              }]
+            })
+            .then(row => {
+              open_hours.create({
+                outletId: row.id,
+                mon_open: req.body.mon_open,
+                mon_close: req.body.mon_close,
+                tue_open: req.body.tue_open,
+                tue_close: req.body.tue_close,
+                wed_open: req.body.wed_open,
+                wed_close: req.body.wed_close,
+                thu_open: req.body.thu_open,
+                thu_close: req.body.thu_close,
+                fri_open: req.body.fri_open,
+                fri_close: req.body.fri_close,
+                sat_open: req.body.sat_open,
+                sat_close: req.body.sat_close,
+                sun_open: req.body.sun_open,
+                sun_close: req.body.sun_close,
+              })
+            })
+            .then(rows => {
+              console.log(rows);
+              res.redirect('/business-owner/outlet');
+            })
+          }) 
+        })
+      } else {
+        category.findAll()
+        .then(rows => {
+          res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', active4: 'active-navbar', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+        })
+      } 
+    })
   })
 });
 

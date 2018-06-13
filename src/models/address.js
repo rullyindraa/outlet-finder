@@ -58,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
     
     // address.belongsTo(models['user']);
     address.hasOne(models['business']);
+    address.hasOne(models['outlet']);
     //address.belongsTo(models['outlet']);
   };
   return address;

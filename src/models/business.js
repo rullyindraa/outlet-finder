@@ -76,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
     business.hasOne(models['outlet']);
     business.belongsTo(models['file']);
     business.belongsTo(models['user']);
+    business.hasOne(models['open_hours']);
     //business.hasOne(models['user']);
     //business.belongsTo(models['helper_category']);
     //business.belongsTo(models.helper_category, {foreignKey: models.helper_category.bussinessId});
