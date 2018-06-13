@@ -33,11 +33,11 @@ block content
               | Please enter a valid email
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
-            label(for='phone_number') Phone Number:
+            label(for='phone_number') Contact Number:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
             input.form-control(type='text', name='phone_number', placeholder='Phone Number', required='')
             .invalid-feedback
-              | Please enter a valid phone number
+              | Please enter a valid contact number
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='website') Website:
@@ -51,11 +51,10 @@ block content
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
             .custom-file
               input#photo.form-control(type='file' accept="image/*" name='photo')
-              input(type='hidden', value=file_name, name='old_photo')
+              input(type='hidden', name='old_photo')
         .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8
           label(for='description') Description:
           textarea.form-control(name="description", rows="4")
-            =description
           .invalid-feedback
             | Please enter your description
         .form-group.col-lg-10.col-md-10.col-sm-10.col-xl-10
@@ -123,17 +122,11 @@ block content
                   label.form-check-label
                     | Closed
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="open")
-                    option(name='categories', value="categories") 08:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#mon_open.form-control(type='time', name='mon_open', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="close")
-                    option(name='categories', value="categories") 17:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#mon_close.form-control(type='time', name='mon_close', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
               .form-row
@@ -144,17 +137,11 @@ block content
                   label.form-check-label
                     | Closed
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="open")
-                    option(name='categories', value="categories") 08:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#tue_open.form-control(type='time', name='tue_open', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="close")
-                    option(name='categories', value="categories") 17:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#tue_close.form-control(type='time', name='tue_close', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
               .form-row
@@ -165,17 +152,11 @@ block content
                   label.form-check-label
                     | Closed
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="open")
-                    option(name='categories', value="categories") 08:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#wed_open.form-control(type='time', name='wed_open', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="close")
-                    option(name='categories', value="categories") 17:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#wed_close.form-control(type='time', name='wed_close', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
               .form-row
@@ -186,17 +167,11 @@ block content
                   label.form-check-label
                     | Closed
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="open")
-                    option(name='categories', value="categories") 08:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#thu_open.form-control(type='time', name='thu_open', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="close")
-                    option(name='categories', value="categories") 17:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#thu_close.form-control(type='time', name='thu_close', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
               .form-row
@@ -207,17 +182,11 @@ block content
                   label.form-check-label
                     | Closed
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="open")
-                    option(name='categories', value="categories") 08:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#fri_open.form-control(type='time', name='fri_open', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="close")
-                    option(name='categories', value="categories") 17:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#fri_close.form-control(type='time', name='fri_close', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
               .form-row
@@ -228,17 +197,11 @@ block content
                   label.form-check-label
                     | Closed
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="open" disabled)
-                    option(name='categories', value="categories") 08:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#sat_open.form-control(type='time', name='sat_open', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="close" disabled)
-                    option(name='categories', value="categories") 17:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#sat_close.form-control(type='time', name='sat_close', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
               .form-row
@@ -249,21 +212,15 @@ block content
                   label.form-check-label
                     | Closed
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="open" disabled)
-                    option(name='categories', value="categories") 08:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#sun_open.form-control(type='time', name='sun_open', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
                 .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  select.form-control(name="close" disabled)
-                    option(name='categories', value="categories") 17:00
-                    option(name='it_service', value="it_service") IT Services
-                    option(name='fnb', value="fnb") Food and Beverages
+                  input#sun_close.form-control(type='time', name='sun_close', min="00:00" max="24:00" required)
                   .invalid-feedback
                     | Please select categories
               .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8(style='margin-left: 5px;')
-                input.form-check-input(type='checkbox', value='', checked)
+                input.form-check-input(name='public_holiday', type='checkbox', value='1', checked)
                 label.form-check-label
                   | Set as closed on public holiday
 

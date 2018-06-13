@@ -94,25 +94,8 @@ router.get('/', function(req, res, next) {
         })
         .then(resulto => {
         console.log('resultbb', resultb);
-        // console.log('countb', countb);
-        // console.log('resultw', resultr);
-        // console.log('resultc', resultc);
-        // console.log(resultb.count[0].count);
-        // console.log(resultb.count[1].count);
-        // console.log(resultb.count[2].count);
-        // //console.log(resultb[0].count);
-        // var totalb = 0;
-        // var help = resultb.rows.length;
-        // console.log('help',help);
-        // for (var i=0; i < resultb.count.length; i++){
-        //  totalb += resultb.count[i].count;
-        // //  totalb = resultb.count[0].count + resultb.count[1].count;
-        // } 
-        // console.log('total bus :', totalb);
-        //console.log('counto', counto);
         var count_business = resultb.count.length;
         var count_outlet = resulto.count.length;
-        //console.log('help',help);
           res.render('admin/index', {
             title: 'Dashboard | Outlet Finder', 
             totalb: count_business, 
