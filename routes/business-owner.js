@@ -782,6 +782,9 @@ router.get('/outlet/:id', function(req, res) {
 router.get('/reviews', function(req, res) {
   review.findAll({
     attributes: ['id', 'name', 'email', 'content', 'rating', 'createdAt'],
+    // where: {
+    //   status: 1
+    // },
     include: [
       {
         model: outlet,

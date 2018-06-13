@@ -12,6 +12,7 @@ const address = models.address;
 const file = models.file;
 const category = models.category;
 const review = models.review;
+const open_hours = models.open_hours;
 const moment = require('moment');
 const flash = require('connect-flash')
 
@@ -65,8 +66,14 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       },
       {
         model: review,
+        // where: {
+        //   status: 1
+        // },
         //order: ['id', 'ASC'],
         //limit: 3,
+      },
+      {
+        model: open_hours
       },
     ],
     order: [
@@ -95,7 +102,6 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           }
           reviewList.push(review);
         }
-
       } 
       else {
         for (var i = 0; i < 3; i++) {
@@ -117,6 +123,22 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       if(rows.length > 3) req.flash('more', 'See more >');
     }
     else req.flash('info', 'Be the first to add review.');
+    
+    var mon_open=moment(rows[0]['open_hour.mon_open'], 'HH:mm:ss').format('H.mm'),
+      mon_close=moment(rows[0]['open_hour.mon_close'], 'HH:mm:ss').format('H.mm'),
+      tue_open=moment(rows[0]['open_hour.tue_open'], 'HH:mm:ss').format('H.mm'),
+      tue_close=moment(rows[0]['open_hour.tue_close'], 'HH:mm:ss').format('H.mm'),
+      wed_open=moment(rows[0]['open_hour.wed_open'], 'HH:mm:ss').format('H.mm'),
+      wed_close=moment(rows[0]['open_hour.wed_close'], 'HH:mm:ss').format('H.mm'),
+      thu_open=moment(rows[0]['open_hour.thu_open'], 'HH:mm:ss').format('H.mm'),
+      thu_close=moment(rows[0]['open_hour.thu_close'], 'HH:mm:ss').format('H.mm'),
+      fri_open=moment(rows[0]['open_hour.fri_open'], 'HH:mm:ss').format('H.mm'),
+      fri_close=moment(rows[0]['open_hour.fri_close'], 'HH:mm:ss').format('H.mm'),
+      sat_open=moment(rows[0]['open_hour.sat_open'], 'HH:mm:ss').format('H.mm'),
+      sat_close=moment(rows[0]['open_hour.sat_close'], 'HH:mm:ss').format('H.mm'),
+      sun_open=moment(rows[0]['open_hour.sun_open'], 'HH:mm:ss').format('H.mm'),
+      sun_close=moment(rows[0]['open_hour.sun_close'], 'HH:mm:ss').format('H.mm');
+
     res.render('guest/detail', {
       title: rows[0].name+' | Outlet Finder', data: reviewList, 
       //data: rows,
@@ -124,7 +146,6 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       outlet_name:  rows[0].name, outlet_phone: rows[0].phone_number, outlet_email: rows[0].email, outlet_website: rows[0].website, outlet_desc: rows[0].description, 
       address_id: rows[0].addressId,
       city: rows[0]['address.adm_area_lv2'], 
-      //city: rows[0]['business.address.adm_area_lv2'],
       outlet_address: rows[0]['address.formatted_address'],
       lat: rows[0]['address.location'].coordinates[0], lng: rows[0]['address.location'].coordinates[1],
       businessId:rows[0].businessId, business_name: rows[0]['business.name'],
@@ -135,6 +156,14 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       business_address: rows[0]['business.address.formatted_address'],
       path: rows[0]['business.file.path'], file_name: rows[0]['business.file.name'], 
       //category: 
+      //openhour
+      mon_open: mon_open, mon_close: mon_close, 
+      tue_open: tue_open, tue_close: tue_close, 
+      wed_open: wed_open, wed_close: wed_close, 
+      thu_open: thu_open, thu_close: thu_close, 
+      fri_open: fri_open, fri_close: fri_close, 
+      sat_open: sat_open, sat_close: sat_close, 
+      sun_open: sun_open, sun_close: sun_close, 
       'info': req.flash('info'), 'more': req.flash('more'), 
     })
   }).catch(err => {

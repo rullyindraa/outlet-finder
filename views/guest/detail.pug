@@ -119,34 +119,59 @@ html
               i.fa.fa-fw.fa-clock-o
             .timeline-panel.primary
               .timeline-heading
-                h4.timeline-title Open Now
+                h4.timeline-title
+                  =status
               .timeline-body
                 p
                   .row
                     .col-lg-5.col-md-5.col-sm-6.col-xs-6
                       | Monday
                     .col-lg-6.col-md-6.col-sm-6.col-xs-6 
-                      | 8.00 - 18.00
+                      =mon_open
+                      |   - 
+                      =mon_close
                   .row
                     .col-lg-5.col-md-5.col-sm-6.col-xs-6
                       | Tuesday
                     .col-lg-6.col-md-6.col-sm-6.col-xs-6
-                      | 8.00 - 18.00
+                      =tue_open
+                      |   - 
+                      =tue_close
                   .row
                     .col-lg-5.col-md-5.col-sm-6.col-xs-6
                       | Wednesday
                     .col-lg-6.col-md-6.col-sm-6.col-xs-6
-                      | 8.00 - 18.00
+                      =wed_open
+                      |   - 
+                      =wed_close
                   .row
                     .col-lg-5.col-md-5.col-sm-6.col-xs-6
                       | Thursday
                     .col-lg-6.col-md-6.col-sm-6.col-xs-6
-                      | 8.00 - 18.00
+                      =thu_open
+                      |   - 
+                      =thu_close
                   .row
                     .col-lg-5.col-md-5.col-sm-6.col-xs-6
                       | Friday
                     .col-lg-6.col-md-6.col-sm-6.col-xs-6
-                      | 8.00 - 18.00   
+                      =fri_open
+                      |   - 
+                      =fri_close
+                  .row
+                    .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                      | Saturday
+                    .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                      =sat_open
+                      |   - 
+                      =sat_close  
+                  .row
+                    .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                      | Sunday
+                    .col-lg-6.col-md-6.col-sm-6.col-xs-6
+                      =sun_open
+                      |   - 
+                      =sun_close    
         .container.text-center
           a#maps.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(href='#maps' style='border-radius: 300px; padding: 1rem 2rem;') View in Maps
     section.bg-section-2.maps.text-center(style='padding-bottom: 50px;')
