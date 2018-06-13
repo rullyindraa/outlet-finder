@@ -18,6 +18,7 @@ const file = models.file;
 const moment = require('moment')
 const validateJoi = require('../src/validation/create-user');
 var multer = require('multer');
+var faker = require('faker');
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -162,7 +163,14 @@ router.get('/categories', function(req, res) {
 });
 
 router.get('/categories/add-category', function(req, res) {
-  res.render('admin/add-category', { title: 'Add Category | Outlet Finder', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'});
+  var category = {
+    name: faker.commerce.department(),
+    description: faker.lorem.sentence(),
+  }
+  console.log(category);
+  res.render('admin/add-category', { title: 'Add Category | Outlet Finder', 
+  data: category, 
+  name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`], active2: 'active-navbar'});
 });
 
 router.post('/categories/add-category', function(req, res) {

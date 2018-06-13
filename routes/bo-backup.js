@@ -48,6 +48,7 @@ function fileFilter(req, file, cb) {
 //const upload = multer({storage: storage});
 const upload = multer({storage: storage, fileFilter: fileFilter});
 
+faker.locale = "id_ID";
 router.get('/', function(req, res) {
   business.findAndCountAll(
     {
@@ -144,9 +145,17 @@ router.get('/business', function(req, res) {
 });
 
 router.get('/business/create-business', function(req, res) {
+
+  var business = {
+    name: faker.company.companyName(),
+    email: faker.internet.email(),
+  }
+  console.log(business);
   category.findAll()
   .then(rows => {
-    res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+    res.render('business-owner/create-businessfaker', {title: 'Create Business | Outlet Finder', 
+    data:business,
+    Categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
   })
 });
 
