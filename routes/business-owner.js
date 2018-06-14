@@ -1019,7 +1019,7 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
               })
               .then(rows => {
                 //console.log(rows);
-                req.flash('info', 'Outlet Edited');
+                req.flash('info', 'Outlet '+req.body.name+' Edited');
                 res.redirect('/business-owner/outlet');
               }).catch(err => {
                 console.error('errpostnya', err);
