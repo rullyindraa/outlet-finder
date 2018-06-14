@@ -20,6 +20,7 @@ const path = require('path');
 const moment = require('moment');
 var fs = require('fs');
 var faker = require('faker');
+const flash = require('connect-flash');
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -649,7 +650,12 @@ router.get('/outlet', function(req, res) {
     category.findAll()
     .then(cat => {
       console.log(rows);
-      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', 
+      data: rows,
+      active4: 'active-navbar', categories: cat, 
+      name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`],
+      'info': req.flash('info')
+    });
     })
   }).catch(err => {
     console.error('countb',err);
@@ -811,6 +817,7 @@ router.post('/outlet/create-outlet', function(req, res){
             })
             .then(rows => {
               console.log(rows);
+              req.flash('info', 'New Outlet Added');
               res.redirect('/business-owner/outlet');
             })
           }) 
@@ -885,7 +892,7 @@ router.get('/outlet/:id', function(req, res) {
         sat_close=moment(rows[0]['open_hour.sat_close'], 'HH:mm:ss').format('HH:mm'),
         sun_open=moment(rows[0]['open_hour.sun_open'], 'HH:mm:ss').format('HH:mm'),
         sun_close=moment(rows[0]['open_hour.sun_close'], 'HH:mm:ss').format('HH:mm');
-
+      
       res.render('business-owner/edit-outlet', {
         title: 'Edit Outlet | Outlet Finder', 
         //data: rows,
@@ -1011,7 +1018,8 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
                 }
               })
               .then(rows => {
-                console.log(rows);
+                //console.log(rows);
+                req.flash('info', 'Outlet Edited');
                 res.redirect('/business-owner/outlet');
               }).catch(err => {
                 console.error('errpostnya', err);
@@ -1080,6 +1088,7 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
           })
           .then(rows => {
             console.log(rows);
+            req.flash('info', 'Outlet '+req.body.name+' Edited');
             res.redirect('/business-owner/outlet');
           }).catch(err => {
             console.error('errpostnya', err);

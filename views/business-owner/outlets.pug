@@ -7,6 +7,10 @@ block content
       // Breadcrumbs
       ol.breadcrumb.color-pblue
         li.breadcrumb-item.active.h4 Outlets
+      //- span.text-dark
+      //-   - if (info){
+      //-     div #{info} 
+      //-   - }
       // Search
       form(action='/search/', method='GET')
         .form-row
@@ -62,7 +66,10 @@ block content
                       a.dropdown-item(href='#', onclick='del('+o.id+')') 
                         i.fa.fa-trash
                         |  Delete
-            
+      span#yes
+        - if (info){
+          option(type='hidden') #{info} 
+        - } 
       #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
         .modal-dialog(role='document')
           .modal-content(style='color: black') 
