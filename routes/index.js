@@ -157,13 +157,19 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         sun_open=moment(rows[0]['open_hour.sun_open'], 'HH:mm:ss').format('H.mm'),
         sun_close=moment(rows[0]['open_hour.sun_close'], 'HH:mm:ss').format('H.mm');
         console.log(reviewList);
-      // var status = moment().isWorkingTime();
-      // console.log('status',status);
-      var now = moment().format('H.mm');
-      // console.log('now',now);
-      // console.log(moment(now).isBetween(mon_open, mon_close));
-      if (moment(now).isBetween(mon_open, mon_close)) var status="Open Now";
-      else var status = "Close Now";
+
+      var time = moment(),
+        beforeTime = moment(mon_open, 'H:mm'),
+        afterTime = moment(mon_close, 'H:mm');
+
+      if (time.isBetween(beforeTime, afterTime)) {
+        console.log('buka');
+        var status = "Open Now";
+      } else {
+        console.log('tutup');
+        var status = "Close Now";
+      }
+      
       res.render('guest/detail', {
         title: rows[0].name+' | Outlet Finder', data: reviewList, 
         //data: rows,
