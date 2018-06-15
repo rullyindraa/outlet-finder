@@ -222,7 +222,11 @@ router.get('/more-reviews/:id', function(req, res, next) {
   })
   .then(rows => {
     var reviewList = [];
-    
+    for (var i=0; i<rows.length; i++){
+      var created = moment(rows[i].createdAt).fromNow();
+      var help = Object.assign({created}, rows[i]);
+      reviewList.push(help);
+    }
     console.log(reviewList);
     // console.log('ini', help);
     res.render('guest/more-reviews', { title: 'More Reviews' , data:reviewList});
