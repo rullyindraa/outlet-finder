@@ -13,13 +13,14 @@ const outlet = models.outlet;
 const page_view = models.page_view;
 const user = models.user;
 const review = models.review;
+const open_hours = models.open_hours;
 const validateJoi = require('../src/validation/create-business');
 var multer = require('multer');
 const path = require('path');
 const moment = require('moment');
 var fs = require('fs');
 var faker = require('faker');
-
+const flash = require('connect-flash');
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -46,9 +47,8 @@ function fileFilter(req, file, cb) {
 }
 
 //const upload = multer({storage: storage});
-const upload = multer({storage: storage, fileFilter: fileFilter});
-
-faker.locale = "id_ID";
+//var upload = multer({storage: storage, fileFilter: fileFilter});
+var upload = multer({storage: storage, fileFilter: fileFilter}).single('photo');
 router.get('/', function(req, res) {
   business.findAndCountAll(
     {
@@ -145,26 +145,17 @@ router.get('/business', function(req, res) {
 });
 
 router.get('/business/create-business', function(req, res) {
-
-  var business = {
-    name: faker.company.companyName(),
-    email: faker.internet.email(),
-  }
-  console.log(business);
   category.findAll()
   .then(rows => {
-    res.render('business-owner/create-businessfaker', {title: 'Create Business | Outlet Finder', 
-    data:business,
-    Categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+    res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', Categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
   })
 });
 
-router.post('/business/create-business', upload.single('photo'), function(req, res){
-  //var target_path = '/files/' + req.file.filename;
+// router.post('/business/create-business', upload.single('photo'), function(req, res){
+router.post('/business/create-business', function(req, res){
   upload(req, res, function (err) {
     if (err) {
-      // An error occurred when uploading
-      return err;
+      res.render('error', {message: err})
     }
     validateJoi.validate({ 
       // category: req.body.category, 
@@ -198,7 +189,7 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
             }]
           }
         )
-        .then(row => {
+        .then(address => {
           if (req.file !== undefined){
             var name = req.file.filename,
               relative_path = '/files/' + req.file.filename,
@@ -221,14 +212,14 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
               model: business
             }]
           })
-          .then(row => {
+          .then(file => {
             // console.log(row);
             // console.log(req.file);
             business.create({
               userId: req.user.id,
               name: req.body.name,
-              addressId: row.id,
-              fileId: row.id,
+              addressId: address.id,
+              fileId: file.id,
               email: req.body.email,
               phone_number: req.body.phone_number,
               website: req.body.website,
@@ -262,100 +253,101 @@ router.post('/business/create-business', upload.single('photo'), function(req, r
     })
     // Everything went fine
   })
-  validateJoi.validate({ 
-    // category: req.body.category, 
-    name: req.body.name, 
-    email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
-    description: req.body.description, 
-    // line1: req.body.line1, line2: req.body.line2,
-    // adm_area_lv1: req.body.adm_area_lv1, adm_area_lv2: req.body.adm_area_lv2, 
-    // adm_area_lv3: req.body.adm_area_lv3, adm_area_lv4: req.body.adm_area_lv4, 
-    // postal_code: req.body.postal_code, 
-    formatted_address: req.body.formatted_address,
-    lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
-      console.log(errors);
-      if (!errors) {
-        address.create({
-          line1: req.body.line1, 
-          line2: req.body.line2,
-          adm_area_lv1: req.body.adm_area_lv1, 
-          adm_area_lv2: req.body.adm_area_lv2, 
-          adm_area_lv3: req.body.adm_area_lv3, 
-          adm_area_lv4: req.body.adm_area_lv4, 
-          raw_address: req.body.line1+ ` ` +req.body.line2,
-          formatted_address: req.body.formatted_address,
-          postal_code: req.body.postal_code,
-          country: req.body.country,
-          //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
-          location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`)
-        }, {
-          include: [{
-            model: business
-          }]
-        }
-      )
-      .then(row => {
-        if (req.file !== undefined){
-          var name = req.file.filename,
-            relative_path = '/files/' + req.file.filename,
-            original_name = !req.file ? 'placeholder.jpg' : req.file.originalname,
-            mime_type = req.file.mimetype;
-        }
-        else {
-          var name = null,
-            relative_path = 'http://www.morpho.pl/en/wp-content/uploads/2015/06/icon_nologo_black.png',
-            original_name = null,
-            mime_type = null;
-        }
-        file.create({
-          name: name,
-          relative_path: relative_path,
-          original_name: original_name,
-          mime_type : mime_type
-        }, {
-          include: [{
-            model: business
-          }]
-        })
-        .then(row => {
-          // console.log(row);
-          // console.log(req.file);
-          business.create({
-            userId: req.user.id,
-            name: req.body.name,
-            addressId: row.id,
-            fileId: row.id,
-            email: req.body.email,
-            phone_number: req.body.phone_number,
-            website: req.body.website,
-            description: req.body.description
-          }, {
-            include: [{
-              model: helper_category
-            }]
-          })
-          .then(row => {
-            for(var i = 0; i < req.body.category.length; i++ ) {
-              helper_category.create({
-                categoryId: req.body.category[i],
-                businessId: row.id
-              })
-            }
-          })
-          .then(rows => {
-            console.log(rows);
-            res.redirect('/business-owner/business');
-          })
-        }) 
-      })
-    } else {
-      category.findAll()
-      .then(rows => {
-        //if (err) return err;
-        res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
-      })
-    } 
-  })
+  //withoutmultererrhandler
+  // validateJoi.validate({ 
+  //   // category: req.body.category, 
+  //   name: req.body.name, 
+  //   email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
+  //   description: req.body.description, 
+  //   // line1: req.body.line1, line2: req.body.line2,
+  //   // adm_area_lv1: req.body.adm_area_lv1, adm_area_lv2: req.body.adm_area_lv2, 
+  //   // adm_area_lv3: req.body.adm_area_lv3, adm_area_lv4: req.body.adm_area_lv4, 
+  //   // postal_code: req.body.postal_code, 
+  //   formatted_address: req.body.formatted_address,
+  //   lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
+  //     console.log(errors);
+  //     if (!errors) {
+  //       address.create({
+  //         line1: req.body.line1, 
+  //         line2: req.body.line2,
+  //         adm_area_lv1: req.body.adm_area_lv1, 
+  //         adm_area_lv2: req.body.adm_area_lv2, 
+  //         adm_area_lv3: req.body.adm_area_lv3, 
+  //         adm_area_lv4: req.body.adm_area_lv4, 
+  //         raw_address: req.body.line1+ ` ` +req.body.line2,
+  //         formatted_address: req.body.formatted_address,
+  //         postal_code: req.body.postal_code,
+  //         country: req.body.country,
+  //         //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+  //         location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`)
+  //       }, {
+  //         include: [{
+  //           model: business
+  //         }]
+  //       }
+  //     )
+  //     .then(address => {
+  //       if (req.file !== undefined){
+  //         var name = req.file.filename,
+  //           relative_path = '/files/' + req.file.filename,
+  //           original_name = !req.file ? 'placeholder.jpg' : req.file.originalname,
+  //           mime_type = req.file.mimetype;
+  //       }
+  //       else {
+  //         var name = null,
+  //           relative_path = 'http://www.morpho.pl/en/wp-content/uploads/2015/06/icon_nologo_black.png',
+  //           original_name = null,
+  //           mime_type = null;
+  //       }
+  //       file.create({
+  //         name: name,
+  //         relative_path: relative_path,
+  //         original_name: original_name,
+  //         mime_type : mime_type
+  //       }, {
+  //         include: [{
+  //           model: business
+  //         }]
+  //       })
+  //       .then(file => {
+  //         // console.log(row);
+  //         // console.log(req.file);
+  //         business.create({
+  //           userId: req.user.id,
+  //           name: req.body.name,
+  //           addressId: address.id,
+  //           fileId: file.id,
+  //           email: req.body.email,
+  //           phone_number: req.body.phone_number,
+  //           website: req.body.website,
+  //           description: req.body.description
+  //         }, {
+  //           include: [{
+  //             model: helper_category
+  //           }]
+  //         })
+  //         .then(row => {
+  //           for(var i = 0; i < req.body.category.length; i++ ) {
+  //             helper_category.create({
+  //               categoryId: req.body.category[i],
+  //               businessId: row.id
+  //             })
+  //           }
+  //         })
+  //         .then(rows => {
+  //           console.log(rows);
+  //           res.redirect('/business-owner/business');
+  //         })
+  //       }) 
+  //     })
+  //   } else {
+  //     category.findAll()
+  //     .then(rows => {
+  //       //if (err) return err;
+  //       res.render('business-owner/create-business', {title: 'Create Business | Outlet Finder', categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+  //     })
+  //   } 
+  // })
 });
 
 router.get('/business/:id', function(req, res) {
@@ -436,7 +428,8 @@ router.get('/business/:id', function(req, res) {
 });
 
 //editbisnis
-router.post('/business/edit-business', upload.single('photo'), function(req, res){
+// router.post('/business/edit-business', upload.single('photo'), function(req, res){
+router.post('/business/edit-business', upload, function(req, res){
   // var target_path = '/files/' + req.file.filename;
 
   validateJoi.validate({ 
@@ -657,7 +650,12 @@ router.get('/outlet', function(req, res) {
     category.findAll()
     .then(cat => {
       console.log(rows);
-      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', data: rows, active4: 'active-navbar', categories: cat, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+      res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', 
+      data: rows,
+      active4: 'active-navbar', categories: cat, 
+      name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`],
+      'info': req.flash('info')
+    });
     })
   }).catch(err => {
     console.error('countb',err);
@@ -725,6 +723,119 @@ router.get('/outlet/create-outlet', function(req, res) {
   })
 });
 
+router.post('/outlet/create-outlet', function(req, res){
+  upload(req, res, function (err) {
+    if (err) {
+      res.render('error', {message: err})
+    }
+    validateJoi.validate({ 
+      // category: req.body.category, 
+      name: req.body.name, 
+      email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
+      description: req.body.description, 
+      formatted_address: req.body.formatted_address,
+      lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
+        console.log(errors);
+        if (!errors) {
+          address.create({
+            line1: req.body.line1, 
+            line2: req.body.line2,
+            adm_area_lv1: req.body.adm_area_lv1, 
+            adm_area_lv2: req.body.adm_area_lv2, 
+            adm_area_lv3: req.body.adm_area_lv3, 
+            adm_area_lv4: req.body.adm_area_lv4, 
+            raw_address: req.body.line1+ ` ` +req.body.line2,
+            formatted_address: req.body.formatted_address,
+            postal_code: req.body.postal_code,
+            country: req.body.country,
+            //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+            location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`)
+          }, {
+            include: [{
+              model: outlet
+            }]
+          }
+        )
+        .then(address => {
+          if (req.file !== undefined){
+            var name = req.file.filename,
+              relative_path = '/files/' + req.file.filename,
+              original_name = !req.file ? 'placeholder.jpg' : req.file.originalname,
+              mime_type = req.file.mimetype;
+          }
+          else {
+            var name = null,
+              relative_path = 'http://www.morpho.pl/en/wp-content/uploads/2015/06/icon_nologo_black.png',
+              original_name = null,
+              mime_type = null;
+          }
+          file.create({
+            name: name,
+            relative_path: relative_path,
+            original_name: original_name,
+            mime_type : mime_type
+          }, {
+            include: [{
+              model: outlet
+            }]
+          })
+          .then(file => {
+            // console.log(row);
+            // console.log(req.file);
+            outlet.create({
+              businessId: req.body.business,
+              name: req.body.name,
+              addressId: address.id,
+              fileId: file.id,
+              email: req.body.email,
+              phone_number: req.body.phone_number,
+              website: req.body.website,
+              description: req.body.description
+            }, {
+              include: [{
+                model: open_hours
+              }]
+            })
+            .then(row => {
+              open_hours.create({
+                outletId: row.id,
+                mon_open: req.body.mon_open,
+                mon_close: req.body.mon_close,
+                tue_open: req.body.tue_open,
+                tue_close: req.body.tue_close,
+                wed_open: req.body.wed_open,
+                wed_close: req.body.wed_close,
+                thu_open: req.body.thu_open,
+                thu_close: req.body.thu_close,
+                fri_open: req.body.fri_open,
+                fri_close: req.body.fri_close,
+                sat_open: req.body.sat_open,
+                sat_close: req.body.sat_close,
+                sun_open: req.body.sun_open,
+                sun_close: req.body.sun_close,
+              })
+            })
+            .then(rows => {
+              console.log(rows);
+              req.flash('info', 'New Outlet Added');
+              res.redirect('/business-owner/outlet');
+            })
+          }) 
+        })
+      } else {
+        business.findAll({
+          where: {
+            userId: req.user.id
+          }
+        })
+        .then(rows => {
+          res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', active4: 'active-navbar', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+        })
+      } 
+    })
+  })
+});
+
 router.post('/outlet/delete/:id', function(req, res, next) {
   outlet.destroy({
     where: {
@@ -751,7 +862,10 @@ router.get('/outlet/:id', function(req, res) {
       {
         model: file,
         attributes: ['name', ['relative_path', 'path']]
-      }
+      },
+      {
+        model: open_hours
+      },
     ],
     raw:true
   })
@@ -763,15 +877,28 @@ router.get('/outlet/:id', function(req, res) {
     })
     .then(bus => {
       console.log('inioutlet',rows);
-      // console.log('itu', cat);
-      // console.log('try', rows[0]['address.raw_address']);
-      //console.log('aku', rows[0]['address.location'].coordinates[0]);
+      
+      var mon_open=moment(rows[0]['open_hour.mon_open'], 'HH:mm:ss').format('HH:mm'),
+        mon_close=moment(rows[0]['open_hour.mon_close'], 'HH:mm:ss').format('HH:mm'),
+        tue_open=moment(rows[0]['open_hour.tue_open'], 'HH:mm:ss').format('HH:mm'),
+        tue_close=moment(rows[0]['open_hour.tue_close'], 'HH:mm:ss').format('HH:mm'),
+        wed_open=moment(rows[0]['open_hour.wed_open'], 'HH:mm:ss').format('HH:mm'),
+        wed_close=moment(rows[0]['open_hour.wed_close'], 'HH:mm:ss').format('HH:mm'),
+        thu_open=moment(rows[0]['open_hour.thu_open'], 'HH:mm:ss').format('HH:mm'),
+        thu_close=moment(rows[0]['open_hour.thu_close'], 'HH:mm:ss').format('HH:mm'),
+        fri_open=moment(rows[0]['open_hour.fri_open'], 'HH:mm:ss').format('HH:mm'),
+        fri_close=moment(rows[0]['open_hour.fri_close'], 'HH:mm:ss').format('HH:mm'),
+        sat_open=moment(rows[0]['open_hour.sat_open'], 'HH:mm:ss').format('HH:mm'),
+        sat_close=moment(rows[0]['open_hour.sat_close'], 'HH:mm:ss').format('HH:mm'),
+        sun_open=moment(rows[0]['open_hour.sun_open'], 'HH:mm:ss').format('HH:mm'),
+        sun_close=moment(rows[0]['open_hour.sun_close'], 'HH:mm:ss').format('HH:mm');
+      
       res.render('business-owner/edit-outlet', {
         title: 'Edit Outlet | Outlet Finder', 
         //data: rows,
-        //id:  rows[0].id,
+        id:  rows[0].id,
         outlet_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
-        path: rows[0]['file.path'], file_name: rows[0]['file.name'], 
+        path: rows[0]['file.path'], file_name: rows[0]['file.name'], file_id: rows[0].fileId,
         address_id: rows[0].addressId,
         raw_address: rows[0]['address.raw_address'], 
         line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
@@ -781,6 +908,14 @@ router.get('/outlet/:id', function(req, res) {
         businessId:rows[0].businessId, business_name: rows[0]['business.name'],
         active4: 'active-navbar',
         business: bus,
+        //openhour
+        mon_open: mon_open, mon_close: mon_close, 
+        tue_open: tue_open, tue_close: tue_close, 
+        wed_open: wed_open, wed_close: wed_close, 
+        thu_open: thu_open, thu_close: thu_close, 
+        fri_open: fri_open, fri_close: fri_close, 
+        sat_open: sat_open, sat_close: sat_close, 
+        sun_open: sun_open, sun_close: sun_close, 
         name: req.user.first_name + ' ' + req.user.last_name, 
         photo:req.user[`file.pp`]
       })
@@ -788,6 +923,192 @@ router.get('/outlet/:id', function(req, res) {
   }).catch(err => {
     console.error(err);
   });
+});
+
+router.post('/outlet/edit-outlet', upload, function(req, res){
+  validateJoi.validate({ 
+    name: req.body.name, 
+    email: req.body.email, phone_number: req.body.phone_number, website: req.body.website, 
+    description: req.body.description, 
+    formatted_address: req.body.formatted_address,
+    lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
+      console.log(errors);
+      if (!errors) {
+        if (req.file) {
+          // if old photo exists (old photo not empty) then unlink / remove the photo in directory
+          if (req.body.old_photo !== '')
+            fs.unlink(`public/files/${req.body.old_photo}`);
+          var target_path = '/files/' + req.file.filename;
+          file.update(
+            {
+              name: req.file.filename,
+              relative_path: target_path,
+              original_name: !req.file ? 'placeholder.jpg' : req.file.originalname,
+              mime_type : req.file.mimetype,
+              updatedAt: new Date()
+            },
+            {
+              where: {
+                id: req.body.file_id
+              }
+            },
+            // {
+            //   include: [{
+            //     model: business
+            //   }]
+            // }
+          )
+          .then(file => {
+            address.update({
+              line1: req.body.line1, 
+              line2: req.body.line2,
+              adm_area_lv1: req.body.adm_area_lv1, 
+              adm_area_lv2: req.body.adm_area_lv2, 
+              adm_area_lv3: req.body.adm_area_lv3, 
+              adm_area_lv4: req.body.adm_area_lv4, 
+              raw_address: req.body.line1+ ` ` +req.body.line2,
+              formatted_address: req.body.formatted_address,
+              postal_code: req.body.postal_code,
+              country: req.body.country,
+              //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+              location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`),
+              updatedAt: new Date()
+            }, {
+              where: {
+                id: req.body.address_id
+              }
+            }
+          )
+          .then(address => {
+            outlet.update({
+              name: req.body.name,
+              businessId: req.body.business,
+              email: req.body.email,
+              phone_number: req.body.phone_number,
+              website: req.body.website,
+              description: req.body.description,
+              updatedAt: new Date()
+            }, 
+            {
+              where: {
+                id: req.body.outlet_id
+              }
+            })
+            .then(outlet => {
+              open_hours.update({
+                // outletId: row.id,
+                mon_open: req.body.mon_open,
+                mon_close: req.body.mon_close,
+                tue_open: req.body.tue_open,
+                tue_close: req.body.tue_close,
+                wed_open: req.body.wed_open,
+                wed_close: req.body.wed_close,
+                thu_open: req.body.thu_open,
+                thu_close: req.body.thu_close,
+                fri_open: req.body.fri_open,
+                fri_close: req.body.fri_close,
+                sat_open: req.body.sat_open,
+                sat_close: req.body.sat_close,
+                sun_open: req.body.sun_open,
+                sun_close: req.body.sun_close,
+              },
+              {
+                where: {
+                  outletId: req.body.outlet_id
+                }
+              })
+              .then(rows => {
+                //console.log(rows);
+                req.flash('info', 'Outlet '+req.body.name+' Edited');
+                res.redirect('/business-owner/outlet');
+              }).catch(err => {
+                console.error('errpostnya', err);
+              });
+            })
+          })
+        })
+      }
+        
+        address.update({
+          line1: req.body.line1, 
+          line2: req.body.line2,
+          adm_area_lv1: req.body.adm_area_lv1, 
+          adm_area_lv2: req.body.adm_area_lv2, 
+          adm_area_lv3: req.body.adm_area_lv3, 
+          adm_area_lv4: req.body.adm_area_lv4, 
+          raw_address: req.body.line1+ ` ` +req.body.line2,
+          formatted_address: req.body.formatted_address,
+          postal_code: req.body.postal_code,
+          country: req.body.country,
+          location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`),
+          updatedAt: new Date()
+        }, {
+          where: {
+            id: req.body.address_id
+          }
+        }
+      )
+      .then(rows => {
+        outlet.update({
+          name: req.body.name,
+          email: req.body.email,
+          phone_number: req.body.phone_number,
+          website: req.body.website,
+          description: req.body.description,
+          businessId: req.body.business,
+          updatedAt: new Date()
+        }, 
+        {
+          where: {
+            id: req.body.outlet_id
+          }
+        })
+        .then(outlet => {
+          open_hours.update({
+            // outletId: row.id,
+            mon_open: req.body.mon_open,
+            mon_close: req.body.mon_close,
+            tue_open: req.body.tue_open,
+            tue_close: req.body.tue_close,
+            wed_open: req.body.wed_open,
+            wed_close: req.body.wed_close,
+            thu_open: req.body.thu_open,
+            thu_close: req.body.thu_close,
+            fri_open: req.body.fri_open,
+            fri_close: req.body.fri_close,
+            sat_open: req.body.sat_open,
+            sat_close: req.body.sat_close,
+            sun_open: req.body.sun_open,
+            sun_close: req.body.sun_close,
+          },
+          {
+            where: {
+              outletId: req.body.outlet_id
+            }
+          })
+          .then(rows => {
+            console.log(rows);
+            req.flash('info', 'Outlet '+req.body.name+' Edited');
+            res.redirect('/business-owner/outlet');
+          }).catch(err => {
+            console.error('errpostnya', err);
+          })
+        }) 
+      })
+    } else {
+      business.findAll({
+        where: {
+          userId: req.user.id
+        }
+      })
+      .then(rows => {
+        //masihbingung
+        res.render('business-owner/outlet/:id', {title: 'Create Business | Outlet Finder', categories:rows, active3: 'active-navbar', name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`]});
+      }).catch(err => {
+        console.error('error', err);
+      })
+    } 
+  })
 });
 
 router.get('/reviews', function(req, res) {
@@ -818,30 +1139,15 @@ router.get('/reviews', function(req, res) {
   }).then(rows => {
     business.findAll()
     .then(bus => {
-      console.log('inireview',rows);
-      // var created= moment(rows[0].createdAt).format('YYYY, M, DD');
-      // var createdAt= moment(rows[0].createdAt).fromNow();
-      // console.log(createdAt);
       var reviewList = [];
-      for (var i = 0; i < rows.length; i++) {
-        var review = {
-          'id' : rows[i].id,
-          'name':rows[i].name,
-          'email':rows[i].email,
-          'content':rows[i].content,
-          'createdAt':moment(rows[i].createdAt).fromNow(),
-          'rating':rows[i].rating,
-          'outlet_id':rows[i]['outlet.id'],
-          'outlet_name': rows[i]['outlet.outlet_name']
-        }
-        reviewList.push(review);
-        console.log('revv',reviewList);
+      for (var i=0; i<rows.length; i++){
+        var created = moment(rows[i].createdAt).fromNow();
+        var help = Object.assign({created}, rows[i]);
+        reviewList.push(help);
       }
-      //console.log('userr',req.user.id);
+      console.log('inireview',reviewList);
       res.render('business-owner/reviews', { 
         title: 'Reviews | Outlet Finder', data: reviewList, 
-        //created: rows[0].createdAt,
-        //created: moment(rows[0].createdAt).fromNow(),
         business: bus, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] 
       });
     })

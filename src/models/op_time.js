@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     day: {
-      type: DataTypes.ENUM('0','1','2','3','4','5','6'),
+      type: DataTypes.ENUM('1','2','3','4','5','6','7'),
       allowNull: false,
       defaultValue: null
     },

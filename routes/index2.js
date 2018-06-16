@@ -96,7 +96,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
     review.findAll({
       where: {
         //outletId: req.params.id
-        [Sequelize.Op.and]: [
+        [Op.and]: [
           {
             outletId: [req.params.id]
           }, {
@@ -171,7 +171,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         // console.log(rows);
 
         var time = moment(),
-          day = moment().day(),
+          day = moment().isoWeekday(),
           openTime = moment(op_time[day-1].open_time, 'HH:mm:ss'),
           closeTime = moment(op_time[day-1].close_time, 'HH:mm:ss');
 
@@ -182,7 +182,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           console.log('tutup');
           var status = "Close Now";
         }
-        console.log(moment().day(), op_time[moment().day()-1].open_time, op_time[moment().day()-1].close_time, status);
+        console.log(moment().isoWeekday(), op_time[moment().isoWeekday()-1].open_time, op_time[moment().isoWeekday()-1].close_time, status);
         //console.log(moment().day());
       // console.log(op_time);
         console.log('other', other_outlet);
