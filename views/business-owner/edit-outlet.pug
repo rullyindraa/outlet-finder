@@ -123,111 +123,112 @@ block content
           label(for='open_hours') Open Hours:
           .card.mb-3
             .card-body
-              .form-row
-                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
-                  label.mr-5(for='day1') Monday
-                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
-                  input.form-check-input(type='checkbox', value='')
-                  label.form-check-label
-                    | Closed
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#mon_open.form-control(type='time', name='mon_open', min="00:00" max="24:00" value=mon_open required)
-                  .invalid-feedback
-                    | Please select categories
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#mon_close.form-control(type='time', name='mon_close', min="00:00" max="24:00" value=mon_close required)
-                  .invalid-feedback
-                    | Please select categories
-              .form-row
-                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
-                  label.mr-5(for='day2') Tuesday
-                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
-                  input.form-check-input(type='checkbox', value='')
-                  label.form-check-label
-                    | Closed
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#tue_open.form-control(type='time', name='tue_open', min="00:00" max="24:00" value=tue_open required)
-                  .invalid-feedback
-                    | Please select categories
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#tue_close.form-control(type='time', name='tue_close', min="00:00" max="24:00" value=tue_close required)
-                  .invalid-feedback
-                    | Please select categories
-              .form-row
-                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
-                  label.mr-5(for='day3') Wednesday
-                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
-                  input.form-check-input(type='checkbox', value='')
-                  label.form-check-label
-                    | Closed
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#wed_open.form-control(type='time', name='wed_open', min="00:00" max="24:00" value=wed_open required)
-                  .invalid-feedback
-                    | Please select categories
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#wed_close.form-control(type='time', name='wed_close', min="00:00" max="24:00" value=wed_close required)
-                  .invalid-feedback
-                    | Please select categories
-              .form-row
-                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
-                  label.mr-5(for='day4') Thursday
-                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
-                  input.form-check-input(type='checkbox', value='')
-                  label.form-check-label
-                    | Closed
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#thu_open.form-control(type='time', name='thu_open', min="00:00" max="24:00" value=thu_open required)
-                  .invalid-feedback
-                    | Please select categories
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#thu_close.form-control(type='time', name='thu_close', min="00:00" max="24:00" value=thu_close required)
-                  .invalid-feedback
-                    | Please select categories
-              .form-row
-                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
-                  label.mr-5(for='day5') Friday
-                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
-                  input.form-check-input(type='checkbox', value='')
-                  label.form-check-label
-                    | Closed
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#fri_open.form-control(type='time', name='fri_open', min="00:00" max="24:00" value=fri_open required)
-                  .invalid-feedback
-                    | Please select categories
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#fri_close.form-control(type='time', name='fri_close', min="00:00" max="24:00" value=fri_close required)
-                  .invalid-feedback
-                    | Please select categories
-              .form-row
-                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
-                  label.mr-5(for='day6') Saturday
-                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
-                  input.form-check-input(type='checkbox', value='' checked)
-                  label.form-check-label
-                    | Closed
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#sat_open.form-control(type='time', name='sat_open', min="00:00" max="24:00" value=sat_open required)
-                  .invalid-feedback
-                    | Please select categories
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#sat_close.form-control(type='time', name='sat_close', min="00:00" max="24:00" value=sat_close required)
-                  .invalid-feedback
-                    | Please select categories
-              .form-row
-                .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
-                  label(for='day7') Sunday
-                .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
-                  input.form-check-input(type='checkbox', value='' checked)
-                  label.form-check-label
-                    | Closed
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#sun_open.form-control(type='time', name='sun_open', min="00:00" max="24:00" value=sun_open required)
-                  .invalid-feedback
-                    | Please select categories
-                .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  input#sun_close.form-control(type='time', name='sun_close', min="00:00" max="24:00" value=sun_close required)
-                  .invalid-feedback
-                    | Please select categories
+              for value in data
+                .form-row
+                  .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+                    label.mr-5(for='day1')=value.days
+                  .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+                    input.form-check-input(type='checkbox', value='')
+                    label.form-check-label
+                      | Closed
+                  .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                    input.form-control(type='time', name='open', min="00:00" max="24:00" value=value.open required)
+                    .invalid-feedback
+                      | Please select categories
+                  .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+                    input.form-control(type='time', name='close', min="00:00" max="24:00" value=value.close required)
+                    .invalid-feedback
+                      | Please select categories
+              //- .form-row
+              //-   .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+              //-     label.mr-5(for='day2') Tuesday
+              //-   .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+              //-     input.form-check-input(type='checkbox', value='')
+              //-     label.form-check-label
+              //-       | Closed
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#tue_open.form-control(type='time', name='tue_open', min="00:00" max="24:00" value=tue_open required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#tue_close.form-control(type='time', name='tue_close', min="00:00" max="24:00" value=tue_close required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //- .form-row
+              //-   .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+              //-     label.mr-5(for='day3') Wednesday
+              //-   .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+              //-     input.form-check-input(type='checkbox', value='')
+              //-     label.form-check-label
+              //-       | Closed
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#wed_open.form-control(type='time', name='wed_open', min="00:00" max="24:00" value=wed_open required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#wed_close.form-control(type='time', name='wed_close', min="00:00" max="24:00" value=wed_close required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //- .form-row
+              //-   .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+              //-     label.mr-5(for='day4') Thursday
+              //-   .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+              //-     input.form-check-input(type='checkbox', value='')
+              //-     label.form-check-label
+              //-       | Closed
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#thu_open.form-control(type='time', name='thu_open', min="00:00" max="24:00" value=thu_open required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#thu_close.form-control(type='time', name='thu_close', min="00:00" max="24:00" value=thu_close required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //- .form-row
+              //-   .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+              //-     label.mr-5(for='day5') Friday
+              //-   .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+              //-     input.form-check-input(type='checkbox', value='')
+              //-     label.form-check-label
+              //-       | Closed
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#fri_open.form-control(type='time', name='fri_open', min="00:00" max="24:00" value=fri_open required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#fri_close.form-control(type='time', name='fri_close', min="00:00" max="24:00" value=fri_close required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //- .form-row
+              //-   .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+              //-     label.mr-5(for='day6') Saturday
+              //-   .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+              //-     input.form-check-input(type='checkbox', value='' checked)
+              //-     label.form-check-label
+              //-       | Closed
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#sat_open.form-control(type='time', name='sat_open', min="00:00" max="24:00" value=sat_open required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#sat_close.form-control(type='time', name='sat_close', min="00:00" max="24:00" value=sat_close required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //- .form-row
+              //-   .form-group.col-lg-4.col-md-4.col-sm-4.col-xs-4
+              //-     label(for='day7') Sunday
+              //-   .form-group.col-lg-2.col-md-2.col-sm-2.col-xs-2.check-collapse
+              //-     input.form-check-input(type='checkbox', value='' checked)
+              //-     label.form-check-label
+              //-       | Closed
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#sun_open.form-control(type='time', name='sun_open', min="00:00" max="24:00" value=sun_open required)
+              //-     .invalid-feedback
+              //-       | Please select categories
+              //-   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
+              //-     input#sun_close.form-control(type='time', name='sun_close', min="00:00" max="24:00" value=sun_close required)
+              //-     .invalid-feedback
+              //-       | Please select categories
               .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8(style='margin-left: 5px;')
                 input.form-check-input(name='public_holiday', type='checkbox', value='1', checked)
                 label.form-check-label
@@ -235,7 +236,10 @@ block content
 
         input.btn.btn-md.color-ink.ml-3.mb-5(type='submit', value='Submit')
         input.btn.btn-md.color-ink.ml-2.mb-5(type='submit', value='Submit and Add Outlet >')
-
+    span#yes
+      - if (info){
+        option(type='hidden') #{info} 
+      - } 
   include ../includes/logout.pug
   
   include ../includes/footer.pug

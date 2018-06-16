@@ -22,6 +22,7 @@ const moment = require('moment');
 var fs = require('fs');
 var faker = require('faker');
 const flash = require('connect-flash');
+const Op = Sequelize.Op;
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -445,31 +446,6 @@ router.post('/business/edit-business', upload, function(req, res){
     lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
       console.log(errors);
       if (!errors) {
-      //   address.update({
-      //     line1: req.body.line1, 
-      //     line2: req.body.line2,
-      //     adm_area_lv1: req.body.adm_area_lv1, 
-      //     adm_area_lv2: req.body.adm_area_lv2, 
-      //     adm_area_lv3: req.body.adm_area_lv3, 
-      //     adm_area_lv4: req.body.adm_area_lv4, 
-      //     raw_address: req.body.line1+ ` ` +req.body.line2,
-      //     formatted_address: req.body.formatted_address,
-      //     postal_code: req.body.postal_code,
-      //     country: req.body.country,
-      //     //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
-      //     location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`),
-      //     updatedAt: new Date()
-      //   }, {
-      //     where: {
-      //       id: req.body.address_id
-      //     }
-      //   },{
-      //     include: [{
-      //       model: business
-      //     }]
-      //   },
-      // )
-      // .then(row => {
         if (req.file) {
           // if old photo exists (old photo not empty) then unlink / remove the photo in directory
           if (req.body.old_photo !== '')
@@ -538,8 +514,8 @@ router.post('/business/edit-business', upload, function(req, res){
           }).catch(err => {
             console.error('errpostnya', err);
           });
-          }) 
-        }
+        })
+      }
         
         address.update({
           line1: req.body.line1, 
@@ -650,7 +626,7 @@ router.get('/outlet', function(req, res) {
   .then(rows => {
     category.findAll()
     .then(cat => {
-      console.log(rows);
+      // console.log(rows);
       res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', 
       data: rows,
       active4: 'active-navbar', categories: cat, 
@@ -810,8 +786,8 @@ router.post('/outlet/create-outlet', function(req, res){
                   // open_time: req.body.open1,
                   // close_time: req.body.close1,
                 })
-                console.log(req.body.open_i);
-                console.log(req.body.open+i);
+                // console.log(req.body.open_i);
+                // console.log(req.body.open+i);
               }
             })
             .then(rows => {
@@ -882,12 +858,10 @@ router.get('/outlet/:id', function(req, res) {
         var opList = [];
         for (var i = 0; i < op_time.length; i++) {
           var days = moment().isoWeekday(i+1).format('dddd'); 
-          if (op_time[i].open_time !== null){
-            var open = moment(op_time[i].open_time, 'HH:mm:ss').format('H.mm');
-            var close = moment(op_time[i].close_time, 'HH:mm:ss').format('H.mm');
-            var help = Object.assign({days, open, close}, op_time[i]);
-            opList.push(help);
-          }
+          var open = moment(op_time[i].open_time, 'HH:mm:ss').format('HH:mm');
+          var close = moment(op_time[i].close_time, 'HH:mm:ss').format('HH:mm');
+          var help = Object.assign({days, open, close}, op_time[i]);
+          opList.push(help);
         }
         console.log('oplis',opList);
         // console.log('inioutlet',rows);
@@ -929,9 +903,7 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
       console.log(errors);
       if (!errors) {
         if (req.file) {
-          // if old photo exists (old photo not empty) then unlink / remove the photo in directory
-          if (req.body.old_photo !== '')
-            fs.unlink(`public/files/${req.body.old_photo}`);
+          if (req.body.old_photo !== '') fs.unlink(`public/files/${req.body.old_photo}`);
           var target_path = '/files/' + req.file.filename;
           file.update(
             {
@@ -946,11 +918,6 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
                 id: req.body.file_id
               }
             },
-            // {
-            //   include: [{
-            //     model: business
-            //   }]
-            // }
           )
           .then(file => {
             address.update({
@@ -989,27 +956,24 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
               }
             })
             .then(outlet => {
-              open_hours.update({
-                // outletId: row.id,
-                mon_open: req.body.mon_open,
-                mon_close: req.body.mon_close,
-                tue_open: req.body.tue_open,
-                tue_close: req.body.tue_close,
-                wed_open: req.body.wed_open,
-                wed_close: req.body.wed_close,
-                thu_open: req.body.thu_open,
-                thu_close: req.body.thu_close,
-                fri_open: req.body.fri_open,
-                fri_close: req.body.fri_close,
-                sat_open: req.body.sat_open,
-                sat_close: req.body.sat_close,
-                sun_open: req.body.sun_open,
-                sun_close: req.body.sun_close,
-              },
-              {
-                where: {
-                  outletId: req.body.outlet_id
-                }
+              for (var i=1; i<8; i++){
+                op_time.update({
+                  open_time: req.body.open[i-1],
+                  close_time: req.body.close[i-1]
+                },
+                {
+                  where: {
+                    [Op.and]: [
+                      {
+                        outletId: req.body.outlet_id
+                      }, {
+                        day: [i]
+                      }
+                    ]
+                  }
+                })
+              }
+                
               })
               .then(rows => {
                 //console.log(rows);
@@ -1020,7 +984,6 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
               });
             })
           })
-        })
       }
         
         address.update({
@@ -1058,37 +1021,33 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
           }
         })
         .then(outlet => {
-          open_hours.update({
-            // outletId: row.id,
-            mon_open: req.body.mon_open,
-            mon_close: req.body.mon_close,
-            tue_open: req.body.tue_open,
-            tue_close: req.body.tue_close,
-            wed_open: req.body.wed_open,
-            wed_close: req.body.wed_close,
-            thu_open: req.body.thu_open,
-            thu_close: req.body.thu_close,
-            fri_open: req.body.fri_open,
-            fri_close: req.body.fri_close,
-            sat_open: req.body.sat_open,
-            sat_close: req.body.sat_close,
-            sun_open: req.body.sun_open,
-            sun_close: req.body.sun_close,
-          },
-          {
-            where: {
-              outletId: req.body.outlet_id
-            }
-          })
-          .then(rows => {
-            console.log(rows);
-            req.flash('info', 'Outlet '+req.body.name+' Edited');
-            res.redirect('/business-owner/outlet');
-          }).catch(err => {
-            console.error('errpostnya', err);
-          })
-        }) 
-      })
+          for (var i=1; i<8; i++){
+            op_time.update({
+              open_time: req.body.open[i-1],
+              close_time: req.body.close[i-1]
+            },
+            {
+              where: {
+                [Op.and]: [
+                  {
+                    outletId: req.body.outlet_id
+                  }, {
+                    day: [i]
+                  }
+                ]
+              }
+            })
+          }
+        })
+        .then(rows => {
+          console.log(rows);
+          req.flash('info', 'Outlet '+req.body.name+' Edited');
+          res.redirect('/business-owner/outlet');
+          // res.redirect('/business-owner/outlet/'+req.body.outlet_id);
+        }).catch(err => {
+          console.error('errpostnya', err);
+        })
+      }) 
     } else {
       business.findAll({
         where: {
