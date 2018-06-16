@@ -153,7 +153,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         
         var opList = [];
         for (var i = 0; i < op_time.length; i++) {
-          var days = moment(op_time[i].day, 'e').format('dddd'); 
+          var days = moment().isoWeekday(i+1).format('dddd'); 
           if (op_time[i].open_time !== null){
             var open = moment(op_time[i].open_time, 'HH:mm:ss').format('H.mm');
             var close = moment(op_time[i].close_time, 'HH:mm:ss').format('H.mm');
@@ -164,11 +164,15 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           //   var open = 'closed';
           //   var close = 'closed';
           // }
-
           // var help = Object.assign({days, open, close}, op_time[i]);
           // opList.push(help);
         }
-        // console.log(rows);
+        // console.log('try',moment().isoWeekday(2).format('dddd'));
+        // console.log('try2',moment().isoWeekday(op_time[0].day).format('dddd'));
+        // console.log(op_time[0].day);
+        // console.log(op_time[6].day);
+        // console.log(op_time);
+        // console.log(opList);
 
         var time = moment(),
           day = moment().isoWeekday(),
@@ -183,9 +187,8 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           var status = "Close Now";
         }
         console.log(moment().isoWeekday(), op_time[moment().isoWeekday()-1].open_time, op_time[moment().isoWeekday()-1].close_time, status);
-        //console.log(moment().day());
-      // console.log(op_time);
-        console.log('other', other_outlet);
+        
+        // console.log('other', other_outlet);
         res.render('guest/detail-2', {
           title: rows.name+' | Outlet Finder', data: reviewList, op: opList,
           outlet: other_outlet,

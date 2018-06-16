@@ -861,10 +861,7 @@ router.get('/outlet/:id', function(req, res) {
       {
         model: file,
         attributes: ['name', ['relative_path', 'path']]
-      },
-      {
-        model: open_hours
-      },
+      }
     ],
     raw:true
   })
@@ -875,53 +872,51 @@ router.get('/outlet/:id', function(req, res) {
       }
     })
     .then(bus => {
-      console.log('inioutlet',rows);
-      
-      var mon_open=moment(rows[0]['open_hour.mon_open'], 'HH:mm:ss').format('HH:mm'),
-        mon_close=moment(rows[0]['open_hour.mon_close'], 'HH:mm:ss').format('HH:mm'),
-        tue_open=moment(rows[0]['open_hour.tue_open'], 'HH:mm:ss').format('HH:mm'),
-        tue_close=moment(rows[0]['open_hour.tue_close'], 'HH:mm:ss').format('HH:mm'),
-        wed_open=moment(rows[0]['open_hour.wed_open'], 'HH:mm:ss').format('HH:mm'),
-        wed_close=moment(rows[0]['open_hour.wed_close'], 'HH:mm:ss').format('HH:mm'),
-        thu_open=moment(rows[0]['open_hour.thu_open'], 'HH:mm:ss').format('HH:mm'),
-        thu_close=moment(rows[0]['open_hour.thu_close'], 'HH:mm:ss').format('HH:mm'),
-        fri_open=moment(rows[0]['open_hour.fri_open'], 'HH:mm:ss').format('HH:mm'),
-        fri_close=moment(rows[0]['open_hour.fri_close'], 'HH:mm:ss').format('HH:mm'),
-        sat_open=moment(rows[0]['open_hour.sat_open'], 'HH:mm:ss').format('HH:mm'),
-        sat_close=moment(rows[0]['open_hour.sat_close'], 'HH:mm:ss').format('HH:mm'),
-        sun_open=moment(rows[0]['open_hour.sun_open'], 'HH:mm:ss').format('HH:mm'),
-        sun_close=moment(rows[0]['open_hour.sun_close'], 'HH:mm:ss').format('HH:mm');
-      
-      res.render('business-owner/edit-outlet', {
-        title: 'Edit Outlet | Outlet Finder', 
-        //data: rows,
-        id:  rows[0].id,
-        outlet_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
-        path: rows[0]['file.path'], file_name: rows[0]['file.name'], file_id: rows[0].fileId,
-        address_id: rows[0].addressId,
-        raw_address: rows[0]['address.raw_address'], 
-        line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
-        adm_area_lv1: rows[0]['address.adm_area_lv1'], adm_area_lv2: rows[0]['address.adm_area_lv2'], adm_area_lv3: rows[0]['address.adm_area_lv3'], adm_area_lv4: rows[0]['address.adm_area_lv4'],
-        formatted_address: rows[0]['address.formatted_address'],
-        lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
-        businessId:rows[0].businessId, business_name: rows[0]['business.name'],
-        active4: 'active-navbar',
-        business: bus,
-        //openhour
-        mon_open: mon_open, mon_close: mon_close, 
-        tue_open: tue_open, tue_close: tue_close, 
-        wed_open: wed_open, wed_close: wed_close, 
-        thu_open: thu_open, thu_close: thu_close, 
-        fri_open: fri_open, fri_close: fri_close, 
-        sat_open: sat_open, sat_close: sat_close, 
-        sun_open: sun_open, sun_close: sun_close, 
-        name: req.user.first_name + ' ' + req.user.last_name, 
-        photo:req.user[`file.pp`]
+      op_time.findAll({
+        where: {
+          outletId: req.params.id,
+        },
+        raw:true
       })
-    })
-  }).catch(err => {
-    console.error(err);
-  });
+      .then(op_time => {
+        var opList = [];
+        for (var i = 0; i < op_time.length; i++) {
+          var days = moment().isoWeekday(i+1).format('dddd'); 
+          if (op_time[i].open_time !== null){
+            var open = moment(op_time[i].open_time, 'HH:mm:ss').format('H.mm');
+            var close = moment(op_time[i].close_time, 'HH:mm:ss').format('H.mm');
+            var help = Object.assign({days, open, close}, op_time[i]);
+            opList.push(help);
+          }
+        }
+        console.log('oplis',opList);
+        // console.log('inioutlet',rows);
+        
+        
+        res.render('business-owner/edit-outlet', {
+          title: 'Edit Outlet | Outlet Finder', 
+          //data: rows,
+          data: opList,
+          id:  rows[0].id,
+          outlet_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
+          path: rows[0]['file.path'], file_name: rows[0]['file.name'], file_id: rows[0].fileId,
+          address_id: rows[0].addressId,
+          raw_address: rows[0]['address.raw_address'], 
+          line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
+          adm_area_lv1: rows[0]['address.adm_area_lv1'], adm_area_lv2: rows[0]['address.adm_area_lv2'], adm_area_lv3: rows[0]['address.adm_area_lv3'], adm_area_lv4: rows[0]['address.adm_area_lv4'],
+          formatted_address: rows[0]['address.formatted_address'],
+          lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
+          businessId:rows[0].businessId, business_name: rows[0]['business.name'],
+          active4: 'active-navbar',
+          business: bus,
+          name: req.user.first_name + ' ' + req.user.last_name, 
+          photo:req.user[`file.pp`]
+        })
+      })
+    }).catch(err => {
+      console.error(err);
+    });
+  })
 });
 
 router.post('/outlet/edit-outlet', upload, function(req, res){
