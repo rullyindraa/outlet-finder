@@ -16,7 +16,8 @@ const open_hours = models.open_hours;
 const op_time = models.op_time;
 const moment = require('moment');
 const flash = require('connect-flash')
-var moment2 = require("moment-business-time")
+// var moment2 = require("moment-business-time");
+const Op = Sequelize.Op;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -37,14 +38,16 @@ router.get('/categories', function(req, res, next) {
 // });
 
 router.get('/detail/outlet/:id', function(req, res, next) {
-  outlet.findAll({
+  outlet.findOne({
     where: {
       id: [req.params.id]
     },
     include: [
       {
         model: business,
-        attributes: ['id', 'name', 'description', 'email', 'phone_number', 'website'],
+        attributes: ['id', 'name', 'description', 'email', 'phone_number', 'website',
+        [Sequelize.fn('GROUP_CONCAT', Sequelize.literal("`business->categories`.`name` SEPARATOR ', '")), 'category_names']
+      ],
         //group: ['business.id'],
         include: [
           {
@@ -54,12 +57,11 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           {
             model: address,
             attributes: ['adm_area_lv2', 'formatted_address']
+          },
+          {
+            model: category,
+            attributes: ['name']
           }
-          // {
-          //   model: category,
-          //   //attributes: ['name']
-          //   attributes: [[Sequelize.fn('GROUP_CONCAT', Sequelize.literal("name SEPARATOR ', '")), 'category_names']]
-          // }
         ]
       },
       {
@@ -86,7 +88,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
   .then(rows => {
     op_time.findAll({
       where: {
-        outletId: req.params.id
+        outletId: req.params.id,
       },
       raw:true
     })
@@ -107,89 +109,107 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       raw:true
     })
     .then(review => {
-      var reviewList = [];
-      if(review.length !== 0){
-        if (review.length > 3){
-          var reviewList = [];
-          for (var i = 0; i < 3; i++) {
-            var created = moment(review[i].createdAt).fromNow();
-            var help = Object.assign({created}, review[i]);
-            reviewList.push(help);
-          }
-          console.log(reviewList);
-          req.flash('more', 'See more >');
-        } 
-        else {
-          var reviewList = [];
-          for (var i = 0; i < review.length; i++) {
-            var created = moment(review[i].createdAt).fromNow();
-            var help = Object.assign({created}, review[i]);
-            reviewList.push(help);
-          }
-          //req.flash('more', 'See more >');
-        }
-        //if(review.length > 3) req.flash('more', 'See more >');
-      }
-      else req.flash('info', 'Be the first to add review.');
-      
-      var opList = [];
-      for (var i = 0; i < op_time.length; i++) {
-        var days = moment(op_time[i].day, 'e').format('dddd'); 
-        if (op_time[i].open_time !== null){
-          var open = moment(op_time[i].open_time, 'HH:mm:ss').format('H.mm');
-          var close = moment(op_time[i].close_time, 'HH:mm:ss').format('H.mm');
-          var help = Object.assign({days, open, close}, op_time[i]);
-          opList.push(help);
-        }
-        // else {
-        //   var open = 'closed';
-        //   var close = 'closed';
-        // }
-
-        // var help = Object.assign({days, open, close}, op_time[i]);
-        // opList.push(help);
-      }
-      console.log(opList);
-
-      var time = moment(),
-        day = moment().day(),
-        openTime = moment(op_time[day-1].open_time, 'HH:mm:ss'),
-        closeTime = moment(op_time[day-1].close_time, 'HH:mm:ss');
-
-      if (time.isBetween(openTime, closeTime)) {
-        console.log('buka');
-        var status = "Open Now";
-      } else {
-        console.log('tutup');
-        var status = "Close Now";
-      }
-      console.log(moment().day(), op_time[moment().day()-1].open_time, op_time[moment().day()-1].close_time, status);
-      //console.log(moment().day());
-     // console.log(op_time);
-      res.render('guest/detail-2', {
-        title: rows[0].name+' | Outlet Finder', data: reviewList, op: opList,
-        //data: rows,
-        status:status,
-        id:  rows[0].id,
-        outlet_name:  rows[0].name, outlet_phone: rows[0].phone_number, outlet_email: rows[0].email, outlet_website: rows[0].website, outlet_desc: rows[0].description, 
-        address_id: rows[0].addressId,
-        city: rows[0]['address.adm_area_lv2'], 
-        outlet_address: rows[0]['address.formatted_address'],
-        lat: rows[0]['address.location'].coordinates[0], lng: rows[0]['address.location'].coordinates[1],
-        businessId:rows[0].businessId, business_name: rows[0]['business.name'],
-        business_email: rows[0]['business.email'],
-        business_phone: rows[0]['business.phone_number'],
-        business_website: rows[0]['business.website'],
-        business_desc: rows[0]['business.description'],
-        business_address: rows[0]['business.address.formatted_address'],
-        path: rows[0]['business.file.path'], file_name: rows[0]['business.file.name'], 
-        //category: 
-        
-        'info': req.flash('info'), 'more': req.flash('more'), 
+      outlet.findAll({
+        attributes: ['id', 'name'],
+        where: {
+          businessId: rows['business.id'],
+          [Op.and]: [
+            {
+              id: { [Op.ne]: [req.params.id] }
+            }
+          ]
+        },
+        include: [{
+          model: address,
+          attributes: [['adm_area_lv2', 'city']]
+        }],
+        raw: true
       })
-    }).catch(err => {
-      console.error(err);
-    });
+      .then(other_outlet => {
+        var reviewList = [];
+        if(review.length !== 0){
+          if (review.length > 3){
+            var reviewList = [];
+            for (var i = 0; i < 3; i++) {
+              var created = moment(review[i].createdAt).fromNow();
+              var help = Object.assign({created}, review[i]);
+              reviewList.push(help);
+            }
+            // console.log(reviewList);
+            req.flash('more', 'See more >');
+          } 
+          else {
+            var reviewList = [];
+            for (var i = 0; i < review.length; i++) {
+              var created = moment(review[i].createdAt).fromNow();
+              var help = Object.assign({created}, review[i]);
+              reviewList.push(help);
+            }
+            //req.flash('more', 'See more >');
+          }
+          //if(review.length > 3) req.flash('more', 'See more >');
+        }
+        else req.flash('info', 'Be the first to add review.');
+        
+        var opList = [];
+        for (var i = 0; i < op_time.length; i++) {
+          var days = moment(op_time[i].day, 'e').format('dddd'); 
+          if (op_time[i].open_time !== null){
+            var open = moment(op_time[i].open_time, 'HH:mm:ss').format('H.mm');
+            var close = moment(op_time[i].close_time, 'HH:mm:ss').format('H.mm');
+            var help = Object.assign({days, open, close}, op_time[i]);
+            opList.push(help);
+          }
+          // else {
+          //   var open = 'closed';
+          //   var close = 'closed';
+          // }
+
+          // var help = Object.assign({days, open, close}, op_time[i]);
+          // opList.push(help);
+        }
+        // console.log(rows);
+
+        var time = moment(),
+          day = moment().day(),
+          openTime = moment(op_time[day-1].open_time, 'HH:mm:ss'),
+          closeTime = moment(op_time[day-1].close_time, 'HH:mm:ss');
+
+        if (time.isBetween(openTime, closeTime)) {
+          console.log('buka');
+          var status = "Open Now";
+        } else {
+          console.log('tutup');
+          var status = "Close Now";
+        }
+        console.log(moment().day(), op_time[moment().day()-1].open_time, op_time[moment().day()-1].close_time, status);
+        //console.log(moment().day());
+      // console.log(op_time);
+        console.log('other', other_outlet);
+        res.render('guest/detail-2', {
+          title: rows.name+' | Outlet Finder', data: reviewList, op: opList,
+          outlet: other_outlet,
+          status:status,
+          id:  rows.id,
+          outlet_name:  rows.name, outlet_phone: rows.phone_number, outlet_email: rows.email, outlet_website: rows.website, outlet_desc: rows.description, 
+          address_id: rows.addressId,
+          city: rows['address.adm_area_lv2'], 
+          outlet_address: rows['address.formatted_address'],
+          lat: rows['address.location'].coordinates[0], lng: rows['address.location'].coordinates[1],
+          businessId:rows.businessId, business_name: rows['business.name'],
+          business_email: rows['business.email'],
+          business_phone: rows['business.phone_number'],
+          business_website: rows['business.website'],
+          business_desc: rows['business.description'],
+          business_address: rows['business.address.formatted_address'],
+          path: rows['business.file.path'], file_name: rows['business.file.name'], 
+          category : rows['business.category_names'],
+          'info': req.flash('info'), 'more': req.flash('more'), 
+        })
+      }).catch(err => {
+        console.error(err);
+      });
+    })
   })
 })
   //res.render('guest/detail', { title: 'Detail Outlet | Oulet Finder' });

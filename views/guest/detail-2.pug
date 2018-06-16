@@ -46,7 +46,7 @@ html
         p.text-muted 
           | City: 
           =city
-          |  - Business: - Retail
+          |  - Category: 
           =category
         p.text-center
           =business_desc
@@ -207,30 +207,14 @@ html
                 th City
                 th 
             tbody
-              tr
-                td Wonderlabs Armstrong Campus
-                td Wonderlabs
-                td Yogyakarta
-                td 
-                  a(href='#') view outlets >
-              tr
-                td Wonderlabs Explorer Campus
-                td Wonderlabs
-                td Yogyakarta
-                td 
-                  a(href='#') view outlets >
-              tr
-                td Wonderlabs Sputnik Campus
-                td Wonderlabs
-                td Yogyakarta
-                td 
-                  a(href='#') view outlets >
-              tr
-                td Wonderlabs Houston Campus
-                td Wonderlabs
-                td Yogyakarta
-                td 
-                  a(href='#') view outlets >
+              for data in outlet
+                tr
+                  td=data.name
+                  td=business_name
+                  td=data['address.city']
+                  td 
+                    a(href='/detail/outlet/'+data.id) view outlets >
+              
 
     div(style='margin-top: -20px;')
 
