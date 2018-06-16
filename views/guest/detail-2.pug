@@ -1,6 +1,24 @@
-extends ../layout2
-
-block content
+doctype html
+html
+  head
+    title=title
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/style-guest.css')
+    link(rel='icon', href='/images/square-icon.png')
+    script(src='/javascripts/one-page.js')
+    script(src='/javascripts/maps-detail.js')
+    script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBpk20FbiTlQeiV5gCPRY_83idTVbLpyDI&callback=initMap')
+  body(onload='getLocation()')
     nav.navbar.navbar-expand-lg.navbar-light.color-ink
       a.navbar-brand(href='/' style="color: #FFFFFF;")
         img(src="/images/logo-light.png" height="31" alt="")
@@ -8,174 +26,214 @@ block content
         span.i.fa.fa-fw.fa-bars(style='color: white;')
       #navbarSupportedContent.collapse.navbar-collapse.justify-content-right
         ul.navbar-nav.ml-auto.justify-content-right
-          li.nav-item
-            a.nav-link.rounded.border-light(style='color: #ffffff', href='/')
+          li.nav-item.mr-2
+            a.nav-link.nav-top.rounded.border-light.text-white(href='/')
               |  Home
-          li.nav-item
-            a.nav-link.rounded.border-light(style='color: #ffffff', href='/categories')
+          li.nav-item.mr-2
+            a.nav-link.nav-top.rounded.border-light.text-white(href='/categories')
               |  Browse Directory
-          li.nav-item
-            a.nav-link.rounded.border-light(style='color: #ffffff', href='#')
+          li.nav-item.mr-2
+            a.signin.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.login')
               |  Login
-          li.nav-item
-            a.nav-link.rounded.border-light(style='color: #ffffff', href='#')
+          li.nav-item.mr-2
+            a.signup.nav-link.nav-top.rounded.border-light.text-white(href='#', data-toggle='modal', data-target='.register')
               |  Register
-    .container-fluid
-      a#home.float(href='#home')
-        i.fa.fa-briefcase.my-float.fa-lg
-      a#info.float2(href='#info')
-        i.fa.fa-info.my-float.fa-lg
-      a#maps.float3(href='#maps')
-        i.fa.fa-map-marker.my-float.fa-lg
-      a#comment.float4(href='#comment')
-        i.fa.fa-comment.my-float.fa-lg
-    .container-fluid
+    header.bg-header.text-center
       .container
-        .home.row.mt-4
-          .col-lg-3.col-md-3.col-sm-3.col-xs-3.text-center
-            img(src='https://image.freepik.com/free-icon/city_318-112631.jpg', alt='ikon bisnis', style="width: 100px;")
-          .col-lg-8.col-md-8.col-sm-8.col-xs-8
-            h2
-              a Wonderlabs
-            p(style='color: grey') City: Yogyakarta - Business: Retail
-            p
-              i.fa.fa-fw.fa-map-marker
-              |  Jalan Laksda Adisucipto no 21, Kota Yogyakarta, Depok, 55238
-              br
-              i.fa.fa-fw.fa-globe
-              |  http://www.lorem.co.id 
-              br
-              i.fa.fa-fw.fa-phone-square
-              |  0274 567 890 
-              br
-              i.fa.fa-fw.fa-envelope
-              |  contact@lorem.co.id 
-              br
-            p(align='justify')
-              | Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam ornare wisi eu metus. Quisque porta. Fusce wisi. Nunc dapibus tortor vel mi dapibus sollicitudin. Etiam sapien elit, consequat eget, tristique non, venenatis quis, ante. Nulla quis diam.
-              | Fusce suscipit libero eget elit. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Aliquam erat volutpat. Aenean placerat. Mauris tincidunt sem sed arcu.
-        hr.color-nantucket(style='margin-top: 0px; height: 1px;')
-        .info.mt-2
-          h4 Outlet Info
-          h3 Wonderlabs Armstrong Campus
-          p
-            i.fa.fa-fw.fa-map-marker
-            |  Jalan Laksda Adisucipto no 21, Kota Yogyakarta, Depok, 55238
-            br
-            i.fa.fa-fw.fa-globe
-            |  http://www.lorem.co.id 
-            br
-            i.fa.fa-fw.fa-phone-square
-            |  0274 567 890 
-            br
-            i.fa.fa-fw.fa-envelope
-            |  contact@lorem.co.id 
-          ul(style='margin-left: -20px; margin-top: -10px;')
-            li
-              .row
-                .col-lg-2.col-md-2.col-sm-3.col-xs-3
-                  | Monday
-                .col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  | 8.00 - 18.00
-            li
-              .row
-                .col-lg-2.col-md-2.col-sm-3.col-xs-3
-                  | Tuesday
-                .col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  | 8.00 - 18.00
-            li
-              .row
-                .col-lg-2.col-md-2.col-sm-3.col-xs-3
-                  | Wednesday
-                .col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  | 8.00 - 18.00
-            li
-              .row
-                .col-lg-2.col-md-2.col-sm-3.col-xs-3
-                  | Thursday
-                .col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  | 8.00 - 18.00
-            li
-              .row
-                .col-lg-2.col-md-2.col-sm-3.col-xs-3
-                  | Friday
-                .col-lg-3.col-md-3.col-sm-3.col-xs-3
-                  | 8.00 - 18.00
+        img.img-fluid.mb-4.d-block.mx-auto(src=path, alt='' style="width: 200px;")
+        h1.text-uppercase.mb-2
+          =business_name
+        p.text-muted 
+          | City: 
+          =city
+          |  - Business: - Retail
+          =category
+        p.text-center
+          =business_desc
+        hr.detail.mt-4
       .container
-        #map.border.maps
-        .mt-3
-        a.btn.btn-ink.color-ink.col-xs-3.mr-2.mb-2(href='#') Get Direction
-        a.btn.btn-detail.color-nantucket.col-xs-3.mr-2.mb-2(href='#') Find Similar
-        .comment.row.mt-3
-          h4.col-sm-12 Review
-            hr
-          .col-lg-12
+        .row
+          .col-lg-3.col-md-6.text-center
+            .detail-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-map-marker.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+              h3.mb-3 
+                | Address
+              p.text-muted.mb-0
+                =business_address
+          .col-lg-3.col-md-6.text-center
+            .detail-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-globe.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+              h3.mb-3 
+                | Website
+              p.text-muted.mb-0
+                =business_website
+          .col-lg-3.col-md-6.text-center
+            .detail-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-phone-square.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+              h3.mb-3 
+                | Phone
+              p.text-muted.mb-0
+                =business_phone 
+          .col-lg-3.col-md-6.text-center
+            .detail-box.mt-5.mx-auto
+              i.fa.fa-4x.fa-envelope.icon-ink.mb-2(style="visibility: visible;  -webkit-transform: scale(1); opacity: 1;transform: scale(1); opacity: 1;-webkit-transition: -webkit-transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; transition: transform 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s, opacity 0.6s cubic-bezier(0.6, 0.2, 0.1, 1) 0s; ")
+              h3.mb-3 
+                | E-mail
+              p.text-muted.mb-0
+                =business_email 
+        a#info.btn.btn-detail.color-white.btn-xl.mt-4.text-uppercase(href='#info' style='border-radius: 300px; padding: 1rem 2rem;') View Outlet Info
+    section.bg-section-1.info(style='padding-bottom: 50px;')
+      .container
+        h2.mb-2.text-center
+          =outlet_name
+        hr.detail.mt-4
+      .container
+        ul.timeline
+          li
+            .timeline-badge.blue
+              i.fa.fa-fw.fa-info
+            .timeline-panel.blue
+              .timeline-heading
+                h4.timeline-title Outlet Info
+              .timeline-body
+                p
+                  .mt-2
+                  i.fa.fa-fw.fa-map-marker
+                  =outlet_address
+                  br
+                  .mt-2
+                  i.fa.fa-fw.fa-globe
+                  =outlet_website
+                  br
+                  .mt-2
+                  i.fa.fa-fw.fa-phone-square
+                  =outlet_phone 
+                  br
+                  .mt-2
+                  i.fa.fa-fw.fa-envelope
+                  =outlet_email
+                input#lat.form-control(type='hidden' value=lat)
+                input#lng.form-control(type='hidden' value=lng)
+          li.timeline-inverted
+            .timeline-badge.primary
+              i.fa.fa-fw.fa-clock-o
+            .timeline-panel.primary
+              .timeline-heading
+                h4.timeline-title
+                  =status
+              .timeline-body
+                p
+                  for data in op
+                    .row
+                      .col-lg-5.col-md-5.col-sm-6.col-xs-6
+                        =data.days
+                      .col-lg-6.col-md-6.col-sm-6.col-xs-6 
+                        =data.open
+                        |   - 
+                        =data.close
+                          
+        .container.text-center
+          a#maps.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(href='#maps' style='border-radius: 300px; padding: 1rem 2rem;') View in Maps
+    section.bg-section-2.maps.text-center(style='padding-bottom: 50px;')
+      .container-fluid
+        .row
+          #map.map-detail(style='margin-top: -30px;')
+          .mt-5
+      form#calculate-route(name='calculate-route', action='#', method='get')
+        input#from.form-control(type='hidden', name='from')
+        input#to.form-control(type='hidden', name='to', value=outlet_address)
+        br
+        input.btn.btn-ink.color-ink.btn-xl.mt-5.text-uppercase(type='submit' value='Get Direction' style='border-radius: 300px; padding: 1rem 2rem;') 
+        //a.btn.btn-ink.color-ink.btn-xl.mt-5.text-uppercase(href='#' style='border-radius: 300px; padding: 1rem 2rem;') Get Direction
+        a.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-5.text-uppercase(href='#' style='border-radius: 300px; padding: 1rem 2rem;') Find Similar
+        a#comment.btn.btn-detail.btn-detail-page.color-white.btn-xl.mt-5.text-uppercase(href='#comment' style='border-radius: 300px; padding: 1rem 2rem;') Find Out Review
+    section.bg-section-1.comment(style='padding-bottom: 50px;')
+      .container
+        h2.mb-2.text-center
+          | Review
+        hr.detail.mt-4
+      .container.mt-4
+        .col-lg-12.col-md-12.col-sm-12.col-xs-12
+          span.text-secondary
+            - if (info){
+                p #{info} 
+            - }  
+          for r in data
             strong
-              h6(style='color: black;') Rully Indra Laelaningrum
+              h6(style='color: black;')
+                =r.name
             p(style='color: gray; font-size: 14px')
-              | 2 days ago 
+              =r.created
+              |   - outlet : 
+              a(href='/detail/outlet/'+id)
+                =outlet_name
             p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
-              | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-              | book.
-            i.fa.fa-fw.fa-star.star-orange
-            i.fa.fa-fw.fa-star.star-orange
-            i.fa.fa-fw.fa-star.star-orange
-            i.fa.fa-fw.fa-star.star-orange
-            i.fa.fa-fw.fa-star.star-orange
-            .mt-3
-            strong
-              h6(style='color: black;') Evania Kurniawati
-            p(style='color: gray; font-size: 14px')
-              | 3 days ago
-            p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
-              | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen
-              | book.
-            i.fa.fa-fw.fa-star.star-orange
-            i.fa.fa-fw.fa-star.star-orange
-            i.fa.fa-fw.fa-star.star-orange
-            i.fa.fa-fw.fa-star.star-gray
-            i.fa.fa-fw.fa-star.star-gray
-            .mt-3
-            div
-              button.btn.color-ink.mb-4(type='button', data-toggle='modal', data-target='.bd-example-modal-lg') Add Review
-        .card.mb-3
-          .card-header.color-pblue
-            | Other Outlets
-          .card-body
-            .table-responsive-lg(style='color: black;')
-              table.table-striped.table.col-lg-12.col-md-12.col-sm-12.col-xs-12
-                thead
-                  tr
-                    th Name
-                    th Business
-                    th City
-                    th 
-                tbody
-                  tr
-                    td Wonderlabs Armstrong Campus
-                    td Wonderlabs
-                    td Yogyakarta
-                    td 
-                      a(href='#') view outlets >
-                  tr
-                    td Wonderlabs Explorer Campus
-                    td Wonderlabs
-                    td Yogyakarta
-                    td 
-                      a(href='#') view outlets >
-                  tr
-                    td Wonderlabs Sputnik Campus
-                    td Wonderlabs
-                    td Yogyakarta
-                    td 
-                      a(href='#') view outlets >
-                  tr
-                    td Wonderlabs Houston Campus
-                    td Wonderlabs
-                    td Yogyakarta
-                    td 
-                      a(href='#') view outlets >
-    
+              =r.content
+            p(style='margin-top: -18px;')
+              .star-box(style='display: inline-block;width:auto ;white-space: nowrap; margin-left: -2px')
+                span.unfilled(style='position: absolute;') 
+                  i.fa.fa-fw.fa-star.star-gray
+                  i.fa.fa-fw.fa-star.star-gray
+                  i.fa.fa-fw.fa-star.star-gray
+                  i.fa.fa-fw.fa-star.star-gray
+                  i.fa.fa-fw.fa-star.star-gray
+                span.filled(style='white-space: nowrap; overflow: hidden;position: absolute; width:'+r.rating*1.25+'em')
+                  i.fa.fa-fw.fa-star.star-orange
+                  i.fa.fa-fw.fa-star.star-orange
+                  i.fa.fa-fw.fa-star.star-orange
+                  i.fa.fa-fw.fa-star.star-orange
+                  i.fa.fa-fw.fa-star.star-orange
+                br
+          span
+            - if (more){
+              a(href='/more-reviews/'+id) #{more}
+            - } 
+          //a(href='#') more reviews >
+      .container.text-center
+        button.btn.btn-ink.color-ink.btn-xl.mt-4.text-uppercase(style='border-radius: 300px; padding: 1rem 2rem;', type='button', data-toggle='modal', data-target='.bd-example-modal-lg') Add Review
+        a#other.btn.btn-detail.btn-detail-page.color-nantucket.btn-xl.mt-4.text-uppercase(href='#other' style='border-radius: 300px; padding: 1rem 2rem;') Find Other Outlet
+    section.bg-section-2.other(style='padding-bottom: 50px;')
+      .container
+        h2.mb-2.text-center
+          | Other Outlet
+        hr.detail.mt-4
+      .container.mt-4
+        .table-responsive-lg(style='color: black;')
+          table.table-striped.table.col-lg-12.col-md-12.col-sm-12.col-xs-12
+            thead
+              tr
+                th Name
+                th Business
+                th City
+                th 
+            tbody
+              tr
+                td Wonderlabs Armstrong Campus
+                td Wonderlabs
+                td Yogyakarta
+                td 
+                  a(href='#') view outlets >
+              tr
+                td Wonderlabs Explorer Campus
+                td Wonderlabs
+                td Yogyakarta
+                td 
+                  a(href='#') view outlets >
+              tr
+                td Wonderlabs Sputnik Campus
+                td Wonderlabs
+                td Yogyakarta
+                td 
+                  a(href='#') view outlets >
+              tr
+                td Wonderlabs Houston Campus
+                td Wonderlabs
+                td Yogyakarta
+                td 
+                  a(href='#') view outlets >
+
+    div(style='margin-top: -20px;')
+
     include footer.pug
-    
-    include add_review.pug
+      
+    include add-review.pug

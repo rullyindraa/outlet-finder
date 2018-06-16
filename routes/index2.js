@@ -13,6 +13,7 @@ const file = models.file;
 const category = models.category;
 const review = models.review;
 const open_hours = models.open_hours;
+const op_time = models.op_time;
 const moment = require('moment');
 const flash = require('connect-flash')
 var moment2 = require("moment-business-time")
@@ -83,6 +84,13 @@ router.get('/detail/outlet/:id', function(req, res, next) {
     raw:true
   })
   .then(rows => {
+    op_time.findAll({
+      where: {
+        outletId: req.params.id
+      },
+      raw:true
+    })
+    .then(op_time => {
     review.findAll({
       where: {
         //outletId: req.params.id
@@ -102,6 +110,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       var reviewList = [];
       if(review.length !== 0){
         if (review.length > 3){
+          var reviewList = [];
           for (var i = 0; i < 3; i++) {
             var created = moment(review[i].createdAt).fromNow();
             var help = Object.assign({created}, review[i]);
@@ -111,6 +120,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           req.flash('more', 'See more >');
         } 
         else {
+          var reviewList = [];
           for (var i = 0; i < review.length; i++) {
             var created = moment(review[i].createdAt).fromNow();
             var help = Object.assign({created}, review[i]);
@@ -122,35 +132,42 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       }
       else req.flash('info', 'Be the first to add review.');
       
-      var mon_open=moment(rows[0]['open_hour.mon_open'], 'HH:mm:ss').format('H.mm'),
-        mon_close=moment(rows[0]['open_hour.mon_close'], 'HH:mm:ss').format('H.mm'),
-        tue_open=moment(rows[0]['open_hour.tue_open'], 'HH:mm:ss').format('H.mm'),
-        tue_close=moment(rows[0]['open_hour.tue_close'], 'HH:mm:ss').format('H.mm'),
-        wed_open=moment(rows[0]['open_hour.wed_open'], 'HH:mm:ss').format('H.mm'),
-        wed_close=moment(rows[0]['open_hour.wed_close'], 'HH:mm:ss').format('H.mm'),
-        thu_open=moment(rows[0]['open_hour.thu_open'], 'HH:mm:ss').format('H.mm'),
-        thu_close=moment(rows[0]['open_hour.thu_close'], 'HH:mm:ss').format('H.mm'),
-        fri_open=moment(rows[0]['open_hour.fri_open'], 'HH:mm:ss').format('H.mm'),
-        fri_close=moment(rows[0]['open_hour.fri_close'], 'HH:mm:ss').format('H.mm'),
-        sat_open=moment(rows[0]['open_hour.sat_open'], 'HH:mm:ss').format('H.mm'),
-        sat_close=moment(rows[0]['open_hour.sat_close'], 'HH:mm:ss').format('H.mm'),
-        sun_open=moment(rows[0]['open_hour.sun_open'], 'HH:mm:ss').format('H.mm'),
-        sun_close=moment(rows[0]['open_hour.sun_close'], 'HH:mm:ss').format('H.mm');
+      var opList = [];
+      for (var i = 0; i < op_time.length; i++) {
+        var days = moment(op_time[i].day, 'e').format('dddd'); 
+        if (op_time[i].open_time !== null){
+          var open = moment(op_time[i].open_time, 'HH:mm:ss').format('H.mm');
+          var close = moment(op_time[i].close_time, 'HH:mm:ss').format('H.mm');
+          var help = Object.assign({days, open, close}, op_time[i]);
+          opList.push(help);
+        }
+        // else {
+        //   var open = 'closed';
+        //   var close = 'closed';
+        // }
+
+        // var help = Object.assign({days, open, close}, op_time[i]);
+        // opList.push(help);
+      }
+      console.log(opList);
 
       var time = moment(),
-        beforeTime = moment(mon_open, 'H:mm'),
-        afterTime = moment(mon_close, 'H:mm');
+        day = moment().day(),
+        openTime = moment(op_time[day-1].open_time, 'HH:mm:ss'),
+        closeTime = moment(op_time[day-1].close_time, 'HH:mm:ss');
 
-      if (time.isBetween(beforeTime, afterTime)) {
+      if (time.isBetween(openTime, closeTime)) {
         console.log('buka');
         var status = "Open Now";
       } else {
         console.log('tutup');
         var status = "Close Now";
       }
-      console.log(moment().day());
-      res.render('guest/detail', {
-        title: rows[0].name+' | Outlet Finder', data: reviewList, 
+      console.log(moment().day(), op_time[moment().day()-1].open_time, op_time[moment().day()-1].close_time, status);
+      //console.log(moment().day());
+     // console.log(op_time);
+      res.render('guest/detail-2', {
+        title: rows[0].name+' | Outlet Finder', data: reviewList, op: opList,
         //data: rows,
         status:status,
         id:  rows[0].id,
@@ -167,21 +184,14 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         business_address: rows[0]['business.address.formatted_address'],
         path: rows[0]['business.file.path'], file_name: rows[0]['business.file.name'], 
         //category: 
-        //openhour
-        mon_open: mon_open, mon_close: mon_close, 
-        tue_open: tue_open, tue_close: tue_close, 
-        wed_open: wed_open, wed_close: wed_close, 
-        thu_open: thu_open, thu_close: thu_close, 
-        fri_open: fri_open, fri_close: fri_close, 
-        sat_open: sat_open, sat_close: sat_close, 
-        sun_open: sun_open, sun_close: sun_close, 
+        
         'info': req.flash('info'), 'more': req.flash('more'), 
       })
     }).catch(err => {
       console.error(err);
     });
   })
-    
+})
   //res.render('guest/detail', { title: 'Detail Outlet | Oulet Finder' });
 });
 

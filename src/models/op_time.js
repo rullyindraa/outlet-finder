@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var open_hours = sequelize.define('open_hours', {
+  var op_time = sequelize.define('op_time', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     day: {
-      type: DataTypes.INTEGER
+      type: DataTypes.ENUM('0','1','2','3','4','5','6'),
+      allowNull: false,
+      defaultValue: null
     },
     open_time: {
       type: DataTypes.TIME,
@@ -37,8 +39,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {});
-  open_hours.associate = function(models) {
-    // associations can be defined here
+  op_time.associate = function(models) {
+    op_time.belongsTo(models['outlet']);
   };
-  return open_hours;
+  return op_time;
 };
