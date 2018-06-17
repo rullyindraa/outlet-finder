@@ -15,9 +15,12 @@ const review = models.review;
 const open_hours = models.open_hours;
 const op_time = models.op_time;
 const moment = require('moment');
+moment.locale('id');
 const flash = require('connect-flash')
 // var moment2 = require("moment-business-time");
 const Op = Sequelize.Op;
+const Libur = require('libur');
+const libur = new Libur();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -167,28 +170,81 @@ router.get('/detail/outlet/:id', function(req, res, next) {
           // var help = Object.assign({days, open, close}, op_time[i]);
           // opList.push(help);
         }
-        // console.log('try',moment().isoWeekday(2).format('dddd'));
-        // console.log('try2',moment().isoWeekday(op_time[0].day).format('dddd'));
-        // console.log(op_time[0].day);
-        // console.log(op_time[6].day);
-        // console.log(op_time);
-        // console.log(opList);
 
-        var time = moment(),
-          day = moment().isoWeekday(),
-          openTime = moment(op_time[day-1].open_time, 'HH:mm:ss'),
-          closeTime = moment(op_time[day-1].close_time, 'HH:mm:ss');
+        // var time = moment(),
+        //   day = moment().isoWeekday(),
+        //   openTime = moment(op_time[day-1].open_time, 'HH:mm:ss'),
+        //   closeTime = moment(op_time[day-1].close_time, 'HH:mm:ss');
 
-        if (time.isBetween(openTime, closeTime)) {
-          console.log('buka');
-          var status = "Open Now";
-        } else {
-          console.log('tutup');
-          var status = "Close Now";
+        // if (time.isBetween(openTime, closeTime)) {
+        //   console.log('buka');
+        //   var status = "Open Now";
+        // } else {
+        //   console.log('tutup');
+        //   var status = "Close Now";
+        // }
+
+        // console.log(moment().isoWeekday(), op_time[moment().isoWeekday()-1].open_time, op_time[moment().isoWeekday()-1].close_time, status);
+        // console.log(libur.getDataByYear(2018));
+        // var lib = libur.getDataByYear(2018);
+        // var val = lib[0].data[11].date;
+        // console.log(lib);
+
+        var target = convertDate(2018).filter(isSame);
+        var isiTarget = target[0];
+        console.log('isi target',isiTarget);
+        // var a = moment(val, 'D MMMM YYYY').format();
+        var d = moment().format();
+        // console.log(a, ' ',d);
+        var a1 = moment(isiTarget);
+        var a2 = moment(d);
+        // var a1 = moment([2018,6,18]);
+        // var a2 = moment([2018,6,20]);
+        var status = '';
+        console.log(a1,a2);
+        console.log(a1.diff(a2, 'days'));
+        if (rows.close_on_public_holiday === 1){
+          console.log('ikut kalender libur')
+          if (a1.diff(a2, 'days') === 0) {
+            console.log('tanggal merah');
+            status = 'Holiday Now';
+          }
+          else {
+            console.log('tanggal hitam')
+            var time = moment(),
+            day = moment().isoWeekday(),
+            // day = 3,
+            openTime = moment(op_time[day-1].open_time, 'HH:mm:ss'),
+            closeTime = moment(op_time[day-1].close_time, 'HH:mm:ss');
+
+            if (time.isBetween(openTime, closeTime)) {
+              console.log('buka');
+              status = "Open Now";
+            } else {
+              console.log('tutup');
+              status = "Close Now";
+            }
+          }
         }
-        console.log(moment().isoWeekday(), op_time[moment().isoWeekday()-1].open_time, op_time[moment().isoWeekday()-1].close_time, status);
-        
-        // console.log('other', other_outlet);
+        else {
+          console.log('tidak ikut');
+            var time = moment(),
+            day = moment().isoWeekday(),
+            // day = 3,
+            openTime = moment(op_time[day-1].open_time, 'HH:mm:ss'),
+            closeTime = moment(op_time[day-1].close_time, 'HH:mm:ss');
+
+            if (time.isBetween(openTime, closeTime)) {
+              console.log('buka');
+              status = "Open Now";
+            } else {
+              console.log('tutup');
+              status = "Close Now";
+            }
+        }
+
+        //console.log(convertDate(2018));
+        console.log(convertDate(2018).filter(isSame));
         res.render('guest/detail-2', {
           title: rows.name+' | Outlet Finder', data: reviewList, op: opList,
           outlet: other_outlet,
@@ -252,4 +308,29 @@ router.get('/more-reviews/:id', function(req, res, next) {
   
 });
 
+// function getDate(tanggal){
+//   var dataLibur = data.filter (value => {
+//     if (value.tanggal === )
+//   })
+// }
+
+function convertDate(year){
+  var holiday = [];
+  var lib = libur.getDataByYear(year);
+  for(var i = 0; i<lib[0].data.length; i++){
+    var val = lib[0].data[i].date;
+    var conv = moment(val, 'D MMMM YYYY').format();
+    holiday.push(conv);
+  }
+  return holiday;
+}
+
+function isSame(value) {
+  var a1 = moment(value);
+  var d = moment().format();
+  var a2 = moment(d);
+  return (a1.diff(a2, 'days') === 0);
+}
+
+//var filtered = convertDate(2018).filter(isSame);
 module.exports = router;
