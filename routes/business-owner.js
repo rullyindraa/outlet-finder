@@ -696,8 +696,6 @@ router.get('/outlet/create-outlet', function(req, res) {
     }
   })
   .then(rows => {
-    var i = 1;
-      console.log('bbb',req.body.open1);
     res.render('business-owner/create-outlet2', { title: 'Create Outlet | Outlet Finder', active4: 'active-navbar', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
   })
 });
@@ -769,7 +767,8 @@ router.post('/outlet/create-outlet', function(req, res){
               email: req.body.email,
               phone_number: req.body.phone_number,
               website: req.body.website,
-              description: req.body.description
+              description: req.body.description,
+              close_on_public_holiday: req.body.public_holiday
             }, {
               include: [{
                 model: open_hours
@@ -792,6 +791,7 @@ router.post('/outlet/create-outlet', function(req, res){
             })
             .then(rows => {
               console.log(rows);
+              console.log(req.body.public_holiday);
               req.flash('info', 'New Outlet Added');
               res.redirect('/business-owner/outlet');
             })
@@ -858,9 +858,16 @@ router.get('/outlet/:id', function(req, res) {
         var opList = [];
         for (var i = 0; i < op_time.length; i++) {
           var days = moment().isoWeekday(i+1).format('dddd'); 
-          var open = moment(op_time[i].open_time, 'HH:mm:ss').format('HH:mm');
-          var close = moment(op_time[i].close_time, 'HH:mm:ss').format('HH:mm');
-          var help = Object.assign({days, open, close}, op_time[i]);
+          if (op_time[i].open_time != null){
+            var open = moment(op_time[i].open_time, 'HH:mm:ss').format('HH:mm');
+            var close = moment(op_time[i].close_time, 'HH:mm:ss').format('HH:mm');
+            var help = Object.assign({days, open, close}, op_time[i]);
+          }
+          else {
+            var open = null;
+            var close = null;
+            var help = Object.assign({days, open, close}, op_time[i]);
+          }
           opList.push(help);
         }
         console.log('oplis',opList);
@@ -871,7 +878,7 @@ router.get('/outlet/:id', function(req, res) {
           title: 'Edit Outlet | Outlet Finder', 
           //data: rows,
           data: opList,
-          id:  rows[0].id,
+          id:  rows[0].id, holiday: rows[0].close_on_public_holiday,
           outlet_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
           path: rows[0]['file.path'], file_name: rows[0]['file.name'], file_id: rows[0].fileId,
           address_id: rows[0].addressId,
@@ -948,6 +955,7 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
               phone_number: req.body.phone_number,
               website: req.body.website,
               description: req.body.description,
+              close_on_public_holiday: req.body.public_holiday,
               updatedAt: new Date()
             }, 
             {
@@ -1013,6 +1021,7 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
           website: req.body.website,
           description: req.body.description,
           businessId: req.body.business,
+          close_on_public_holiday: req.body.public_holiday,
           updatedAt: new Date()
         }, 
         {
@@ -1021,10 +1030,19 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
           }
         })
         .then(outlet => {
-          for (var i=1; i<8; i++){
+          for (var i=0; i<7; i++){
+            if(req.body.open[i] !== ''){
+              var open_time= req.body.open[i],
+              close_time= req.body.close[i];
+            }
+            else {
+              var open_time= null,
+              close_time= null;
+            }
+            
             op_time.update({
-              open_time: req.body.open[i-1],
-              close_time: req.body.close[i-1]
+              open_time: open_time,
+              close_time: close_time
             },
             {
               where: {
@@ -1032,7 +1050,7 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
                   {
                     outletId: req.body.outlet_id
                   }, {
-                    day: [i]
+                    day: [i+1]
                   }
                 ]
               }

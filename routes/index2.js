@@ -15,7 +15,7 @@ const review = models.review;
 const open_hours = models.open_hours;
 const op_time = models.op_time;
 const moment = require('moment');
-moment.locale('id');
+//moment.locale('id');
 const flash = require('connect-flash')
 // var moment2 = require("moment-business-time");
 const Op = Sequelize.Op;
@@ -315,6 +315,7 @@ router.get('/more-reviews/:id', function(req, res, next) {
 // }
 
 function convertDate(year){
+  moment.locale('id');
   var holiday = [];
   var lib = libur.getDataByYear(year);
   for(var i = 0; i<lib[0].data.length; i++){

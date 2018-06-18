@@ -9,7 +9,7 @@ block content
         li.breadcrumb-item.active.h4 Edit Outlet
       form.needs-validation(enctype="multipart/form-data", action='/business-owner/outlet/edit-outlet', method='POST', novalidate='', style='color: black; margin-left: -12px;')
         .form-group
-          input.form-control(type='text', name='outlet_id', value=id)
+          input.form-control(type='hidden', name='outlet_id', value=id)
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='business') Business:
             input.form-control(type='hidden', id='buss' value=businessId)
@@ -38,7 +38,7 @@ block content
               | Please enter a valid email
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
-            label(for='phone_number') Phone Number:
+            label(for='phone_number') Contact:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
             input.form-control(type='text', name='phone_number', placeholder='Phone Number', required='' value=phone_number)
             .invalid-feedback
@@ -51,7 +51,7 @@ block content
             .invalid-feedback
               | Please enter your website
         .form-group
-          input.form-control(type='text', name='file_id', value=file_id)
+          input.form-control(type='hidden', name='file_id', value=file_id)
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='photo') Photo:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
@@ -67,7 +67,7 @@ block content
             | Please enter your description
         .form-group.col-lg-10.col-md-10.col-sm-10.col-xl-10
           label(for='address') Address:
-          input#address_id.form-control(type='text', name='address_id', value=address_id)
+          input#address_id.form-control(type='hidden', name='address_id', value=address_id)
           .card.mb-3
             .card-body
               .form-row
@@ -132,11 +132,11 @@ block content
                     label.form-check-label
                       | Closed
                   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                    input.form-control(type='time', name='open', min="00:00" max="24:00" value=value.open required)
+                    input.form-control(type='time', name='open', min="00:00" max="24:00" value=value.open)
                     .invalid-feedback
                       | Please select categories
                   .form-group.col-lg-3.col-md-3.col-sm-3.col-xs-3
-                    input.form-control(type='time', name='close', min="00:00" max="24:00" value=value.close required)
+                    input.form-control(type='time', name='close', min="00:00" max="24:00" value=value.close)
                     .invalid-feedback
                       | Please select categories
               //- .form-row
@@ -230,10 +230,11 @@ block content
               //-     .invalid-feedback
               //-       | Please select categories
               .form-group.col-lg-8.col-md-8.col-sm-8.col-xs-8(style='margin-left: 5px;')
-                input.form-check-input(name='public_holiday', type='checkbox', value='1', checked)
+                //input(type="hidden", name="public_holiday", value=0)
+                input#public_holiday.form-check-input(name='public_holiday', type='checkbox' value='1')
                 label.form-check-label
                   | Set as closed on public holiday
-
+              //input(type="checkbox", name="public_holiday", checked=(true===false ? "checked" : undefined)) 
         input.btn.btn-md.color-ink.ml-3.mb-5(type='submit', value='Submit')
         input.btn.btn-md.color-ink.ml-2.mb-5(type='submit', value='Submit and Add Outlet >')
     span#yes
@@ -243,3 +244,5 @@ block content
   include ../includes/logout.pug
   
   include ../includes/footer.pug
+  //script.
+    document.getElementById("public_holiday").checked = holiday === 'true';
