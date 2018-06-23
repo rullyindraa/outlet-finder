@@ -24,7 +24,18 @@ const libur = new Libur();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  var lat = -7.7830011;
+  var lng = 110.3892038;
+  address.findAll({
+    attributes: [[Sequelize.literal("6371 * acos(cos(radians("+lat+")) * cos(radians(ST_X(location))) * cos(radians("+lng+") - radians(ST_Y(location))) + sin(radians("+lat+")) * sin(radians(ST_X(location))))"),'distance']],
+    order: Sequelize.col('distance'),
+    limit: 10,
+    raw:true
+  })
+  .then(near => {
+    console.log(near);
   res.render('guest/index', { title: 'Oulet Finder' });
+  })
 });
 router.get('/search-result', function(req, res, next) {
   res.render('guest/search-result', { title: 'Search Result | Oulet Finder' });
@@ -112,6 +123,15 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       raw:true
     })
     .then(review => {
+      var lat = -7.7830011;
+      var lng = 110.3892038;
+      address.findAll({
+        attributes: [[Sequelize.literal("6371 * acos(cos(radians("+lat+")) * cos(radians(ST_X(location))) * cos(radians("+lng+") - radians(ST_Y(location))) + sin(radians("+lat+")) * sin(radians(ST_X(location))))"),'distance']],
+        order: Sequelize.col('distance'),
+        limit: 10,
+        raw:true
+      })
+      .then(near => {
       outlet.findAll({
         attributes: ['id', 'name'],
         where: {
@@ -129,6 +149,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         raw: true
       })
       .then(other_outlet => {
+        console.log('terdekat',near);
         var reviewList = [];
         if(review.length !== 0){
           if (review.length > 3){
@@ -191,12 +212,16 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         // console.log(lib);
 
         var target = convertDate(2018).filter(isSame);
+        console.log('target kal', target);
         var isiTarget = target[0];
         console.log('isi target',isiTarget);
         // var a = moment(val, 'D MMMM YYYY').format();
         var d = moment().format();
         // console.log(a, ' ',d);
-        var a1 = moment(isiTarget);
+        if( isiTarget === undefined){
+          var a1 = moment([2018,1,2])
+        }
+        else var a1 = moment(isiTarget);
         var a2 = moment(d);
         // var a1 = moment([2018,6,18]);
         // var a2 = moment([2018,6,20]);
@@ -269,6 +294,7 @@ router.get('/detail/outlet/:id', function(req, res, next) {
         console.error(err);
       });
     })
+  })
   })
 })
   //res.render('guest/detail', { title: 'Detail Outlet | Oulet Finder' });
