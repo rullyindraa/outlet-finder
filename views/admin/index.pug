@@ -80,7 +80,6 @@ block content
                   th Outlets
                   th City
                   th Owner
-                  th Created Date
               tbody
                 for b in data_b
                   tr
@@ -90,8 +89,8 @@ block content
                       | 
                       a(href='/admin/oulets/business/'+b.id) view outlets >
                     td=b['address.city']
-                    td=b['user.username']
-                    td=b.createdAt
+                    td
+                      a(href='#', data-toggle='tooltip', data-placement='top', title='here')=b['user.username']
       br
       .card.mb-3.mt-7
         .card-header
@@ -107,7 +106,7 @@ block content
                   th Business
                   th City
                   th Page Views
-                  th Created Date
+                  th 
               tbody
                 for o in data_o
                   tr
@@ -115,10 +114,14 @@ block content
                     td=o[`business.business_name`]
                     td=o[`address.city_name`]
                     td=o.count_view
-                    td=o.createdAt
-                      | 
+                    td
                       a(href='/detail/outlet/'+o.id) view detail >
 
   include ../includes/logout.pug
 
   include ../includes/footer.pug
+
+  script.
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })

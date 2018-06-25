@@ -5,3 +5,4 @@ public/.DS_Store
 public/stylesheets/.DS_Store
 sendgrid.env
 views/guest/c-2.pug
+views/guest/nearest-outlet.pug
