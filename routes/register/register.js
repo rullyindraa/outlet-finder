@@ -33,9 +33,12 @@ router.get('/', function(req, res, next) {
 
 
 router.post('/verify_account', function(req, res, next) {
+  console.log(req.body.username);
+  console.log(req.body.email)
   validateJoi.validate({
     username: req.body.username,
-    email: req.body.email}, function(errors, value) {
+    email: req.body.email
+  }, function(errors, value) {
       var email = req.body.email;
       var username = req.body.username;
       console.log(email);
@@ -110,8 +113,8 @@ router.post('/verify_account', function(req, res, next) {
             subject: config.register_message.subject_register,
             text: config.register_message.text_register1 + 'http://' + req.headers.host + '/register/next/' + token + '\n\n' + config.register_message.text_register2
           };
-          console.log("token : ",token, 'rows', rows, 'done', done);
-          console.log(mailOptions);
+          // console.log('APAKAH INI MASALAHNYA',"token : ",token, 'rows', rows, 'done', done);
+          console.log('isi buat kirim email ',mailOptions);
           sgMail.send(mailOptions);
         }
         ], function(err) {
