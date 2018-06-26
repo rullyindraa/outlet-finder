@@ -21,12 +21,24 @@ html
     script(src='https://cdn.rawgit.com/PascaleBeier/bootstrap-validate/v2.1.3/dist/bootstrap-validate.js')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='icon', href='/images/square-icon.png')
+    script(src='/javascripts/notify.js')
     title=title
     style.
       #map {
         width: 100%;
         height: 300px;
         border-radius: 4px;
+      }
+      #notifications {
+        cursor: pointer;
+        position: fixed;
+        right: 0px;
+        z-index: 9999;
+        bottom: 0px;
+        margin-bottom: 22px;
+        margin-right: 15px;
+        min-width: 300px; 
+        max-width: 300px;   
       }
     script.
       $(document).ready(function () {
@@ -36,6 +48,13 @@ html
           return this.href == url;
         }).parent().addClass('active-navbar');
       });
+      $( document ).ready(function() {
+        var help = $('span#yes').find('option').val();
+        if (help !== undefined && help !== ""){
+          Notify(help, null, null, 'success');
+        }
+      });
 
   body#page-top.fixed-nav.sticky-footer.bg
+    #notifications 
     block content

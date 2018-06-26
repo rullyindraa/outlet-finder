@@ -28,8 +28,8 @@ block content
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='name') Business Name:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='name', placeholder='Business Name', required='' value=business_name)
-            .invalid-feedback
+            input#name.form-control(type='text', name='name', placeholder='Business Name', required='' value=business_name)
+            //.invalid-feedback
               | Please enter your business name
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
@@ -42,15 +42,15 @@ block content
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='phone_number') Contact Number:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input#phone_number.form-control(type='text', name='phone_number', placeholder='Phone Number', required='' value=phone_number)
+            input#phone_number.form-control(type='text', name='phone_number', placeholder='081xxxxx', required='' value=phone_number)
             //.invalid-feedback
               | Please enter a valid phone number
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='website') Website:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='website', placeholder='Website', required='' value=website)
-            .invalid-feedback
+            input#website.form-control(type='text', name='website', placeholder='http://www.example.com', required='' value=website)
+            //.invalid-feedback
               | Please enter your website
         .form-group
           input.form-control(type='hidden', name='Fid', value=Fid)
@@ -67,9 +67,9 @@ block content
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='Description') Description:
           .col-lg-8.col-md-8.col-sm-8.col-xs-8
-            textarea.form-control(name="description", rows="4")
+            textarea#description.form-control(name="description", rows="4")
               =description
-            .invalid-feedback
+            //.invalid-feedback
               | Please enter your description
         .form-group.col-lg-10.col-md-10.col-sm-10.col-xl-10
           label(for='address') Address:
@@ -91,37 +91,37 @@ block content
                 input#address_id.form-control(type='hidden', name='address_id', value=address_id)
                 .form-group.col-lg-6.col-md-6.col-sm-6.col-xl-6
                   label Line 1:
-                  input#line1.form-control(type='text', name='line1', placeholder='Line 1 Address', required='' value=line1)
+                  input#line1.form-control(type='text', name='line1', placeholder='Line 1 Address', readonly value=line1)
                 .form-group.col-lg-6.col-md-6.col-sm-6.col-xl-6
                   label Line 2:
-                  input#line2.form-control(type='text', name='line2', placeholder='Line 2 Address', required='' value=line2)
+                  input#line2.form-control(type='text', name='line2', placeholder='Line 2 Address', readonly value=line2)
               .form-row
                 .form-group.col-lg-4.col-md-4.col-sm-4.col-xl-4
                   label Country:
-                  input#country.form-control(type='text', name='country', placeholder='Country', required='' value=country)
+                  input#country.form-control(type='text', name='country', placeholder='Country', readonly value=country)
                 .form-group.col-lg-4.col-md-4.col-sm-4.col-xl-4
                   label Administrative Area Level 1:
-                  input#adm1.form-control(type='text', name='adm_area_lv1', placeholder='Administrative Area Level 1', required='' value=adm_area_lv1)
+                  input#adm1.form-control(type='text', name='adm_area_lv1', placeholder='Administrative Area Level 1', readonly value=adm_area_lv1)
                 .form-group.col-lg-4.col-md-4.col-sm-4.col-xl-4
                   label Administrative Area Level 2:
-                  input#adm2.form-control(type='text', name='adm_area_lv2', placeholder='Administrative Area Level 2', required='' value=adm_area_lv2)
+                  input#adm2.form-control(type='text', name='adm_area_lv2', placeholder='Administrative Area Level 2', readonly value=adm_area_lv2)
               .form-row
                 .form-group.col-lg-4.col-md-4.col-sm-4.col-xl-4
                   label Administrative Area Level 3:
-                  input#adm3.form-control(type='text', name='adm_area_lv3', placeholder='Administrative Area Level 3', required='' value=adm_area_lv3)
+                  input#adm3.form-control(type='text', name='adm_area_lv3', placeholder='Administrative Area Level 3', readonly value=adm_area_lv3)
                 .form-group.col-lg-4.col-md-4.col-sm-4.col-xl-4
                   label Administrative Area Level 4:
-                  input#adm4.form-control(type='text', name='adm_area_lv4', placeholder='Administrative Area Level 4', required='' value=adm_area_lv4)
+                  input#adm4.form-control(type='text', name='adm_area_lv4', placeholder='Administrative Area Level 4', readonly value=adm_area_lv4)
                 .form-group.col-lg-4.col-md-4.col-sm-4.col-xl-4
                   label Postal Code:
-                  input#postal_code.form-control(type='text', name='postal_code', placeholder='Postal Code', required='' value=postal_code)
+                  input#postal_code.form-control(type='text', name='postal_code', placeholder='Postal Code', readonly value=postal_code)
               .form-row
                 .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6
                   label Latitude:
-                  input#lat.form-control(type='text', name='lat', placeholder='Latitude', required='' value=lat)
+                  input#lat.form-control(type='text', name='lat', placeholder='Latitude', readonly value=lat)
                 .form-group.col-lg-6.col-md-6.col-sm-6.col-xs-6
                   label Longitude:
-                  input#lng.form-control(type='text', name='lng', placeholder='Longitude', required='' value=long)
+                  input#lng.form-control(type='text', name='lng', placeholder='Longitude', readonly value=long)
               .form-row
                 .form-group.col-lg-12.col-md-12.col-sm-12.col-xl-12
                   label Formatted Address:
@@ -156,5 +156,9 @@ block content
     function cancel() {
       $("#myModal").modal('show');
     }
-    bootstrapValidate('#email', 'email:Please enter a valid email address');
-    bootstrapValidate('#phone_number', 'numeric:Please only enter numeric characters!')
+    bootstrapValidate('#name', 'min:3:Enter at least 3 characters!');
+    bootstrapValidate('#name', 'required:Please enter your business name.')
+    bootstrapValidate('#email', 'email:Please enter a valid email address.');
+    bootstrapValidate('#phone_number', 'numeric:Only enter numeric characters.')
+    bootstrapValidate('#website', 'url:Please enter a valid website url.')
+    bootstrapValidate('#formatted_address', 'required:Please enter your address')

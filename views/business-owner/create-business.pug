@@ -13,38 +13,38 @@ block content
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='categories') Categories:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            select.form-control.selectpicker(name="category" multiple='', required)
+            select#category.form-control.selectpicker(name="category" multiple='', required)
               each value in Categories
                 option(value=value.id) #{value.name}
-                .invalid-feedback
+                //.invalid-feedback
                   | Please select category
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='name') Business Name:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='name', placeholder='Business Name', required='')
+            input#name.form-control(type='text', name='name', placeholder='Business Name', required='')
             .invalid-feedback
               | Please enter your business name
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='email') Email:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='email', name='email', placeholder='Email', required='')
-            .invalid-feedback
+            input#email.form-control(type='email', name='email', placeholder='Email')
+            //.invalid-feedback
               | Please enter a valid email
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
-            label(for='phone_number') Phone Number:
+            label(for='phone_number') Contact Number:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='phone_number', placeholder='Phone Number', required='')
-            .invalid-feedback
+            input#phone_number.form-control(type='text', name='phone_number', placeholder='Phone Number', required='')
+            //.invalid-feedback
               | Please enter a valid phone number
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='website') Website:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input.form-control(type='text', name='website', placeholder='Website', required='')
-            .invalid-feedback
+            input#website.form-control(type='text', name='website', placeholder='Website', required='')
+            //.invalid-feedback
               | Please enter your website
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
@@ -58,7 +58,7 @@ block content
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='description') Description:
           .col-lg-8.col-md-8.col-sm-8.col-xs-8
-            textarea.form-control(name="description", rows="4")
+            textarea#description.form-control(name="description", rows="4")
         .form-group.col-lg-10.col-md-10.col-sm-10.col-xl-10
           label(for='address') Address:
           .card.mb-3
@@ -127,3 +127,11 @@ block content
       style: 'btn-select',
       size: 4
     });
+    //bootstrapValidate('#category', 'required:Please select your business category.')
+    bootstrapValidate('#name', 'min:3:Enter at least 3 characters!');
+    bootstrapValidate('#name', 'required:Please enter your business name.')
+    bootstrapValidate('#email', 'email:Please enter a valid email address.');
+    bootstrapValidate('#phone_number', 'numeric:Only enter numeric characters.')
+    bootstrapValidate('#website', 'url:Please enter a valid website url.')
+    bootstrapValidate('#pac-input', 'required:Please enter your address')
+    bootstrapValidate('#formatted_address', 'required:Please enter your address')

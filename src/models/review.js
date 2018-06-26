@@ -48,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
     }
   }, {});
   review.associate = function(models) {

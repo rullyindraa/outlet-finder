@@ -145,7 +145,7 @@ router.get('/next/:token', function(req, res,){
   })
   .catch(err => {
     console.log(err);
-    res.render('error');
+    res.render('error', {message : err});
   })
 });
 

@@ -24,9 +24,6 @@ module.exports = (sequelize, DataTypes) => {
     adm_area_lv4: {
       type: DataTypes.STRING
     },
-    adm_area_lv4: {
-      type: DataTypes.STRING
-    },
     raw_address: {
       type: DataTypes.TEXT,
       allowNull: true
@@ -61,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
     
     // address.belongsTo(models['user']);
     address.hasOne(models['business']);
+    address.hasOne(models['outlet']);
     //address.belongsTo(models['outlet']);
   };
   return address;

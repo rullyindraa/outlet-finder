@@ -85,9 +85,17 @@ function initMap() {
   
   var myLatLng = {lat: lat, lng: lng};
 
+  var icon = {
+    url: "http://www.clker.com/cliparts/U/Q/d/9/V/E/orange-pin-md.png", // url
+    scaledSize: new google.maps.Size(38, 40), // scaled size
+    origin: new google.maps.Point(0,0), // origin
+    anchor: new google.maps.Point(0, 0) // anchor
+  };
+
   var marker = new google.maps.Marker({
     map: map,
     draggable: true,
+    icon: icon,
     position : {
     lat : parseFloat( lat ),
     lng : parseFloat( lng )}

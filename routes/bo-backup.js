@@ -14,7 +14,6 @@ const page_view = models.page_view;
 const user = models.user;
 const review = models.review;
 const open_hours = models.open_hours;
-const op_time = models.op_time;
 const validateJoi = require('../src/validation/create-business');
 var multer = require('multer');
 const path = require('path');
@@ -22,7 +21,6 @@ const moment = require('moment');
 var fs = require('fs');
 var faker = require('faker');
 const flash = require('connect-flash');
-const Op = Sequelize.Op;
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -446,6 +444,31 @@ router.post('/business/edit-business', upload, function(req, res){
     lat: req.body.lat, lng: req.body.lng}, function(errors, value) {
       console.log(errors);
       if (!errors) {
+      //   address.update({
+      //     line1: req.body.line1, 
+      //     line2: req.body.line2,
+      //     adm_area_lv1: req.body.adm_area_lv1, 
+      //     adm_area_lv2: req.body.adm_area_lv2, 
+      //     adm_area_lv3: req.body.adm_area_lv3, 
+      //     adm_area_lv4: req.body.adm_area_lv4, 
+      //     raw_address: req.body.line1+ ` ` +req.body.line2,
+      //     formatted_address: req.body.formatted_address,
+      //     postal_code: req.body.postal_code,
+      //     country: req.body.country,
+      //     //Sequelize.fn('ST_GeomFromText', 'POINT(-7.778737 110.389407)')
+      //     location: Sequelize.fn('ST_GeomFromText', `POINT(`+req.body.lat+` `+req.body.lng+`)`),
+      //     updatedAt: new Date()
+      //   }, {
+      //     where: {
+      //       id: req.body.address_id
+      //     }
+      //   },{
+      //     include: [{
+      //       model: business
+      //     }]
+      //   },
+      // )
+      // .then(row => {
         if (req.file) {
           // if old photo exists (old photo not empty) then unlink / remove the photo in directory
           if (req.body.old_photo !== '')
@@ -514,8 +537,8 @@ router.post('/business/edit-business', upload, function(req, res){
           }).catch(err => {
             console.error('errpostnya', err);
           });
-        })
-      }
+          }) 
+        }
         
         address.update({
           line1: req.body.line1, 
@@ -626,7 +649,7 @@ router.get('/outlet', function(req, res) {
   .then(rows => {
     category.findAll()
     .then(cat => {
-      // console.log(rows);
+      console.log(rows);
       res.render('business-owner/outlets', { title: 'Outlet Lists | Outlet Finder', 
       data: rows,
       active4: 'active-navbar', categories: cat, 
@@ -696,7 +719,7 @@ router.get('/outlet/create-outlet', function(req, res) {
     }
   })
   .then(rows => {
-    res.render('business-owner/create-outlet2', { title: 'Create Outlet | Outlet Finder', active4: 'active-navbar', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
+    res.render('business-owner/create-outlet', { title: 'Create Outlet | Outlet Finder', active4: 'active-navbar', business: rows, name: req.user.first_name + ' ' + req.user.last_name, photo:req.user[`file.pp`] });
   })
 });
 
@@ -767,31 +790,33 @@ router.post('/outlet/create-outlet', function(req, res){
               email: req.body.email,
               phone_number: req.body.phone_number,
               website: req.body.website,
-              description: req.body.description,
-              close_on_public_holiday: req.body.public_holiday
+              description: req.body.description
             }, {
               include: [{
                 model: open_hours
               }]
             })
             .then(row => {
-              for (var i = 1; i < 8; i++){
-                op_time.create({
-                  outletId: row.id,
-                  day: ''+i,
-                  open_time: req.body.open[i],
-                  close_time: req.body.close[i],
-                  // day: '1',
-                  // open_time: req.body.open1,
-                  // close_time: req.body.close1,
-                })
-                // console.log(req.body.open_i);
-                // console.log(req.body.open+i);
-              }
+              open_hours.create({
+                outletId: row.id,
+                mon_open: req.body.mon_open,
+                mon_close: req.body.mon_close,
+                tue_open: req.body.tue_open,
+                tue_close: req.body.tue_close,
+                wed_open: req.body.wed_open,
+                wed_close: req.body.wed_close,
+                thu_open: req.body.thu_open,
+                thu_close: req.body.thu_close,
+                fri_open: req.body.fri_open,
+                fri_close: req.body.fri_close,
+                sat_open: req.body.sat_open,
+                sat_close: req.body.sat_close,
+                sun_open: req.body.sun_open,
+                sun_close: req.body.sun_close,
+              })
             })
             .then(rows => {
               console.log(rows);
-              console.log(req.body.public_holiday);
               req.flash('info', 'New Outlet Added');
               res.redirect('/business-owner/outlet');
             })
@@ -837,7 +862,10 @@ router.get('/outlet/:id', function(req, res) {
       {
         model: file,
         attributes: ['name', ['relative_path', 'path']]
-      }
+      },
+      {
+        model: open_hours
+      },
     ],
     raw:true
   })
@@ -848,56 +876,53 @@ router.get('/outlet/:id', function(req, res) {
       }
     })
     .then(bus => {
-      op_time.findAll({
-        where: {
-          outletId: req.params.id,
-        },
-        raw:true
+      console.log('inioutlet',rows);
+      
+      var mon_open=moment(rows[0]['open_hour.mon_open'], 'HH:mm:ss').format('HH:mm'),
+        mon_close=moment(rows[0]['open_hour.mon_close'], 'HH:mm:ss').format('HH:mm'),
+        tue_open=moment(rows[0]['open_hour.tue_open'], 'HH:mm:ss').format('HH:mm'),
+        tue_close=moment(rows[0]['open_hour.tue_close'], 'HH:mm:ss').format('HH:mm'),
+        wed_open=moment(rows[0]['open_hour.wed_open'], 'HH:mm:ss').format('HH:mm'),
+        wed_close=moment(rows[0]['open_hour.wed_close'], 'HH:mm:ss').format('HH:mm'),
+        thu_open=moment(rows[0]['open_hour.thu_open'], 'HH:mm:ss').format('HH:mm'),
+        thu_close=moment(rows[0]['open_hour.thu_close'], 'HH:mm:ss').format('HH:mm'),
+        fri_open=moment(rows[0]['open_hour.fri_open'], 'HH:mm:ss').format('HH:mm'),
+        fri_close=moment(rows[0]['open_hour.fri_close'], 'HH:mm:ss').format('HH:mm'),
+        sat_open=moment(rows[0]['open_hour.sat_open'], 'HH:mm:ss').format('HH:mm'),
+        sat_close=moment(rows[0]['open_hour.sat_close'], 'HH:mm:ss').format('HH:mm'),
+        sun_open=moment(rows[0]['open_hour.sun_open'], 'HH:mm:ss').format('HH:mm'),
+        sun_close=moment(rows[0]['open_hour.sun_close'], 'HH:mm:ss').format('HH:mm');
+      
+      res.render('business-owner/edit-outlet', {
+        title: 'Edit Outlet | Outlet Finder', 
+        //data: rows,
+        id:  rows[0].id,
+        outlet_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
+        path: rows[0]['file.path'], file_name: rows[0]['file.name'], file_id: rows[0].fileId,
+        address_id: rows[0].addressId,
+        raw_address: rows[0]['address.raw_address'], 
+        line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
+        adm_area_lv1: rows[0]['address.adm_area_lv1'], adm_area_lv2: rows[0]['address.adm_area_lv2'], adm_area_lv3: rows[0]['address.adm_area_lv3'], adm_area_lv4: rows[0]['address.adm_area_lv4'],
+        formatted_address: rows[0]['address.formatted_address'],
+        lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
+        businessId:rows[0].businessId, business_name: rows[0]['business.name'],
+        active4: 'active-navbar',
+        business: bus,
+        //openhour
+        mon_open: mon_open, mon_close: mon_close, 
+        tue_open: tue_open, tue_close: tue_close, 
+        wed_open: wed_open, wed_close: wed_close, 
+        thu_open: thu_open, thu_close: thu_close, 
+        fri_open: fri_open, fri_close: fri_close, 
+        sat_open: sat_open, sat_close: sat_close, 
+        sun_open: sun_open, sun_close: sun_close, 
+        name: req.user.first_name + ' ' + req.user.last_name, 
+        photo:req.user[`file.pp`]
       })
-      .then(op_time => {
-        var opList = [];
-        for (var i = 0; i < op_time.length; i++) {
-          var days = moment().isoWeekday(i+1).format('dddd'); 
-          if (op_time[i].open_time != null){
-            var open = moment(op_time[i].open_time, 'HH:mm:ss').format('HH:mm');
-            var close = moment(op_time[i].close_time, 'HH:mm:ss').format('HH:mm');
-            var help = Object.assign({days, open, close}, op_time[i]);
-          }
-          else {
-            var open = null;
-            var close = null;
-            var help = Object.assign({days, open, close}, op_time[i]);
-          }
-          opList.push(help);
-        }
-        console.log('oplis',opList);
-        // console.log('inioutlet',rows);
-        
-        
-        res.render('business-owner/edit-outlet', {
-          title: 'Edit Outlet | Outlet Finder', 
-          //data: rows,
-          data: opList,
-          id:  rows[0].id, holiday: rows[0].close_on_public_holiday,
-          outlet_name:  rows[0].name, phone_number: rows[0].phone_number, email: rows[0].email, website: rows[0].website, description: rows[0].description, 
-          path: rows[0]['file.path'], file_name: rows[0]['file.name'], file_id: rows[0].fileId,
-          address_id: rows[0].addressId,
-          raw_address: rows[0]['address.raw_address'], 
-          line1: rows[0]['address.line1'], line2: rows[0]['address.line2'],
-          adm_area_lv1: rows[0]['address.adm_area_lv1'], adm_area_lv2: rows[0]['address.adm_area_lv2'], adm_area_lv3: rows[0]['address.adm_area_lv3'], adm_area_lv4: rows[0]['address.adm_area_lv4'],
-          formatted_address: rows[0]['address.formatted_address'],
-          lat: rows[0]['address.location'].coordinates[0], long: rows[0]['address.location'].coordinates[1],
-          businessId:rows[0].businessId, business_name: rows[0]['business.name'],
-          active4: 'active-navbar',
-          business: bus,
-          name: req.user.first_name + ' ' + req.user.last_name, 
-          photo:req.user[`file.pp`]
-        })
-      })
-    }).catch(err => {
-      console.error(err);
-    });
-  })
+    })
+  }).catch(err => {
+    console.error(err);
+  });
 });
 
 router.post('/outlet/edit-outlet', upload, function(req, res){
@@ -910,7 +935,9 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
       console.log(errors);
       if (!errors) {
         if (req.file) {
-          if (req.body.old_photo !== '') fs.unlink(`public/files/${req.body.old_photo}`);
+          // if old photo exists (old photo not empty) then unlink / remove the photo in directory
+          if (req.body.old_photo !== '')
+            fs.unlink(`public/files/${req.body.old_photo}`);
           var target_path = '/files/' + req.file.filename;
           file.update(
             {
@@ -925,6 +952,11 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
                 id: req.body.file_id
               }
             },
+            // {
+            //   include: [{
+            //     model: business
+            //   }]
+            // }
           )
           .then(file => {
             address.update({
@@ -955,7 +987,6 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
               phone_number: req.body.phone_number,
               website: req.body.website,
               description: req.body.description,
-              close_on_public_holiday: req.body.public_holiday,
               updatedAt: new Date()
             }, 
             {
@@ -964,24 +995,27 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
               }
             })
             .then(outlet => {
-              for (var i=1; i<8; i++){
-                op_time.update({
-                  open_time: req.body.open[i-1],
-                  close_time: req.body.close[i-1]
-                },
-                {
-                  where: {
-                    [Op.and]: [
-                      {
-                        outletId: req.body.outlet_id
-                      }, {
-                        day: [i]
-                      }
-                    ]
-                  }
-                })
-              }
-                
+              open_hours.update({
+                // outletId: row.id,
+                mon_open: req.body.mon_open,
+                mon_close: req.body.mon_close,
+                tue_open: req.body.tue_open,
+                tue_close: req.body.tue_close,
+                wed_open: req.body.wed_open,
+                wed_close: req.body.wed_close,
+                thu_open: req.body.thu_open,
+                thu_close: req.body.thu_close,
+                fri_open: req.body.fri_open,
+                fri_close: req.body.fri_close,
+                sat_open: req.body.sat_open,
+                sat_close: req.body.sat_close,
+                sun_open: req.body.sun_open,
+                sun_close: req.body.sun_close,
+              },
+              {
+                where: {
+                  outletId: req.body.outlet_id
+                }
               })
               .then(rows => {
                 //console.log(rows);
@@ -992,6 +1026,7 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
               });
             })
           })
+        })
       }
         
         address.update({
@@ -1021,7 +1056,6 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
           website: req.body.website,
           description: req.body.description,
           businessId: req.body.business,
-          close_on_public_holiday: req.body.public_holiday,
           updatedAt: new Date()
         }, 
         {
@@ -1030,42 +1064,37 @@ router.post('/outlet/edit-outlet', upload, function(req, res){
           }
         })
         .then(outlet => {
-          for (var i=0; i<7; i++){
-            if(req.body.open[i] !== ''){
-              var open_time= req.body.open[i],
-              close_time= req.body.close[i];
+          open_hours.update({
+            // outletId: row.id,
+            mon_open: req.body.mon_open,
+            mon_close: req.body.mon_close,
+            tue_open: req.body.tue_open,
+            tue_close: req.body.tue_close,
+            wed_open: req.body.wed_open,
+            wed_close: req.body.wed_close,
+            thu_open: req.body.thu_open,
+            thu_close: req.body.thu_close,
+            fri_open: req.body.fri_open,
+            fri_close: req.body.fri_close,
+            sat_open: req.body.sat_open,
+            sat_close: req.body.sat_close,
+            sun_open: req.body.sun_open,
+            sun_close: req.body.sun_close,
+          },
+          {
+            where: {
+              outletId: req.body.outlet_id
             }
-            else {
-              var open_time= null,
-              close_time= null;
-            }
-            
-            op_time.update({
-              open_time: open_time,
-              close_time: close_time
-            },
-            {
-              where: {
-                [Op.and]: [
-                  {
-                    outletId: req.body.outlet_id
-                  }, {
-                    day: [i+1]
-                  }
-                ]
-              }
-            })
-          }
-        })
-        .then(rows => {
-          console.log(rows);
-          req.flash('info', 'Outlet '+req.body.name+' Edited');
-          res.redirect('/business-owner/outlet');
-          // res.redirect('/business-owner/outlet/'+req.body.outlet_id);
-        }).catch(err => {
-          console.error('errpostnya', err);
-        })
-      }) 
+          })
+          .then(rows => {
+            console.log(rows);
+            req.flash('info', 'Outlet '+req.body.name+' Edited');
+            res.redirect('/business-owner/outlet');
+          }).catch(err => {
+            console.error('errpostnya', err);
+          })
+        }) 
+      })
     } else {
       business.findAll({
         where: {

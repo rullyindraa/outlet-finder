@@ -20,10 +20,11 @@ const flash = require('express-flash')
 const alert = require('alert-node')
 var store = new BetterMemoryStore({ expires: 60 * 60 * 1000, debug: true });
 
-var indexRouter = require('./routes/index');
+var indexRouter = require('./routes/index2');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var businessRouter = require('./routes/business-owner');
+// var businessRouter = require('./routes/bo-backup');
 var login = require('./routes/login');
 var register = require('./routes/register/register')
 var account = require('./routes/account');

@@ -7,17 +7,6 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    day: {
-      type: DataTypes.INTEGER
-    },
-    open_time: {
-      type: DataTypes.TIME,
-      allowNull: true
-    },
-    close_time: {
-      type: DataTypes.TIME,
-      allowNull: true
-    },
     outletId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -27,6 +16,62 @@ module.exports = (sequelize, DataTypes) => {
       },
       onUpdate: 'cascade',
       onDelete: 'cascade'
+    },
+    mon_open: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    mon_close: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    tue_open: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    tue_close: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    wed_open: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    wed_close: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    thu_open: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    thu_close: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    fri_open: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    fri_close: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    sat_open: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    sat_close: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    sun_open: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    sun_close: {
+      type: DataTypes.TIME,
+      allowNull: true
     },
     createdAt: {
       allowNull: false,
@@ -39,6 +84,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   open_hours.associate = function(models) {
     // associations can be defined here
+    open_hours.belongsTo(models['outlet']);
   };
   return open_hours;
 };

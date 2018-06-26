@@ -20,7 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE
-    }
+    },
+    picture: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
   }, {});
   category.associate = function(models) {
     // associations can be defined here

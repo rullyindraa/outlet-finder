@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     // file.belongsTo(models['outlet']);
     file.hasOne(models['business']);
     file.hasOne(models['user']);
+    file.hasOne(models['outlet']);
   };
   return file;
 };

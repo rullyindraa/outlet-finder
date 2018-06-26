@@ -25,9 +25,6 @@ module.exports = {
       adm_area_lv4: {
         type: Sequelize.STRING
       },
-      adm_area_lv4: {
-        type: Sequelize.STRING
-      },
       raw_address: {
         type: Sequelize.TEXT,
         allowNull: true

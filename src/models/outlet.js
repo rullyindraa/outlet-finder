@@ -81,6 +81,8 @@ module.exports = (sequelize, DataTypes) => {
     outlet.hasOne(models['page_view']);
     outlet.belongsTo(models['file']);
     outlet.hasOne(models['review']);
+    outlet.hasOne(models['open_hours']);
+    outlet.hasOne(models['op_time']);
   };
   return outlet;
 };

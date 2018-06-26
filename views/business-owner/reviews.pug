@@ -33,10 +33,10 @@ block content
             h6(style='color: black;')
               =r.name
           p(style='color: gray; font-size: 14px')
-            =r.createdAt
+            =r.created
             |   - outlet : 
-            a(href='/detail/outlet/'+r.outlet_id)
-              =r.outlet_name
+            a(href='/detail/outlet/'+r['outlet.id'])
+              =r['outlet.outlet_name']
           p.text-justify(style='color: black; margin-top: -10px; margin-bottom: 5px;')
             =r.content
           p(style='margin-top: -30px;')

@@ -8,17 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      day: {
-        type: Sequelize.INTEGER
-      },
-      open_time: {
-        type: Sequelize.TIME,
-        allowNull: true
-      },
-      close_time: {
-        type: Sequelize.TIME,
-        allowNull: true
-      },
       outletId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -28,6 +17,62 @@ module.exports = {
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'
+      },
+      mon_open: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      mon_close: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      tue_open: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      tue_close: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      wed_open: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      wed_close: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      thu_open: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      thu_close: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      fri_open: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      fri_close: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      sat_open: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      sat_close: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      sun_open: {
+        type: Sequelize.TIME,
+        allowNull: true
+      },
+      sun_close: {
+        type: Sequelize.TIME,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,

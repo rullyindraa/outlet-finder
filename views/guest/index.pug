@@ -23,8 +23,6 @@ block content
   .container-fluid
     .row
       #map.map-index
-      script(src='/javascripts/maps-index.js')
-      script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBpk20FbiTlQeiV5gCPRY_83idTVbLpyDI&callback=initMap')
     #search.row.justify-content-center(style='background-color: #C4D4E0')
       form.col-lg-12.col-md-12.col-sm-12.col-xs-12(action='/search/', method='GET')
         .form-row.justify-content-center(style='margin-top: 20px;')
@@ -130,5 +128,84 @@ block content
           a(href='#') toko kain grosir
           |, 
           a(href='#') toko bunga jogja
+  
+  script.
+    function initMap() {
+      var loc = !{data};
+      console.log(loc);
+      var map = new google.maps.Map(document.getElementById('map'), {
+      center: {
+        lat: 0.0,
+        lng: 0.0
+      },
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      var infoWindow = new google.maps.InfoWindow({
+        map: map
+      });
+
+      var marker, i;
+      var icon = {
+        url: "/images/icon.png", // url
+        scaledSize: new google.maps.Size(38, 40), // scaled size
+        origin: new google.maps.Point(0,0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+      };
+
+      for (i = 0; i < loc.length; i++) {
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(loc[i][1], loc[i][2]),
+          map: map,
+          icon: icon,
+          url: loc[i][4],
+          title: 'Outlet : '+loc[i][0],
+        });
+        
+        marker.addListener('click', toggleBounce);
+
+        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+          return function () {
+            infoWindow.setContent(loc[i][0]);
+            window.location.href = this.url;
+          }
+        })(marker, i));
+      }
+
+      function toggleBounce() {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+      }
+
+      // Try HTML5 geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          infoWindow.setPosition(pos);
+          infoWindow.setContent('Location found.');
+          map.setCenter(pos);
+        }, function() {
+          handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+      }
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(browserHasGeolocation ?
+      'Error: The Geolocation service failed.' :
+      'Error: Your browser doesnt support geolocation.');
+    }
+
+  script(async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBpk20FbiTlQeiV5gCPRY_83idTVbLpyDI&callback=initMap')
 
   include footer.pug
