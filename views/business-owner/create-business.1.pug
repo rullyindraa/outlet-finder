@@ -17,7 +17,7 @@ block content
       //-   - } 
       
       //script(type='text/javascript', src='../../javascripts/validation.js')
-      form#the-form.needs-validation(enctype="multipart/form-data", action='', method='POST', novalidate='', style='color: black; margin-left: -12px;')
+      form.needs-validation(enctype="multipart/form-data", action='/business-owner/business/create-business', method='POST', novalidate='', style='color: black; margin-left: -12px;')
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='categories') Categories:
@@ -29,14 +29,14 @@ block content
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='name') Business Name:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input#name.form-control(type='text', name='name', placeholder='Business Name' value=data.name required)
+            input#name.form-control(type='text', name='name', placeholder='Business Name' value=business_name required)
             //- .invalid-feedback
             //-   | Please enter your business name
         .form-group
           .col-lg-4.col-md-4.col-sm-4.col-xs-4
             label(for='email') Email:
           .col-lg-6.col-md-6.col-sm-6.col-xs-6
-            input#email.form-control(type='email', name='email', placeholder='name@example.com' value=data.email required)
+            input#email.form-control(type='email', name='email', placeholder='name@example.com' value=email required)
             //.invalid-feedback
               | Please enter a valid email
         .form-group
@@ -122,7 +122,7 @@ block content
                 .form-group.col-lg-12.col-md-12.col-sm-12.col-xl-12
                   label Formatted Address:
                   input#formatted_address.form-control(type='text', name='formatted_address', placeholder='Enter an address' readonly required)
-        input.btn.btn-md.color-ink.ml-3.mb-5(type='submit', value='Submit' onClick="addBusiness()")
+        input.btn.btn-md.color-ink.ml-3.mb-5(type='submit', value='Submit')
         input.btn.btn-md.color-ink.ml-2.mb-5(type='submit', value='Submit and Add Outlet >')
       span#error
         - if (error){
@@ -149,23 +149,26 @@ block content
     bootstrapValidate('#pac-input', 'required:Please enter your address')
     bootstrapValidate('#formatted_address', 'required:Please enter your address')
 
-    function addBusiness(){   
+    function saveUser(){   
       $.ajax({
-      url:"/business-owner/business/create-business",
-      type:"post",
-        data:$("#the-form").serialize(),
-        success:function(res){
-            window.location.reload();
-            return false;
-        },
-        error:function(xhr, status, error){
-            console.log(xhr.responseText);
-            var err = '';
-            $.each(JSON.parse(xhr.responseText) , function(i, item) {
-                 err +='<li>'+item.msg+'</li>';
-            });
-            $(".err-area").html(err);    
-            return false;
-        }
+      url:"/api/user/"+<%=data[0].user_id%>,
+      type:"put",
+      data:$("#the-form").serialize(),
+      success:function(res){
+          
+          window.location.href = '/api/user';
+          return false;
+      },
+      error:function(xhr, status, error){
+        console.log(xhr.responseText);
+        var err = '';
+        $.each(JSON.parse(xhr.responseText) , function(i, item) {
+            
+              err +='<li>'+item.msg+'</li>';
+        });
+        $(".err-area").html(err);    
+        return false;
+      }
+      
       });
     }

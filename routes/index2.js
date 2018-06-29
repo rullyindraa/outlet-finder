@@ -12,7 +12,7 @@ const address = models.address;
 const file = models.file;
 const category = models.category;
 const review = models.review;
-const open_hours = models.open_hours;
+// const open_hours = models.open_hours;
 const op_time = models.op_time;
 const moment = require('moment');
 //moment.locale('id');
@@ -100,9 +100,9 @@ router.get('/detail/outlet/:id', function(req, res, next) {
       //   //order: ['id', 'ASC'],
       //   //limit: 3,
       // },
-      {
-        model: open_hours
-      }
+      // {
+      //   model: open_hours
+      // }
     ],
     // order: [
     //   [ review, 'createdAt', 'DESC' ]

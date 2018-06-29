@@ -54,6 +54,12 @@ html
           Notify(help, null, null, 'success');
         }
       });
+      $( document ).ready(function() {
+        var help = $('span#error').find('option').val();
+        if (help !== undefined && help !== ""){
+          Notify(help, null, null, 'danger');
+        }
+      });
 
   body#page-top.fixed-nav.sticky-footer.bg
     #notifications 
